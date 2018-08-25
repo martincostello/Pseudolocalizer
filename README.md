@@ -1,6 +1,6 @@
 Pseudolocalizer
 ===============
-The Pseudolocalizer is a tool for testing internationalization aspects of software. Specifically, it reads string values from resource files in the Resx format and generates fake translations for the "qps-ploc" pseudo-locale.
+The Pseudolocalizer is a tool for testing internationalization aspects of software. Specifically, it reads string values from resource files in the Resx or Xlf format and generates fake translations for the "qps-ploc" pseudo-locale.
 
 The tool is run from the command line and provides the following options for the fake translation:
 
@@ -13,8 +13,8 @@ The tool is run from the command line and provides the following options for the
 
 See also
 --------
-- [WPF Localization Guidance Whitepaper by Rick Strahl and Michele Leroux Bustamante](http://wpflocalization.codeplex.com/releases/view/29389)
-- [Stack Overflow: How to use enable pseudo-locale in Windows for testing?](http://stackoverflow.com/questions/7042920/how-to-use-enable-pseudo-locale-in-windows-for-testing/)
+- [WPF Localization Guidance Whitepaper by Rick Strahl and Michele Leroux Bustamante](https://archive.codeplex.com/?p=wpflocalization)
+- [Stack Overflow: How to use enable pseudo-locale in Windows for testing?](https://stackoverflow.com/questions/7042920/how-to-use-enable-pseudo-locale-in-windows-for-testing/)
 
 License (MIT)
 -------------
