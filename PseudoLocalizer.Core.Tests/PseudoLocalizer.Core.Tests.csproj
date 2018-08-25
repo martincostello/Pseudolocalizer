@@ -14,5 +14,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Test1.resx" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Test1.xlf" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

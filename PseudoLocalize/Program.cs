@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Security;
     using PseudoLocalizer.Core;
@@ -48,7 +47,7 @@
                 Console.WriteLine("Usage: PseudoLocalize [/l] [/a] [/b] [/m] [/u] file [file...]");
                 Console.WriteLine("Generates pseudo-localized versions of the specified input file(s).");
                 Console.WriteLine();
-                Console.WriteLine("The input files must be resource files in Resx file format.");
+                Console.WriteLine("The input files must be resource files in Resx or Xlf file format.");
                 Console.WriteLine("The output will be written to a file next to the original, with .qps-ploc");
                 Console.WriteLine("appended to its name. For example, if the input file is X:\\Foo\\Bar.resx,");
                 Console.WriteLine("then the output file will be X:\\Foo\\Bar.qps-ploc.resx.");
@@ -133,11 +132,26 @@
         {
             foreach (var filePath in _inputFiles)
             {
-                ProcessResxFile(filePath);
+                var processor = GetProcessor(filePath);
+                ProcessFile(filePath, processor);
             }
         }
 
-        private void ProcessResxFile(string inputFileName)
+        private IProcessor GetProcessor(string filePath)
+        {
+            string extension = Path.GetExtension(filePath);
+
+            if (string.Equals(".xlf", extension, StringComparison.OrdinalIgnoreCase))
+            {
+                return new XlfProcessor();
+            }
+            else
+            {
+                return new ResxProcessor();
+            }
+        }
+
+        private void ProcessFile(string inputFileName, IProcessor processor)
         {
             try
             {
@@ -146,7 +160,6 @@
                 using (var inputStream = new FileStream(inputFileName, FileMode.Open, FileAccess.Read))
                 using (var outputStream = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))
                 {
-                    var processor = new ResxProcessor();
                     if (EnableExtraLength || UseDefaultOptions)
                     {
                         processor.TransformString += (s, e) => { e.Value = ExtraLength.Transform(e.Value); };
