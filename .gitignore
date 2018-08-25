@@ -3,6 +3,7 @@ bin
 obj
 TestResult.xml
 *.cache
+*.qps-ploc.*
 *.suo
 *.user
 *.VisualState.xml
