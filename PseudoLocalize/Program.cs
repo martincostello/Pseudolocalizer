@@ -44,7 +44,7 @@
             }
             else
             {
-                Console.WriteLine("Usage: PseudoLocalize [/l] [/a] [/b] [/m] [/u] file [file...]");
+                Console.WriteLine("Usage: pseudo-localize [/l] [/a] [/b] [/m] [/u] file [file...]");
                 Console.WriteLine("Generates pseudo-localized versions of the specified input file(s).");
                 Console.WriteLine();
                 Console.WriteLine("The input files must be resource files in Resx or Xlf file format.");
@@ -53,12 +53,14 @@
                 Console.WriteLine("then the output file will be X:\\Foo\\Bar.qps-ploc.resx.");
                 Console.WriteLine();
                 Console.WriteLine("Options:");
-                Console.WriteLine("  /l  Make all words 30% longer, to ensure that there is room for translations.");
-                Console.WriteLine("  /a  Add accents on all letters so that non-localized text can be spotted.");
-                Console.WriteLine("  /b  Add brackets to show the start and end of each localized string.");
-                Console.WriteLine("      This makes it possible to spot cut off strings.");
-                Console.WriteLine("  /m  Reverse all words (\"mirror\").");
-                Console.WriteLine("  /u  Replace all characters with underscores.");
+                Console.WriteLine("  /h, --help         Show command line help.");
+                Console.WriteLine("  /l, --lengthen     Make all words 30% longer, to ensure that there is room for translations.");
+                Console.WriteLine("  /a, --accents      Add accents on all letters so that non-localized text can be spotted.");
+                Console.WriteLine("  /b, --brackets     Add brackets to show the start and end of each localized string.");
+                Console.WriteLine("                     This makes it possible to spot cut off strings.");
+                Console.WriteLine("  /m, --mirror       Reverse all words (\"mirror\").");
+                Console.WriteLine("  /u, --underscores  Replace all characters with underscores.");
+                Console.WriteLine();
                 Console.WriteLine("The default options, if none are given, are: /l /a /b.");
             }
         }
@@ -85,34 +87,46 @@
 
             foreach (var arg in args)
             {
-                if (arg.StartsWith("/", StringComparison.Ordinal) || arg.StartsWith("-", StringComparison.Ordinal))
+                if (arg.StartsWith("/", StringComparison.Ordinal) ||
+                    arg.StartsWith("-", StringComparison.Ordinal))
                 {
-                    switch (arg.Substring(1).ToUpperInvariant())
+                    string name = arg.TrimStart('-', '/');
+
+                    switch (name.ToUpperInvariant())
                     {
                         case "L":
+                        case "LENGTHEN":
                             instance.EnableExtraLength = true;
                             instance.UseDefaultOptions = false;
                             break;
 
                         case "A":
+                        case "ACCENTS":
                             instance.EnableAccents = true;
                             instance.UseDefaultOptions = false;
                             break;
 
                         case "B":
+                        case "BRACKETS":
                             instance.EnableBrackets = true;
                             instance.UseDefaultOptions = false;
                             break;
 
                         case "M":
+                        case "MIRROR":
                             instance.EnableMirror = true;
                             instance.UseDefaultOptions = false;
                             break;
 
                         case "U":
+                        case "UNDERSCORES":
                             instance.EnableUnderscores = true;
                             instance.UseDefaultOptions = false;
                             break;
+
+                        case "H":
+                        case "HELP":
+                            return false;
 
                         default:
                             Console.WriteLine("ERROR: Unknown option \"{0}\".", arg);
