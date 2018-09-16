@@ -5,6 +5,7 @@ trigger:
   branches:
     include:
     - master
+    - xliff-support
 
 phases:
 - template: build-template.yml
