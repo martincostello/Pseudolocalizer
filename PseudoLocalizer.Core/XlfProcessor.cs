@@ -13,6 +13,48 @@
         private readonly IDictionary<XmlDocument, Version> _versionCache = new ConcurrentDictionary<XmlDocument, Version>();
 
         /// <inheritdoc />
+        protected override void OnProcessed(XmlDocument document, XmlNamespaceManager nsmgr, bool modified)
+        {
+            if (!modified)
+            {
+                return;
+            }
+
+            if (!nsmgr.HasNamespace("x"))
+            {
+                nsmgr.AddNamespace("x", document.DocumentElement.NamespaceURI);
+            }
+
+            var version = GetXliffVersion(document);
+
+            string xpath;
+            string name;
+
+            if (version.Major == 1)
+            {
+                xpath = "/x:xliff/x:file";
+                name = "target-language";
+            }
+            else if (version.Major == 2)
+            {
+                xpath = "/x:xliff";
+                name = "trgLang";
+            }
+            else
+            {
+                throw new NotSupportedException($"XLIFF version {version} is not supported.");
+            }
+
+            var file = document.SelectSingleNode(xpath, nsmgr);
+            var attribute = file.Attributes[name];
+
+            if (attribute != null)
+            {
+                attribute.Value = "qps-ploc";
+            }
+        }
+
+        /// <inheritdoc />
         protected override XmlNodeList SelectNodes(XmlDocument document, XmlNamespaceManager nsmgr)
         {
             if (!nsmgr.HasNamespace("x"))
@@ -41,17 +83,17 @@
         }
 
         /// <inheritdoc />
-        protected override void Visit(XmlNode node, XmlNamespaceManager nsmgr)
+        protected override bool Visit(XmlNode node, XmlNamespaceManager nsmgr)
         {
             var version = GetXliffVersion(node.OwnerDocument);
 
             if (version.Major == 1)
             {
-                Visit10(node, nsmgr);
+                return Visit10(node, nsmgr);
             }
             else if (version.Major == 2)
             {
-                Visit20(node, nsmgr);
+                return Visit20(node, nsmgr);
             }
             else
             {
@@ -78,11 +120,13 @@
             return version;
         }
 
-        private void Visit10(XmlNode node, XmlNamespaceManager nsmgr)
+        private bool Visit10(XmlNode node, XmlNamespaceManager nsmgr)
         {
             var document = node.OwnerDocument;
             var rootNamespace = document.DocumentElement.NamespaceURI;
             var source = node.SelectSingleNode("x:source", nsmgr);
+
+            bool modified = false;
 
             if (source != null && source.NodeType == XmlNodeType.Element)
             {
@@ -107,15 +151,20 @@
                     }
 
                     target.InnerText = transformed;
+                    modified = true;
                 }
             }
+
+            return modified;
         }
 
-        private void Visit20(XmlNode node, XmlNamespaceManager nsmgr)
+        private bool Visit20(XmlNode node, XmlNamespaceManager nsmgr)
         {
             var document = node.OwnerDocument;
             var rootNamespace = document.DocumentElement.NamespaceURI;
             var source = node.SelectSingleNode("x:segment/x:source", nsmgr);
+
+            bool modified = false;
 
             if (source != null && source.NodeType == XmlNodeType.Element)
             {
@@ -140,8 +189,11 @@
                     }
 
                     target.InnerText = transformed;
+                    modified = true;
                 }
             }
+
+            return modified;
         }
     }
 }

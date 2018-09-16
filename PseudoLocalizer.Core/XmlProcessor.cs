@@ -14,10 +14,14 @@
             var document = LoadDocument(inputStream);
             var nsmgr = new XmlNamespaceManager(document.NameTable);
 
+            bool modified = false;
+
             foreach (XmlNode node in SelectNodes(document, nsmgr))
             {
-                Visit(node, nsmgr);
+                modified |= Visit(node, nsmgr);
             }
+
+            OnProcessed(document, nsmgr, modified);
 
             using (var xmlWriter = XmlWriter.Create(outputStream))
             {
@@ -41,6 +45,17 @@
         }
 
         /// <summary>
+        /// Called after the nodes are processed to allow post-processing.
+        /// </summary>
+        /// <param name="document">The XML document that was processed.</param>
+        /// <param name="nsmgr">The namespace manager for the document.</param>
+        /// <param name="modified">Whether the XML document was modified during processing.</param>
+        protected virtual void OnProcessed(XmlDocument document, XmlNamespaceManager nsmgr, bool modified)
+        {
+            // Do nothing by default
+        }
+
+        /// <summary>
         /// Selects the XML nodes to transform.
         /// </summary>
         /// <param name="document">The XML document to select the nodes from.</param>
@@ -55,6 +70,9 @@
         /// </summary>
         /// <param name="node">The node to transform.</param>
         /// <param name="nsmgr">The namespace manager for the document.</param>
-        protected abstract void Visit(XmlNode node, XmlNamespaceManager nsmgr);
+        /// <returns>
+        /// <see langword="true"/> if the node was modified; otherwise <see langword="false"/>.
+        /// </returns>
+        protected abstract bool Visit(XmlNode node, XmlNamespaceManager nsmgr);
     }
 }

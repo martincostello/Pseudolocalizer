@@ -12,8 +12,10 @@
             => document.SelectNodes("/root/data/value");
 
         /// <inheritdoc />
-        protected override void Visit(XmlNode node, XmlNamespaceManager nsmgr)
+        protected override bool Visit(XmlNode node, XmlNamespaceManager nsmgr)
         {
+            bool modified = false;
+
             var child = node.FirstChild;
             if (child != null && child.NodeType == XmlNodeType.Text)
             {
@@ -23,8 +25,11 @@
                 if (transformed != original)
                 {
                     child.Value = transformed;
+                    modified = true;
                 }
             }
+
+            return modified;
         }
     }
 }
