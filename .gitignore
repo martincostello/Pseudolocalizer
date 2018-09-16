@@ -1,4 +1,8 @@
+.DS_Store
+.dotnetcli
+.idea
 .vs
+artifacts
 bin
 obj
 TestResult.xml
