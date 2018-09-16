@@ -106,16 +106,57 @@
 
         public static string Transform(string value)
         {
-            return new string(
-                value.ToCharArray()
-                    .Select(x => Transform(x))
-                    .ToArray());
+            // Slower path to no break formatting strings by removing their digits
+            if (value.Contains('{') && value.Contains('}'))
+            {
+                char[] array = value.ToArray();
+
+                for (int i = 0; i < array.Length; i++)
+                {
+                    char ch = array[i];
+
+                    // Are we at the start of a potential placeholder (e.g. "{?...}")
+                    if (ch == '{' && i < array.Length - 2)
+                    {
+                        int j = i;
+
+                        // Consume all the digits
+                        while (j < array.Length - 1 && char.IsDigit(array[++j]))
+                        {
+                        }
+
+                        if (array[j] == ':')
+                        {
+                            // Consume all of any format specifier (e.g. "{0:yyyy}" for a DateTime)
+                            while (j < array.Length - 1 && array[++j] != '}')
+                            {
+                            }
+                        }
+
+                        if (array[j] == '}')
+                        {
+                            i = j;
+                            continue;
+                        }
+                    }
+
+                    array[i] = Transform(ch);
+                }
+
+                return new string(array);
+            }
+            else
+            {
+                return new string(
+                    value.ToCharArray()
+                        .Select(x => Transform(x))
+                        .ToArray());
+            }
         }
 
         private static char Transform(char value)
         {
-            char x;
-            if (Replacements.TryGetValue(value, out x))
+            if (Replacements.TryGetValue(value, out char x))
             {
                 return x;
             }
