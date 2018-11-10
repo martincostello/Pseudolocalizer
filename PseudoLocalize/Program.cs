@@ -30,10 +30,14 @@
 
         public bool EnableUnderscores { get; set; }
 
+        public bool Force { get; set; }
+
         public bool HasInputFiles
         {
             get { return _inputFiles.Count > 0; }
         }
+
+        public bool Overwrite { get; set; }
 
         public static void Main(string[] args)
         {
@@ -60,6 +64,8 @@
                 Console.WriteLine("                     This makes it possible to spot cut off strings.");
                 Console.WriteLine("  /m, --mirror       Reverse all words (\"mirror\").");
                 Console.WriteLine("  /u, --underscores  Replace all characters with underscores.");
+                Console.WriteLine("  /o, --overwrite    Overwrites the input file(s) with the pseudo-localized version.");
+                Console.WriteLine("  /f, --force        Suppresses the confirmation prompt for the --overwrite option.");
                 Console.WriteLine();
                 Console.WriteLine("The default options, if none are given, are: /l /a /b.");
             }
@@ -112,10 +118,20 @@
                             instance.UseDefaultOptions = false;
                             break;
 
+                        case "F":
+                        case "FORCE":
+                            instance.Force = true;
+                            break;
+
                         case "M":
                         case "MIRROR":
                             instance.EnableMirror = true;
                             instance.UseDefaultOptions = false;
+                            break;
+
+                        case "O":
+                        case "OVERWRITE":
+                            instance.Overwrite = true;
                             break;
 
                         case "U":
@@ -169,40 +185,57 @@
         {
             try
             {
-                var outputFileName = Path.Combine(Path.GetDirectoryName(inputFileName), Path.GetFileNameWithoutExtension(inputFileName) + ".qps-Ploc" + Path.GetExtension(inputFileName));
+                string writtenFileName;
 
-                using (var inputStream = new FileStream(inputFileName, FileMode.Open, FileAccess.Read))
-                using (var outputStream = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))
+                if (Overwrite)
                 {
-                    if (EnableExtraLength || UseDefaultOptions)
+                    if (!Force)
                     {
-                        processor.TransformString += (s, e) => { e.Value = ExtraLength.Transform(e.Value); };
+                        Console.WriteLine("The file {0} will be overwritten.", inputFileName);
+                        Console.Write("Are you sure? [y/n]: ", inputFileName);
+
+                        switch (Console.ReadLine().ToUpperInvariant())
+                        {
+                            case "Y":
+                            case "YES":
+                                break;
+
+                            default:
+                                return;
+                        }
+
+                        Console.WriteLine();
                     }
 
-                    if (EnableAccents || UseDefaultOptions)
+                    using (var inputStream = File.Open(inputFileName, FileMode.Open, FileAccess.ReadWrite))
+                    using (var outputStream = new MemoryStream())
                     {
-                        processor.TransformString += (s, e) => { e.Value = Accents.Transform(e.Value); };
+                        Transform(processor, inputStream, outputStream);
+
+                        inputStream.Seek(0, SeekOrigin.Begin);
+                        inputStream.SetLength(0);
+
+                        outputStream.Seek(0, SeekOrigin.Begin);
+                        outputStream.CopyTo(inputStream);
+                        outputStream.Flush();
                     }
-                    
-                    if (EnableBrackets || UseDefaultOptions)
+
+                    writtenFileName = inputFileName;
+                }
+                else
+                {
+                    var outputFileName = Path.Combine(Path.GetDirectoryName(inputFileName), Path.GetFileNameWithoutExtension(inputFileName) + ".qps-Ploc" + Path.GetExtension(inputFileName));
+
+                    using (var inputStream = File.OpenRead(inputFileName))
+                    using (var outputStream = File.OpenWrite(outputFileName))
                     {
-                        processor.TransformString += (s, e) => { e.Value = Brackets.Transform(e.Value); };
+                        Transform(processor, inputStream, outputStream);
                     }
-                    
-                    if (EnableMirror)
-                    {
-                        processor.TransformString += (s, e) => { e.Value = Mirror.Transform(e.Value); };
-                    }
-                    
-                    if (EnableUnderscores)
-                    {
-                        processor.TransformString += (s, e) => { e.Value = Underscores.Transform(e.Value); };
-                    }
-                    
-                    processor.Transform(inputStream, outputStream);
+
+                    writtenFileName = outputFileName;
                 }
 
-                Console.WriteLine("The file {0} was written successfully.", outputFileName);
+                Console.WriteLine("The file {0} was written successfully.", writtenFileName);
             }
             catch (Exception ex)
             {
@@ -220,5 +253,38 @@
                 }
             }
         }
+
+        private void Transform(IProcessor processor, Stream inputStream, Stream outputStream)
+        {
+            if (EnableExtraLength || UseDefaultOptions)
+            {
+                processor.TransformString += Transform(ExtraLength.Transform);
+            }
+
+            if (EnableAccents || UseDefaultOptions)
+            {
+                processor.TransformString += Transform(Accents.Transform);
+            }
+
+            if (EnableBrackets || UseDefaultOptions)
+            {
+                processor.TransformString += Transform(Brackets.Transform);
+            }
+
+            if (EnableMirror)
+            {
+                processor.TransformString += Transform(Mirror.Transform);
+            }
+
+            if (EnableUnderscores)
+            {
+                processor.TransformString += Transform(Underscores.Transform);
+            }
+
+            processor.Transform(inputStream, outputStream);
+        }
+
+        private EventHandler<TransformStringEventArgs> Transform(Func<string, string> transformer)
+            => (_, e) => e.Value = transformer(e.Value);
     }
 }
