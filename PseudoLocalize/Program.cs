@@ -48,9 +48,9 @@
                 Console.WriteLine("Generates pseudo-localized versions of the specified input file(s).");
                 Console.WriteLine();
                 Console.WriteLine("The input files must be resource files in Resx or Xlf file format.");
-                Console.WriteLine("The output will be written to a file next to the original, with .qps-ploc");
+                Console.WriteLine("The output will be written to a file next to the original, with .qps-Ploc");
                 Console.WriteLine("appended to its name. For example, if the input file is X:\\Foo\\Bar.resx,");
-                Console.WriteLine("then the output file will be X:\\Foo\\Bar.qps-ploc.resx.");
+                Console.WriteLine("then the output file will be X:\\Foo\\Bar.qps-Ploc.resx.");
                 Console.WriteLine();
                 Console.WriteLine("Options:");
                 Console.WriteLine("  /h, --help         Show command line help.");
@@ -169,7 +169,7 @@
         {
             try
             {
-                var outputFileName = Path.Combine(Path.GetDirectoryName(inputFileName), Path.GetFileNameWithoutExtension(inputFileName) + ".qps-ploc" + Path.GetExtension(inputFileName));
+                var outputFileName = Path.Combine(Path.GetDirectoryName(inputFileName), Path.GetFileNameWithoutExtension(inputFileName) + ".qps-Ploc" + Path.GetExtension(inputFileName));
 
                 using (var inputStream = new FileStream(inputFileName, FileMode.Open, FileAccess.Read))
                 using (var outputStream = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))

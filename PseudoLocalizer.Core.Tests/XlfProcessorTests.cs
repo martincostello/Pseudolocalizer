@@ -50,7 +50,7 @@
             Assert.That(!original.Contains("<target state=\"translated\">gnihtemoS</target>"));
             Assert.That(transformed.Contains("<target state=\"translated\">gnihtemoS</target>"));
             Assert.That(!transformed.Contains("<target state=\"translated\">Something</target>"));
-            Assert.That(transformed.Contains("=\"qps-ploc\""));
+            Assert.That(transformed.Contains("=\"qps-Ploc\""));
             Assert.That(!transformed.Contains("=\"ja-JP\""));
         }
 
@@ -97,7 +97,7 @@
             Assert.That(transformed.Contains("<target>[Whatever1]2</target>"));
             Assert.That(transformed.Contains("<target state=\"translated\">[Something1]2</target>"));
             Assert.That(transformed.Contains("<target state=\"translated\">[Anything1]2</target>"));
-            Assert.That(transformed.Contains("=\"qps-ploc\""));
+            Assert.That(transformed.Contains("=\"qps-Ploc\""));
             Assert.That(!transformed.Contains("=\"ja-JP\""));
         }
 

@@ -50,7 +50,7 @@
 
             if (attribute != null)
             {
-                attribute.Value = "qps-ploc";
+                attribute.Value = "qps-Ploc";
             }
         }
 

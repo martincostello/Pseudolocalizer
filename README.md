@@ -1,6 +1,6 @@
 Pseudolocalizer
 ===============
-The Pseudolocalizer is a tool for testing internationalization aspects of software. Specifically, it reads string values from resource files in the Resx or Xlf format and generates fake translations for the "qps-ploc" pseudo-locale.
+The Pseudolocalizer is a tool for testing internationalization aspects of software. Specifically, it reads string values from resource files in the Resx or Xlf format and generates fake translations for the "qps-Ploc" pseudo-locale.
 
 The tool is run from the command line and provides the following options for the fake translation:
 

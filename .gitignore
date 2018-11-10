@@ -7,7 +7,7 @@ bin
 obj
 TestResult.xml
 *.cache
-*.qps-ploc.*
+*.qps-Ploc.*
 *.suo
 *.user
 *.VisualState.xml
