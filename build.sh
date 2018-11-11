@@ -45,6 +45,8 @@ if [ "$dotnet_version" != "$CLI_VERSION" ]; then
 fi
 
 dotnet build ./PseudoLocalizer.sln --output $artifacts --configuration $configuration || exit 1
+dotnet pack ./PseudoLocalizer.Core/PseudoLocalize.Core.csproj --output $artifacts --configuration $configuration || exit 1
+dotnet pack ./PseudoLocalizer.Humanizer/PseudoLocalize.Humanizer.csproj --output $artifacts --configuration $configuration || exit 1
 dotnet pack ./PseudoLocalize/PseudoLocalize.csproj --output $artifacts --configuration $configuration || exit 1
 
 if [ $skipTests == 0 ]; then
