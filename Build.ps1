@@ -11,7 +11,11 @@ $solutionPath = Split-Path $MyInvocation.MyCommand.Definition
 $solutionFile = Join-Path $solutionPath "PseudoLocalizer.sln"
 $sdkFile = Join-Path $solutionPath "global.json"
 
-$libraryProject = Join-Path $solutionPath "PseudoLocalize\PseudoLocalize.csproj"
+$packageProjects = @(
+	(Join-Path $solutionPath "PseudoLocalizer.Core\PseudoLocalizer.Core.csproj"),
+	(Join-Path $solutionPath "PseudoLocalizer.Humanizer\PseudoLocalizer.Humanizer.csproj"),
+	(Join-Path $solutionPath "PseudoLocalize\PseudoLocalize.csproj")
+)
 
 $testProjects = @(
     (Join-Path $solutionPath "PseudoLocalizer.Core.Tests\PseudoLocalizer.Core.Tests.csproj")
@@ -110,8 +114,10 @@ function DotNetTest {
 Write-Host "Building solution..." -ForegroundColor Green
 DotNetBuild $solutionFile
 
-Write-Host "Packaging library..." -ForegroundColor Green
-DotNetPack $libraryProject
+Write-Host "Creating packages..." -ForegroundColor Green
+ForEach ($packageProject in $packageProjects) {
+    DotNetPack $packageProject
+}
 
 Write-Host "Running tests..." -ForegroundColor Green
 ForEach ($testProject in $testProjects) {
