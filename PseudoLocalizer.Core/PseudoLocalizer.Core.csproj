@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>A library containing types for pseudo-localization of strings and RESX and XLIFF resource files.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
     <PackageId>PseudoLocalizer.Core</PackageId>
