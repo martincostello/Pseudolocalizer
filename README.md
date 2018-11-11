@@ -1,6 +1,6 @@
 # Pseudolocalizer
 
-[![NuGet](https://buildstats.info/nuget/PseudoLocalize?includePreReleases=false)](http://www.nuget.org/packages/PseudoLocalize "Download PseudoLocalize from NuGet")
+[![NuGet](https://buildstats.info/nuget/PseudoLocalize?includePreReleases=false)](https://www.nuget.org/packages/PseudoLocalize "Download PseudoLocalize from NuGet")
 
 [![Build Status](https://dev.azure.com/martincostello/Pseudolocalizer/_apis/build/status/CI)](https://dev.azure.com/martincostello/Pseudolocalizer/_build/latest?definitionId=72)
 
