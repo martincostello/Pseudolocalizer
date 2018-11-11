@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en-US" trgLang="ja-JP">
+  <file id="f1" original="Graphic Example.psd">
+    <skeleton href="Graphic Example.psd.skl" />
+    <unit id="1">
+      <segment>
+        <source>Dude</source>
+      </segment>
+    </unit>
+    <unit id="2">
+      <segment>
+        <source>Whatever</source>
+      </segment>
+    </unit>
+    <unit id="3">
+      <segment>
+        <source>Something</source>
+        <target state="new">Something</target>
+      </segment>
+    </unit>
+    <unit id="4">
+      <segment>
+        <source>Anything</source>
+        <target state="translated">Everything</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

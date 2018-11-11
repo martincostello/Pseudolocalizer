@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>A library containing extensions for Humanizer to apply pseudo-localization to strings.</Description>
+    <IsPackable>true</IsPackable>
+    <OutputType>Library</OutputType>
+    <RootNamespace>PseudoLocalizer.Humanizer</RootNamespace>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+<ItemGroup>
+  <PackageReference Include="Humanizer" Version="2.4.2" />
+</ItemGroup>
+<ItemGroup>
+  <ProjectReference Include="..\PseudoLocalizer.Core\PseudoLocalizer.Core.csproj" />
+</ItemGroup>
+</Project>

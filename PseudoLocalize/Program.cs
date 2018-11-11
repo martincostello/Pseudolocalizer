@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Security;
     using PseudoLocalizer.Core;
@@ -31,10 +30,14 @@
 
         public bool EnableUnderscores { get; set; }
 
+        public bool Force { get; set; }
+
         public bool HasInputFiles
         {
             get { return _inputFiles.Count > 0; }
         }
+
+        public bool Overwrite { get; set; }
 
         public static void Main(string[] args)
         {
@@ -45,21 +48,25 @@
             }
             else
             {
-                Console.WriteLine("Usage: PseudoLocalize [/l] [/a] [/b] [/m] [/u] file [file...]");
+                Console.WriteLine("Usage: pseudo-localize [/l] [/a] [/b] [/m] [/u] file [file...]");
                 Console.WriteLine("Generates pseudo-localized versions of the specified input file(s).");
                 Console.WriteLine();
-                Console.WriteLine("The input files must be resource files in Resx file format.");
-                Console.WriteLine("The output will be written to a file next to the original, with .qps-ploc");
+                Console.WriteLine("The input files must be resource files in Resx or Xlf file format.");
+                Console.WriteLine("The output will be written to a file next to the original, with .qps-Ploc");
                 Console.WriteLine("appended to its name. For example, if the input file is X:\\Foo\\Bar.resx,");
-                Console.WriteLine("then the output file will be X:\\Foo\\Bar.qps-ploc.resx.");
+                Console.WriteLine("then the output file will be X:\\Foo\\Bar.qps-Ploc.resx.");
                 Console.WriteLine();
                 Console.WriteLine("Options:");
-                Console.WriteLine("  /l  Make all words 30% longer, to ensure that there is room for translations.");
-                Console.WriteLine("  /a  Add accents on all letters so that non-localized text can be spotted.");
-                Console.WriteLine("  /b  Add brackets to show the start and end of each localized string.");
-                Console.WriteLine("      This makes it possible to spot cut off strings.");
-                Console.WriteLine("  /m  Reverse all words (\"mirror\").");
-                Console.WriteLine("  /u  Replace all characters with underscores.");
+                Console.WriteLine("  /h, --help         Show command line help.");
+                Console.WriteLine("  /l, --lengthen     Make all words 30% longer, to ensure that there is room for translations.");
+                Console.WriteLine("  /a, --accents      Add accents on all letters so that non-localized text can be spotted.");
+                Console.WriteLine("  /b, --brackets     Add brackets to show the start and end of each localized string.");
+                Console.WriteLine("                     This makes it possible to spot cut off strings.");
+                Console.WriteLine("  /m, --mirror       Reverse all words (\"mirror\").");
+                Console.WriteLine("  /u, --underscores  Replace all characters with underscores.");
+                Console.WriteLine("  /o, --overwrite    Overwrites the input file(s) with the pseudo-localized version.");
+                Console.WriteLine("  /f, --force        Suppresses the confirmation prompt for the --overwrite option.");
+                Console.WriteLine();
                 Console.WriteLine("The default options, if none are given, are: /l /a /b.");
             }
         }
@@ -86,34 +93,56 @@
 
             foreach (var arg in args)
             {
-                if (arg.StartsWith("/", StringComparison.Ordinal) || arg.StartsWith("-", StringComparison.Ordinal))
+                if (arg.StartsWith("/", StringComparison.Ordinal) ||
+                    arg.StartsWith("-", StringComparison.Ordinal))
                 {
-                    switch (arg.Substring(1).ToUpperInvariant())
+                    string name = arg.TrimStart('-', '/');
+
+                    switch (name.ToUpperInvariant())
                     {
                         case "L":
+                        case "LENGTHEN":
                             instance.EnableExtraLength = true;
                             instance.UseDefaultOptions = false;
                             break;
 
                         case "A":
+                        case "ACCENTS":
                             instance.EnableAccents = true;
                             instance.UseDefaultOptions = false;
                             break;
 
                         case "B":
+                        case "BRACKETS":
                             instance.EnableBrackets = true;
                             instance.UseDefaultOptions = false;
                             break;
 
+                        case "F":
+                        case "FORCE":
+                            instance.Force = true;
+                            break;
+
                         case "M":
+                        case "MIRROR":
                             instance.EnableMirror = true;
                             instance.UseDefaultOptions = false;
                             break;
 
+                        case "O":
+                        case "OVERWRITE":
+                            instance.Overwrite = true;
+                            break;
+
                         case "U":
+                        case "UNDERSCORES":
                             instance.EnableUnderscores = true;
                             instance.UseDefaultOptions = false;
                             break;
+
+                        case "H":
+                        case "HELP":
+                            return false;
 
                         default:
                             Console.WriteLine("ERROR: Unknown option \"{0}\".", arg);
@@ -133,49 +162,80 @@
         {
             foreach (var filePath in _inputFiles)
             {
-                ProcessResxFile(filePath);
+                var processor = GetProcessor(filePath);
+                ProcessFile(filePath, processor);
             }
         }
 
-        private void ProcessResxFile(string inputFileName)
+        private IProcessor GetProcessor(string filePath)
+        {
+            string extension = Path.GetExtension(filePath);
+
+            if (string.Equals(".xlf", extension, StringComparison.OrdinalIgnoreCase))
+            {
+                return new XlfProcessor();
+            }
+            else
+            {
+                return new ResxProcessor();
+            }
+        }
+
+        private void ProcessFile(string inputFileName, IProcessor processor)
         {
             try
             {
-                var outputFileName = Path.Combine(Path.GetDirectoryName(inputFileName), Path.GetFileNameWithoutExtension(inputFileName) + ".qps-ploc" + Path.GetExtension(inputFileName));
+                string writtenFileName;
 
-                using (var inputStream = new FileStream(inputFileName, FileMode.Open, FileAccess.Read))
-                using (var outputStream = new FileStream(outputFileName, FileMode.Create, FileAccess.Write))
+                if (Overwrite)
                 {
-                    var processor = new ResxProcessor();
-                    if (EnableExtraLength || UseDefaultOptions)
+                    if (!Force)
                     {
-                        processor.TransformString += (s, e) => { e.Value = ExtraLength.Transform(e.Value); };
+                        Console.WriteLine("The file {0} will be overwritten.", inputFileName);
+                        Console.Write("Are you sure? [y/n]: ", inputFileName);
+
+                        switch (Console.ReadLine().ToUpperInvariant())
+                        {
+                            case "Y":
+                            case "YES":
+                                break;
+
+                            default:
+                                return;
+                        }
+
+                        Console.WriteLine();
                     }
 
-                    if (EnableAccents || UseDefaultOptions)
+                    using (var inputStream = File.Open(inputFileName, FileMode.Open, FileAccess.ReadWrite))
+                    using (var outputStream = new MemoryStream())
                     {
-                        processor.TransformString += (s, e) => { e.Value = Accents.Transform(e.Value); };
+                        Transform(processor, inputStream, outputStream);
+
+                        inputStream.Seek(0, SeekOrigin.Begin);
+                        inputStream.SetLength(0);
+
+                        outputStream.Seek(0, SeekOrigin.Begin);
+                        outputStream.CopyTo(inputStream);
+                        outputStream.Flush();
                     }
-                    
-                    if (EnableBrackets || UseDefaultOptions)
+
+                    writtenFileName = inputFileName;
+                }
+                else
+                {
+                    var outputFileName = Path.Combine(Path.GetDirectoryName(inputFileName), Path.GetFileNameWithoutExtension(inputFileName) + ".qps-Ploc" + Path.GetExtension(inputFileName));
+
+                    using (var inputStream = File.OpenRead(inputFileName))
+                    using (var outputStream = File.OpenWrite(outputFileName))
                     {
-                        processor.TransformString += (s, e) => { e.Value = Brackets.Transform(e.Value); };
+                        Transform(processor, inputStream, outputStream);
                     }
-                    
-                    if (EnableMirror)
-                    {
-                        processor.TransformString += (s, e) => { e.Value = Mirror.Transform(e.Value); };
-                    }
-                    
-                    if (EnableUnderscores)
-                    {
-                        processor.TransformString += (s, e) => { e.Value = Underscores.Transform(e.Value); };
-                    }
-                    
-                    processor.Transform(inputStream, outputStream);
+
+                    writtenFileName = outputFileName;
                 }
 
-                Console.WriteLine("The file {0} was written successfully.", outputFileName);
+                Console.WriteLine("The file {0} was written successfully.", writtenFileName);
             }
             catch (Exception ex)
             {
@@ -192,6 +252,46 @@
                     throw;
                 }
             }
+        }
+
+        private void Transform(IProcessor processor, Stream inputStream, Stream outputStream)
+        {
+            ITransformer transformer = CreateTransformer();
+
+            processor.TransformString += (_, e) => transformer.Apply(e);
+            processor.Transform(inputStream, outputStream);
+        }
+
+        private ITransformer CreateTransformer()
+        {
+            var transformers = new List<ITransformer>();
+
+            if (EnableExtraLength || UseDefaultOptions)
+            {
+                transformers.Add(ExtraLength.Instance);
+            }
+
+            if (EnableAccents || UseDefaultOptions)
+            {
+                transformers.Add(Accents.Instance);
+            }
+
+            if (EnableBrackets || UseDefaultOptions)
+            {
+                transformers.Add(Brackets.Instance);
+            }
+
+            if (EnableMirror)
+            {
+                transformers.Add(Mirror.Instance);
+            }
+
+            if (EnableUnderscores)
+            {
+                transformers.Add(Underscores.Instance);
+            }
+
+            return new Pipeline(transformers);
         }
     }
 }

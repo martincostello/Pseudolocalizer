@@ -1,15 +1,16 @@
 ﻿namespace PseudoLocalizer.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
-    /// A transform which adds accents to all letters.
+    /// A transform which adds accents to all letters. This class cannot be inherited.
     /// </summary>
-    public static class Accents
+    public sealed class Accents : ITransformer
     {
-        // character mappings gratefully borrowed from the Google pseudolocalization-tool.
-        private static readonly Dictionary<char, char> Replacements = new Dictionary<char, char>()
+        // Character mappings gratefully borrowed from the Google pseudolocalization-tool.
+        private readonly Dictionary<char, char> _replacements = new Dictionary<char, char>()
         {
             { ' ', '\u2003' },
             { '!', '\u00a1' },
@@ -104,18 +105,106 @@
             { '~', '\u02de' },
         };
 
-        public static string Transform(string value)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Accents"/> class.
+        /// </summary>
+        public Accents()
+            : this(isReadOnly: false)
         {
-            return new string(
-                value.ToCharArray()
-                    .Select(x => Transform(x))
-                    .ToArray());
         }
 
-        private static char Transform(char value)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Accents"/> class.
+        /// </summary>
+        /// <param name="isReadOnly">A value indicating whether the replacements are read-only.</param>
+        private Accents(bool isReadOnly)
         {
-            char x;
-            if (Replacements.TryGetValue(value, out x))
+            IsReadOnly = isReadOnly;
+        }
+
+        /// <summary>
+        /// Gets the singleton instance of <see cref="Accents"/>.
+        /// </summary>
+        public static Accents Instance { get; } = new Accents(isReadOnly: true);
+
+        /// <summary>
+        /// Gets a value indicating whether the replacements are read-only.
+        /// </summary>
+        private bool IsReadOnly { get; }
+
+        /// <inheritdoc />
+        public string Transform(string value)
+        {
+            // Slower path to no break formatting strings by removing their digits
+            if (value.Contains('{') && value.Contains('}'))
+            {
+                char[] array = value.ToArray();
+
+                for (int i = 0; i < array.Length; i++)
+                {
+                    char ch = array[i];
+
+                    // Are we at the start of a potential placeholder (e.g. "{?...}")
+                    if (ch == '{' && i < array.Length - 2)
+                    {
+                        int j = i;
+
+                        // Consume all the digits
+                        while (j < array.Length - 1 && char.IsDigit(array[++j]))
+                        {
+                        }
+
+                        if (array[j] == ':')
+                        {
+                            // Consume all of any format specifier (e.g. "{0:yyyy}" for a DateTime)
+                            while (j < array.Length - 1 && array[++j] != '}')
+                            {
+                            }
+                        }
+
+                        if (array[j] == '}')
+                        {
+                            i = j;
+                            continue;
+                        }
+                    }
+
+                    array[i] = Transform(ch);
+                }
+
+                return new string(array);
+            }
+            else
+            {
+                return new string(
+                    value.ToCharArray()
+                        .Select(x => Transform(x))
+                        .ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Adds a new replacement character for the specified value.
+        /// </summary>
+        /// <param name="original">The character to add a replacement for.</param>
+        /// <param name="substitute">The character to use as a replacement for <paramref name="original"/>.</param>
+        /// <returns>
+        /// The current instance of <see cref="Accents"/>.
+        /// </returns>
+        public Accents AddReplacement(char original, char substitute)
+        {
+            if (IsReadOnly)
+            {
+                throw new InvalidOperationException($"This instance of {nameof(Accents)} is read-only.");
+            }
+
+            _replacements[original] = substitute;
+            return this;
+        }
+
+        private char Transform(char value)
+        {
+            if (_replacements.TryGetValue(value, out char x))
             {
                 return x;
             }

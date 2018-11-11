@@ -1,0 +1,33 @@
+<Project>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All" />
+  </ItemGroup>
+  <PropertyGroup>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)PseudoLocalizer.snk</AssemblyOriginatorKeyFile>
+    <Authors>anderskaplan;martin_costello</Authors>
+    <Company>https://github.com/martincostello/Pseudolocalizer</Company>
+    <Copyright>Pseudolocalizer Contributors (c) 2012-$([System.DateTime]::Now.ToString(yyyy))</Copyright>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <LangVersion>latest</LangVersion>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageIconUrl></PackageIconUrl>
+    <PackageProjectUrl>https://github.com/martincostello/Pseudolocalizer</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/martincostello/Pseudolocalizer#license-mit</PackageLicenseUrl>
+    <PackageReleaseNotes>See $(PackageProjectUrl)/releases for details.</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>localization,pseudolocalization</PackageTags>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
+    <SignAssembly>true</SignAssembly>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+    <VersionSuffix Condition=" '$(VersionSuffix)' == '' AND '$(TF_BUILD)' == 'True'">beta-$([System.Convert]::ToInt32(`$(BUILD_BUILDID)`).ToString(`0000`))</VersionSuffix>
+    <FileVersion Condition=" '$(TF_BUILD)' != '' ">$(VersionPrefix).$(BUILD_BUILDID)</FileVersion>
+  </PropertyGroup>
+</Project>

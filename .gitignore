@@ -1,3 +1,13 @@
-*.suo
+.DS_Store
+.dotnetcli
+.idea
+.vs
+artifacts
+bin
+obj
 TestResult.xml
+*.cache
+*.qps-Ploc.*
+*.suo
+*.user
 *.VisualState.xml
