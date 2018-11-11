@@ -18,7 +18,8 @@ $packageProjects = @(
 )
 
 $testProjects = @(
-    (Join-Path $solutionPath "PseudoLocalizer.Core.Tests\PseudoLocalizer.Core.Tests.csproj")
+    (Join-Path $solutionPath "PseudoLocalizer.Core.Tests\PseudoLocalizer.Core.Tests.csproj"),
+    (Join-Path $solutionPath "PseudoLocalize.Tests\PseudoLocalize.Tests.csproj")
 )
 
 $dotnetVersion = (Get-Content $sdkFile | Out-String | ConvertFrom-Json).sdk.version
