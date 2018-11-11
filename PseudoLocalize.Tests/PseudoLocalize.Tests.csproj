@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>PseudoLocalizer</RootNamespace>
+    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.11.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PseudoLocalize\PseudoLocalize.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="*.xlf" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
