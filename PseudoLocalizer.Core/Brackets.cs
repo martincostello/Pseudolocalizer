@@ -1,13 +1,17 @@
 ﻿namespace PseudoLocalizer.Core
 {
     /// <summary>
-    /// A transform which adds brackets to all strings.
+    /// A transform which adds brackets to all strings. This class cannot be inherited.
     /// </summary>
-    public static class Brackets
+    public sealed class Brackets : ITransformer
     {
-        public static string Transform(string value)
-        {
-            return "[" + value + "]";
-        }
+        /// <summary>
+        /// Gets the singleton instance of <see cref="Brackets"/>.
+        /// </summary>
+        public static Brackets Instance { get; } = new Brackets();
+
+        /// <inheritdoc />
+        public string Transform(string value)
+            => "[" + value + "]";
     }
 }

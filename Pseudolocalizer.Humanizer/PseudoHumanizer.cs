@@ -113,27 +113,27 @@ namespace PseudoLocalizer.Humanizer
 
             if (EnableExtraLength || UseDefaultOptions)
             {
-                result = ExtraLength.Transform(result);
+                result = ExtraLength.Instance.Transform(result);
             }
 
             if (EnableAccents || UseDefaultOptions)
             {
-                result = Accents.Transform(result);
+                result = Accents.Instance.Transform(result);
             }
 
             if (EnableBrackets || UseDefaultOptions)
             {
-                result = Brackets.Transform(result);
+                result = Brackets.Instance.Transform(result);
             }
 
             if (EnableMirror)
             {
-                result = Mirror.Transform(result);
+                result = Mirror.Instance.Transform(result);
             }
 
             if (EnableUnderscores)
             {
-                result = Underscores.Transform(result);
+                result = Underscores.Instance.Transform(result);
             }
 
             return result;

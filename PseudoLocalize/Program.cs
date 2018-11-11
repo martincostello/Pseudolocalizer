@@ -258,27 +258,27 @@
         {
             if (EnableExtraLength || UseDefaultOptions)
             {
-                processor.TransformString += Transform(ExtraLength.Transform);
+                processor.TransformString += Transform(ExtraLength.Instance.Transform);
             }
 
             if (EnableAccents || UseDefaultOptions)
             {
-                processor.TransformString += Transform(Accents.Transform);
+                processor.TransformString += Transform(Accents.Instance.Transform);
             }
 
             if (EnableBrackets || UseDefaultOptions)
             {
-                processor.TransformString += Transform(Brackets.Transform);
+                processor.TransformString += Transform(Brackets.Instance.Transform);
             }
 
             if (EnableMirror)
             {
-                processor.TransformString += Transform(Mirror.Transform);
+                processor.TransformString += Transform(Mirror.Instance.Transform);
             }
 
             if (EnableUnderscores)
             {
-                processor.TransformString += Transform(Underscores.Transform);
+                processor.TransformString += Transform(Underscores.Instance.Transform);
             }
 
             processor.Transform(inputStream, outputStream);

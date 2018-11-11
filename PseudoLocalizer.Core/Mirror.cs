@@ -3,13 +3,17 @@
     using System.Linq;
 
     /// <summary>
-    /// A transform which reverses (mirrors) all strings.
+    /// A transform which reverses (mirrors) all strings. This class cannot be inherited.
     /// </summary>
-    public static class Mirror
+    public sealed class Mirror : ITransformer
     {
-        public static string Transform(string value)
-        {
-            return new string(value.Reverse().ToArray());
-        }
+        /// <summary>
+        /// Gets the singleton instance of <see cref="Mirror"/>.
+        /// </summary>
+        public static Mirror Instance { get; } = new Mirror();
+
+        /// <inheritdoc />
+        public string Transform(string value)
+            => new string(value.Reverse().ToArray());
     }
 }

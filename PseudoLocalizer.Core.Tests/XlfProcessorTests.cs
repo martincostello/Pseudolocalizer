@@ -40,7 +40,7 @@
             using (var outputStream = new FileStream(OutputFileName, FileMode.Create, FileAccess.Write))
             {
                 var processor = new XlfProcessor();
-                processor.TransformString += (s, e) => { e.Value = Mirror.Transform(e.Value); };
+                processor.TransformString += (s, e) => { e.Value = Mirror.Instance.Transform(e.Value); };
                 processor.Transform(inputStream, outputStream);
             }
 
@@ -63,7 +63,7 @@
             using (var outputStream = new FileStream(OutputFileName, FileMode.Create, FileAccess.Write))
             {
                 var processor = new XlfProcessor();
-                processor.TransformString += (s, e) => { e.Value = Accents.Transform(e.Value); };
+                processor.TransformString += (s, e) => { e.Value = Accents.Instance.Transform(e.Value); };
                 processor.Transform(inputStream, outputStream);
             }
 
@@ -82,7 +82,7 @@
             {
                 var processor = new XlfProcessor();
                 processor.TransformString += (s, e) => { e.Value = e.Value + "1"; };
-                processor.TransformString += (s, e) => { e.Value = Brackets.Transform(e.Value); };
+                processor.TransformString += (s, e) => { e.Value = Brackets.Instance.Transform(e.Value); };
                 processor.TransformString += (s, e) => { e.Value = e.Value + "2"; };
                 processor.Transform(inputStream, outputStream);
             }

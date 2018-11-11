@@ -3,11 +3,17 @@
     using System.Linq;
 
     /// <summary>
-    /// A transform which makes all words approximately one third longer.
+    /// A transform which makes all words approximately one third longer. This class cannot be inherited.
     /// </summary>
-    public static class ExtraLength
+    public sealed class ExtraLength : ITransformer
     {
-        public static string Transform(string value)
+        /// <summary>
+        /// Gets the singleton instance of <see cref="ExtraLength"/>.
+        /// </summary>
+        public static ExtraLength Instance { get; } = new ExtraLength();
+
+        /// <inheritdoc />
+        public string Transform(string value)
         {
             return string.Join(
                 " ", 
