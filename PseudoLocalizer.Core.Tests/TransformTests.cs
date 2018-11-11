@@ -1,5 +1,6 @@
 ﻿namespace PseudoLocalizer.Core.Tests
 {
+    using System;
     using NUnit.Framework;
 
     [TestFixture]
@@ -65,6 +66,23 @@
         {
             string actual = Accents.Instance.Transform(input);
             Assert.That(actual.Contains(expected));
+        }
+
+        [Test]
+        public void TestPipeline()
+        {
+            var pipeline = new Pipeline(ExtraLength.Instance, Accents.Instance, Brackets.Instance);
+
+            Assert.That(pipeline.Transform(string.Empty), Is.EqualTo("[]"));
+            var message = "hello, world!";
+            Assert.That(pipeline.Transform(message), Is.EqualTo("[ĥéļļö،ẋẋ ŵöŕļð¡ẋẋ]"));
+        }
+
+        [Test]
+        public void TestPipelineNoTransforms()
+        {
+            var pipeline = new Pipeline(Array.Empty<ITransformer>());
+            Assert.That(pipeline.Transform(string.Empty), Is.EqualTo(string.Empty));
         }
     }
 }
