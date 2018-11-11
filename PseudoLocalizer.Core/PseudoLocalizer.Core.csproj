@@ -3,7 +3,10 @@
     <Description>A library containing types for pseudo-localization of strings and RESX and XLIFF resource files.</Description>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
+    <PackageId>PseudoLocalizer.Core</PackageId>
     <RootNamespace>PseudoLocalizer.Core</RootNamespace>
+    <Summary>$(Description)</Summary>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Title>PseudoLocalizer.Core</Title>
   </PropertyGroup>
 </Project>
