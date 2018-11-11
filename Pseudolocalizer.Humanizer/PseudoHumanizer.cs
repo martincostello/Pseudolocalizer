@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Humanizer.Configuration;
 using PseudoLocalizer.Core;
@@ -106,50 +107,78 @@ namespace PseudoLocalizer.Humanizer
         /// </summary>
         public bool EnableUnderscores { get; set; }
 
+        /// <summary>
+        /// Gets or sets the <see cref="ITransformer"/> to use if the configuration is frozen.
+        /// </summary>
+        private ITransformer Transformer { get; set; }
+
         /// <inheritdoc />
         public virtual string Transform(string value)
-        {
-            string result = value;
-
-            if (EnableExtraLength || UseDefaultOptions)
-            {
-                result = ExtraLength.Instance.Transform(result);
-            }
-
-            if (EnableAccents || UseDefaultOptions)
-            {
-                result = Accents.Instance.Transform(result);
-            }
-
-            if (EnableBrackets || UseDefaultOptions)
-            {
-                result = Brackets.Instance.Transform(result);
-            }
-
-            if (EnableMirror)
-            {
-                result = Mirror.Instance.Transform(result);
-            }
-
-            if (EnableUnderscores)
-            {
-                result = Underscores.Instance.Transform(result);
-            }
-
-            return result;
-        }
+            => (Transformer ?? CreateTransformer()).Transform(value);
 
         /// <summary>
         /// Registers the locale associated with this instance with the Humanizer <see cref="Configurator"/>
         /// to enable pseudo-localization for the locale specified by <see cref="LocaleCode"/>.
         /// </summary>
-        public void Register()
+        /// <returns>
+        /// The current <see cref="PseudoHumanizer"/> instance.
+        /// </returns>
+        public PseudoHumanizer Register()
         {
             Configurator.CollectionFormatters.Register(LocaleCode, new PseudoCollectionFormatter(this));
             Configurator.DateToOrdinalWordsConverters.Register(LocaleCode, new PseudoDateToOrdinalWordConverter(this));
             Configurator.Formatters.Register(LocaleCode, new PseudoFormatter(this));
             Configurator.NumberToWordsConverters.Register(LocaleCode, new PseudoNumberToWordsConverter(this));
             Configurator.Ordinalizers.Register(LocaleCode, new PseudoOrdinalizer(this));
+
+            return this;
+        }
+
+        /// <summary>
+        /// Freezes the configuration of this <see cref="PseudoHumanizer"/> instance.
+        /// </summary>
+        /// <returns>
+        /// The current <see cref="PseudoHumanizer"/> instance.
+        /// </returns>
+        /// <remarks>
+        /// If the configuration is frozen, changes to the configuration properties will no longer have any effect.
+        /// </remarks>
+        public PseudoHumanizer Freeze()
+        {
+            Transformer = CreateTransformer();
+            return this;
+        }
+
+        private ITransformer CreateTransformer()
+        {
+            var transformers = new List<ITransformer>();
+
+            if (EnableExtraLength || UseDefaultOptions)
+            {
+                transformers.Add(ExtraLength.Instance);
+            }
+
+            if (EnableAccents || UseDefaultOptions)
+            {
+                transformers.Add(Accents.Instance);
+            }
+
+            if (EnableBrackets || UseDefaultOptions)
+            {
+                transformers.Add(Brackets.Instance);
+            }
+
+            if (EnableMirror)
+            {
+                transformers.Add(Mirror.Instance);
+            }
+
+            if (EnableUnderscores)
+            {
+                transformers.Add(Underscores.Instance);
+            }
+
+            return new Pipeline(transformers);
         }
     }
 }

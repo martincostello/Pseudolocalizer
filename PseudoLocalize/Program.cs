@@ -256,35 +256,42 @@
 
         private void Transform(IProcessor processor, Stream inputStream, Stream outputStream)
         {
+            ITransformer transformer = CreateTransformer();
+
+            processor.TransformString += (_, e) => transformer.Apply(e);
+            processor.Transform(inputStream, outputStream);
+        }
+
+        private ITransformer CreateTransformer()
+        {
+            var transformers = new List<ITransformer>();
+
             if (EnableExtraLength || UseDefaultOptions)
             {
-                processor.TransformString += Transform(ExtraLength.Instance.Transform);
+                transformers.Add(ExtraLength.Instance);
             }
 
             if (EnableAccents || UseDefaultOptions)
             {
-                processor.TransformString += Transform(Accents.Instance.Transform);
+                transformers.Add(Accents.Instance);
             }
 
             if (EnableBrackets || UseDefaultOptions)
             {
-                processor.TransformString += Transform(Brackets.Instance.Transform);
+                transformers.Add(Brackets.Instance);
             }
 
             if (EnableMirror)
             {
-                processor.TransformString += Transform(Mirror.Instance.Transform);
+                transformers.Add(Mirror.Instance);
             }
 
             if (EnableUnderscores)
             {
-                processor.TransformString += Transform(Underscores.Instance.Transform);
+                transformers.Add(Underscores.Instance);
             }
 
-            processor.Transform(inputStream, outputStream);
+            return new Pipeline(transformers);
         }
-
-        private EventHandler<TransformStringEventArgs> Transform(Func<string, string> transformer)
-            => (_, e) => e.Value = transformer(e.Value);
     }
 }
