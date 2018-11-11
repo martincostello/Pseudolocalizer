@@ -3,8 +3,11 @@
     <Description>A library containing extensions for Humanizer to apply pseudo-localization to strings.</Description>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
+    <PackageId>PseudoLocalizer.Humanizer</PackageId>
     <RootNamespace>PseudoLocalizer.Humanizer</RootNamespace>
+    <Summary>$(Description)</Summary>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Title>PseudoLocalizer.Humanizer</Title>
   </PropertyGroup>
 <ItemGroup>
   <PackageReference Include="Humanizer" Version="2.4.2" />
