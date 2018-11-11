@@ -74,8 +74,7 @@
             var pipeline = new Pipeline(ExtraLength.Instance, Accents.Instance, Brackets.Instance);
 
             Assert.That(pipeline.Transform(string.Empty), Is.EqualTo("[]"));
-            var message = "hello, world!";
-            Assert.That(pipeline.Transform(message), Is.EqualTo("[ĥéļļö،ẋẋ ŵöŕļð¡ẋẋ]"));
+            Assert.That(pipeline.Transform("hello, world!"), Is.EqualTo("[ĥéļļö،ẋẋ ŵöŕļð¡ẋẋ]"));
         }
 
         [Test]
