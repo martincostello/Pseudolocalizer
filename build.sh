@@ -49,7 +49,9 @@ dotnet build ./PseudoLocalizer.sln --output $artifacts --configuration $configur
 if [ $skipTests == 0 ]; then
     if [ "$TF_BUILD" != "" ]; then
         dotnet test ./PseudoLocalizer.Core.Tests/PseudoLocalizer.Core.Tests.csproj --output $artifacts --configuration $configuration --logger trx || exit 1
+        dotnet test ./PseudoLocalize.Tests/PseudoLocalize.Tests.csproj --output $artifacts --configuration $configuration --logger trx || exit 1
     else
         dotnet test ./PseudoLocalizer.Core.Tests/PseudoLocalizer.Core.Tests.csproj --output $artifacts --configuration $configuration || exit 1
+        dotnet test ./PseudoLocalize.Tests/PseudoLocalize.Tests.csproj --output $artifacts --configuration $configuration || exit 1
     fi
 fi
