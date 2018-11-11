@@ -93,6 +93,14 @@
 
             foreach (var arg in args)
             {
+                // File paths may start with '/' on Linux,
+                // so if a path is a file, use it as such.
+                if (File.Exists(arg))
+                {
+                    instance.AddInputFile(arg);
+                    continue;
+                }
+
                 if (arg.StartsWith("/", StringComparison.Ordinal) ||
                     arg.StartsWith("-", StringComparison.Ordinal))
                 {
