@@ -4,6 +4,7 @@
   </ItemGroup>
   <PropertyGroup>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)PseudoLocalizer.snk</AssemblyOriginatorKeyFile>
     <Authors>anderskaplan;martin_costello</Authors>
     <Company>https://github.com/martincostello/Pseudolocalizer</Company>
     <Copyright>Pseudolocalizer Contributors (c) 2012-$([System.DateTime]::Now.ToString(yyyy))</Copyright>
