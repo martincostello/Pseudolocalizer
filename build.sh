@@ -54,6 +54,6 @@ if [ $skipTests == 0 ]; then
     fi
 fi
 
-dotnet pack ./PseudoLocalizer.Core/PseudoLocalize.Core.csproj --output $artifacts --configuration $configuration || exit 1
-dotnet pack ./PseudoLocalizer.Humanizer/PseudoLocalize.Humanizer.csproj --output $artifacts --configuration $configuration || exit 1
+dotnet pack ./PseudoLocalizer.Core/PseudoLocalizer.Core.csproj --output $artifacts --configuration $configuration || exit 1
+dotnet pack ./PseudoLocalizer.Humanizer/PseudoLocalizer.Humanizer.csproj --output $artifacts --configuration $configuration || exit 1
 dotnet pack ./PseudoLocalize/PseudoLocalize.csproj --output $artifacts --configuration $configuration || exit 1
