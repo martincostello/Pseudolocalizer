@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Security;
     using PseudoLocalizer.Core;
 
@@ -259,9 +261,7 @@
                 }
                 else
                 {
-                    var outputFileName = Path.Combine(
-                        Path.GetDirectoryName(inputFileName),
-                        Path.GetFileNameWithoutExtension(inputFileName) + "." + OutputCulture + Path.GetExtension(inputFileName));
+                    string outputFileName = GetOutputFileName(inputFileName);
 
                     using (var inputStream = File.OpenRead(inputFileName))
                     using (var outputStream = File.OpenWrite(outputFileName))
@@ -329,6 +329,30 @@
             }
 
             return new Pipeline(transformers);
+        }
+
+        private string GetOutputFileName(string inputFileName)
+        {
+            string baseFileName = Path.GetFileNameWithoutExtension(inputFileName);
+
+            try
+            {
+                string existingCulture = baseFileName.Split('.').LastOrDefault();
+
+                if (existingCulture != null &&
+                    !baseFileName.StartsWith(existingCulture) &&
+                    !string.Equals(CultureInfo.CreateSpecificCulture(existingCulture).TwoLetterISOLanguageName, "iv", StringComparison.Ordinal))
+                {
+                    baseFileName = baseFileName.Substring(0, baseFileName.LastIndexOf('.'));
+                }
+            }
+            catch (CultureNotFoundException)
+            {
+            }
+
+            return Path.Combine(
+                Path.GetDirectoryName(inputFileName),
+                baseFileName + "." + OutputCulture + Path.GetExtension(inputFileName));
         }
     }
 }
