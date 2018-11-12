@@ -83,5 +83,14 @@
             var pipeline = new Pipeline(Array.Empty<ITransformer>());
             Assert.That(pipeline.Transform(string.Empty), Is.EqualTo(string.Empty));
         }
+
+        [Test]
+        public void ShouldIgnorePlaceholdersWhenApplyingUnderscores()
+        {
+            Assert.That(Underscores.Instance.Transform("{0}hello, world"), Is.EqualTo("{0}____________"));
+            Assert.That(Underscores.Instance.Transform("hello, {1} world"), Is.EqualTo("_______{1}______"));
+            Assert.That(Underscores.Instance.Transform("hello, world{99}"), Is.EqualTo("____________{99}"));
+            Assert.That(Underscores.Instance.Transform("hello, world{0"), Is.EqualTo("______________"));
+        }
     }
 }
