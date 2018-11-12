@@ -65,7 +65,23 @@
         public void TestAccentsDoNotBreakFormatStrings(string input, string expected)
         {
             string actual = Accents.Instance.Transform(input);
-            Assert.That(actual.Contains(expected));
+            Assert.That(actual, Contains.Substring(expected));
+        }
+
+        [Test]
+        [TestCase("Hi <em>{0}</em>, click <a href=\"{1}\">here</a>.", new[] { "<em>{0}</em>", "<a href=\"{1}\">", "</a>" })]
+        [TestCase("2 > 0", new[] { "② ≥ ⓪" })]
+        [TestCase("0 < 2", new[] { "⓪ ≤ ②" })]
+        [TestCase("0 <> 2", new[] { "⓪ ≤≥ ②" })]
+        [TestCase("<self/> <a></a> <tag />", new[] { "<self/>", "<a></a>", "<tag />" })]
+        public void TestAccentsDoNotBreakHtml(string input, string[] expected)
+        {
+            string actual = Accents.Instance.Transform(input);
+
+            foreach (string value in expected)
+            {
+                Assert.That(actual, Contains.Substring(value));
+            }
         }
 
         [Test]
@@ -91,6 +107,14 @@
             Assert.That(Underscores.Instance.Transform("hello, {1} world"), Is.EqualTo("_______{1}______"));
             Assert.That(Underscores.Instance.Transform("hello, world{99}"), Is.EqualTo("____________{99}"));
             Assert.That(Underscores.Instance.Transform("hello, world{0"), Is.EqualTo("______________"));
+        }
+
+        [Test]
+        public void ShouldIgnoreHtmlWhenApplyingUnderscores()
+        {
+            Assert.That(Underscores.Instance.Transform("This <em>is</em> Sparta"), Is.EqualTo("_____<em>__</em>_______"));
+            Assert.That(Underscores.Instance.Transform("Some text <div/> more text"), Is.EqualTo("__________<div/>__________"));
+            Assert.That(Underscores.Instance.Transform("Some text <> more text"), Is.EqualTo("______________________"));
         }
     }
 }

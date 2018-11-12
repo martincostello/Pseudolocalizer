@@ -135,8 +135,9 @@
         /// <inheritdoc />
         public string Transform(string value)
         {
-            // Slower path to no break formatting strings by removing their digits
-            if (value.Contains('{') && value.Contains('}'))
+            // Slower path to not break formatting strings by removing their digits or break HTML tags
+            if ((value.Contains('{') && value.Contains('}')) ||
+                (value.Contains('<') && value.Contains('>') && value.Contains('/')))
             {
                 char[] array = value.ToArray();
 
@@ -144,32 +145,10 @@
                 {
                     char ch = array[i];
 
-                    // Are we at the start of a potential placeholder (e.g. "{?...}")
-                    if (ch == '{' && i < array.Length - 2)
+                    if (EscapeHelpers.ShouldTransform(array, ch, ref i))
                     {
-                        int j = i;
-
-                        // Consume all the digits
-                        while (j < array.Length - 1 && char.IsDigit(array[++j]))
-                        {
-                        }
-
-                        if (array[j] == ':')
-                        {
-                            // Consume all of any format specifier (e.g. "{0:yyyy}" for a DateTime)
-                            while (j < array.Length - 1 && array[++j] != '}')
-                            {
-                            }
-                        }
-
-                        if (array[j] == '}')
-                        {
-                            i = j;
-                            continue;
-                        }
+                        array[i] = Transform(ch);
                     }
-
-                    array[i] = Transform(ch);
                 }
 
                 return new string(array);
