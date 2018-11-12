@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Security;
     using PseudoLocalizer.Core;
 
@@ -37,6 +39,8 @@
             get { return _inputFiles.Count > 0; }
         }
 
+        public string OutputCulture { get; set; }
+
         public bool Overwrite { get; set; }
 
         public static void Main(string[] args)
@@ -48,13 +52,14 @@
             }
             else
             {
-                Console.WriteLine("Usage: pseudo-localize [/l] [/a] [/b] [/m] [/u] file [file...]");
+                Console.WriteLine("Usage: pseudo-localize [/l] [/a] [/b] [/m] [/u] [/c culture] file [file...]");
                 Console.WriteLine("Generates pseudo-localized versions of the specified input file(s).");
                 Console.WriteLine();
                 Console.WriteLine("The input files must be resource files in Resx or Xlf file format.");
                 Console.WriteLine("The output will be written to a file next to the original, with .qps-Ploc");
-                Console.WriteLine("appended to its name. For example, if the input file is X:\\Foo\\Bar.resx,");
-                Console.WriteLine("then the output file will be X:\\Foo\\Bar.qps-Ploc.resx.");
+                Console.WriteLine("(or the output culture you specify) appended to its name. For example, if");
+                Console.WriteLine("the input file is X:\\Foo\\Bar.resx, then the output file will be");
+                Console.WriteLine("X:\\Foo\\Bar.qps-Ploc.resx.");
                 Console.WriteLine();
                 Console.WriteLine("Options:");
                 Console.WriteLine("  /h, --help         Show command line help.");
@@ -64,6 +69,7 @@
                 Console.WriteLine("                     This makes it possible to spot cut off strings.");
                 Console.WriteLine("  /m, --mirror       Reverse all words (\"mirror\").");
                 Console.WriteLine("  /u, --underscores  Replace all characters with underscores.");
+                Console.WriteLine("  /c, --culture      Use the following string as the culture code in the output file name(s).");
                 Console.WriteLine("  /o, --overwrite    Overwrites the input file(s) with the pseudo-localized version.");
                 Console.WriteLine("  /f, --force        Suppresses the confirmation prompt for the --overwrite option.");
                 Console.WriteLine();
@@ -90,9 +96,12 @@
             instance.EnableBrackets = false;
             instance.EnableMirror = false;
             instance.EnableUnderscores = false;
+            instance.OutputCulture = "qps-Ploc";
 
-            foreach (var arg in args)
+            for (var i = 0; i < args.Length; i++)
             {
+                string arg = args[i];
+
                 // File paths may start with '/' on Linux,
                 // so if a path is a file, use it as such.
                 if (File.Exists(arg))
@@ -124,6 +133,26 @@
                         case "BRACKETS":
                             instance.EnableBrackets = true;
                             instance.UseDefaultOptions = false;
+                            break;
+
+                        case "C":
+                        case "CULTURE":
+                            if (i == args.Length -1)
+                            {
+                                Console.WriteLine("ERROR: No output culture specified.", arg);
+                                return false;
+                            }
+
+                            string culture = args[i + 1];
+                            if (culture.StartsWith("/", StringComparison.Ordinal) ||
+                                culture.StartsWith("-", StringComparison.Ordinal))
+                            {
+                                Console.WriteLine("ERROR: No output culture specified.", arg);
+                                return false;
+                            }
+
+                            instance.OutputCulture = culture;
+                            i++; // Consumed, so skip
                             break;
 
                         case "F":
@@ -181,7 +210,7 @@
 
             if (string.Equals(".xlf", extension, StringComparison.OrdinalIgnoreCase))
             {
-                return new XlfProcessor();
+                return new XlfProcessor(OutputCulture);
             }
             else
             {
@@ -232,7 +261,7 @@
                 }
                 else
                 {
-                    var outputFileName = Path.Combine(Path.GetDirectoryName(inputFileName), Path.GetFileNameWithoutExtension(inputFileName) + ".qps-Ploc" + Path.GetExtension(inputFileName));
+                    string outputFileName = GetOutputFileName(inputFileName);
 
                     using (var inputStream = File.OpenRead(inputFileName))
                     using (var outputStream = File.OpenWrite(outputFileName))
@@ -300,6 +329,30 @@
             }
 
             return new Pipeline(transformers);
+        }
+
+        private string GetOutputFileName(string inputFileName)
+        {
+            string baseFileName = Path.GetFileNameWithoutExtension(inputFileName);
+
+            try
+            {
+                string existingCulture = baseFileName.Split('.').LastOrDefault();
+
+                if (existingCulture != null &&
+                    !baseFileName.StartsWith(existingCulture) &&
+                    !string.Equals(CultureInfo.CreateSpecificCulture(existingCulture).TwoLetterISOLanguageName, "iv", StringComparison.Ordinal))
+                {
+                    baseFileName = baseFileName.Substring(0, baseFileName.LastIndexOf('.'));
+                }
+            }
+            catch (CultureNotFoundException)
+            {
+            }
+
+            return Path.Combine(
+                Path.GetDirectoryName(inputFileName),
+                baseFileName + "." + OutputCulture + Path.GetExtension(inputFileName));
         }
     }
 }

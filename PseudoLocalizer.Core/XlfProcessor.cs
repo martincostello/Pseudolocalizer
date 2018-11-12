@@ -12,6 +12,31 @@
     {
         private readonly IDictionary<XmlDocument, Version> _versionCache = new ConcurrentDictionary<XmlDocument, Version>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XlfProcessor"/> class.
+        /// </summary>
+        public XlfProcessor()
+            : this("qps-Ploc")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XlfProcessor"/> class.
+        /// </summary>
+        /// <param name="culture">The name of the culture to output.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="culture"/> is <see langword="null"/>.
+        /// </exception>
+        public XlfProcessor(string culture)
+        {
+            Culture = culture ?? throw new ArgumentNullException(nameof(culture));
+        }
+
+        /// <summary>
+        /// Gets the culture code associated with the processor.
+        /// </summary>
+        public string Culture { get; }
+
         /// <inheritdoc />
         protected override void OnProcessed(XmlDocument document, XmlNamespaceManager nsmgr, bool modified)
         {
@@ -50,7 +75,7 @@
 
             if (attribute != null)
             {
-                attribute.Value = "qps-Ploc";
+                attribute.Value = Culture;
             }
         }
 
