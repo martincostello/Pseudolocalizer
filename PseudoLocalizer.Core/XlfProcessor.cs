@@ -24,6 +24,9 @@
         /// Initializes a new instance of the <see cref="XlfProcessor"/> class.
         /// </summary>
         /// <param name="culture">The name of the culture to output.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="culture"/> is <see langword="null"/>.
+        /// </exception>
         public XlfProcessor(string culture)
         {
             Culture = culture ?? throw new ArgumentNullException(nameof(culture));
