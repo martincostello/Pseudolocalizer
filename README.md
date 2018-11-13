@@ -70,7 +70,7 @@ This project is licensed under the [MIT](https://github.com/martincostello/Pseud
 
 ## Building and Testing
 
-Compiling the tool yourself requires Git and the [.NET Core SDK](https://www.microsoft.com/net/download/core "Download the .NET Core SDK") to be installed (version `2.1.403` or later).
+Compiling the tool yourself requires Git and the [.NET Core SDK](https://www.microsoft.com/net/download/core "Download the .NET Core SDK") to be installed.
 
 To build and test the tool locally from a terminal/command-line, run one of the following set of commands:
 
