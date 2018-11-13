@@ -14,8 +14,8 @@
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageIconUrl></PackageIconUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/martincostello/Pseudolocalizer</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/martincostello/Pseudolocalizer#license</PackageLicenseUrl>
     <PackageReleaseNotes>See $(PackageProjectUrl)/releases for details.</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>localization,pseudolocalization</PackageTags>
