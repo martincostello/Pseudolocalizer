@@ -73,7 +73,7 @@
         [TestCase("2 > 0", new[] { "② ≥ ⓪" })]
         [TestCase("0 < 2", new[] { "⓪ ≤ ②" })]
         [TestCase("0 <> 2", new[] { "⓪ ≤≥ ②" })]
-        [TestCase("<self/> <a></a> <tag />", new[] { "<self/>", "<a></a>", "<tag />" })]
+        [TestCase("<self/> <br> <a></a> <tag /> <br>", new[] { "<self/>", "<br>", "<a></a>", "<tag />" })]
         public void TestAccentsDoNotBreakHtml(string input, string[] expected)
         {
             string actual = Accents.Instance.Transform(input);

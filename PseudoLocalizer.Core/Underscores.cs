@@ -17,7 +17,7 @@ namespace PseudoLocalizer.Core
         {
             // Slower path to not break formatting strings by removing their digits or break HTML tags
             if ((value.Contains('{') && value.Contains('}')) ||
-                (value.Contains('<') && value.Contains('>') && value.Contains('/')))
+                (value.Contains('<') && value.Contains('>')))
             {
                 char[] array = value.ToArray();
 
