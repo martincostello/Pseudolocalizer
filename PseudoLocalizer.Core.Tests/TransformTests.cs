@@ -73,10 +73,25 @@
         [TestCase("2 > 0", new[] { "② ≥ ⓪" })]
         [TestCase("0 < 2", new[] { "⓪ ≤ ②" })]
         [TestCase("0 <> 2", new[] { "⓪ ≤≥ ②" })]
-        [TestCase("<self/> <a></a> <tag />", new[] { "<self/>", "<a></a>", "<tag />" })]
+        [TestCase("<self/> <br> <a></a> <tag /> <br>", new[] { "<self/>", "<br>", "<a></a>", "<tag />" })]
         public void TestAccentsDoNotBreakHtml(string input, string[] expected)
         {
             string actual = Accents.Instance.Transform(input);
+
+            foreach (string value in expected)
+            {
+                Assert.That(actual, Contains.Substring(value));
+            }
+        }
+
+        [Test]
+        [TestCase("Hi <em>{0}</em>, click <a href=\"{1}\">here</a>.", new[] { "<em>{0}</em>", "<a href=\"{1}\">", "</a>" })]
+        [TestCase("<em>{0}</em>", new[] { "<em>{0}</em>" })]
+        [TestCase("<em> {0} </em>", new[] { "<em> {0} </em>" })]
+        [TestCase("<a href=\"{0}\">here</a>", new[] { "<a href=\"{0}\">" })]
+        public void TestExtraLengthDoesNotBreakHtml(string input, string[] expected)
+        {
+            string actual = ExtraLength.Instance.Transform(input);
 
             foreach (string value in expected)
             {

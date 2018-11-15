@@ -135,11 +135,12 @@
         /// <inheritdoc />
         public string Transform(string value)
         {
+            char[] array;
+
             // Slower path to not break formatting strings by removing their digits or break HTML tags
-            if ((value.Contains('{') && value.Contains('}')) ||
-                (value.Contains('<') && value.Contains('>') && value.Contains('/')))
+            if (EscapeHelpers.MayNeedEscaping(value))
             {
-                char[] array = value.ToArray();
+                array = value.ToArray();
 
                 for (int i = 0; i < array.Length; i++)
                 {
@@ -150,16 +151,13 @@
                         array[i] = Transform(ch);
                     }
                 }
-
-                return new string(array);
             }
             else
             {
-                return new string(
-                    value.ToCharArray()
-                        .Select(x => Transform(x))
-                        .ToArray());
+                array = value.Select(Transform).ToArray();
             }
+
+            return new string(array);
         }
 
         /// <summary>

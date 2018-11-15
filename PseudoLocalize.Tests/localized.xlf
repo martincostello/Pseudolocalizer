@@ -9,12 +9,12 @@
       </trans-unit>
       <trans-unit id="PageTitleFormat">
         <source>{0} - {1}</source>
-        <target state="translated">[{0}ẋ ‐ẋ {1}ẋ]</target>
+        <target state="translated">[{0} ‐ẋ {1}]</target>
         <note />
       </trans-unit>
       <trans-unit id="Copyright">
         <source>© {0:yyyy} - {1}</source>
-        <target state="translated">[©ẋ {0:yyyy}ẋẋẋ ‐ẋ {1}ẋ]</target>
+        <target state="translated">[©ẋ {0:yyyy} ‐ẋ {1}]</target>
         <note />
       </trans-unit>
       <trans-unit id="NavListText">
