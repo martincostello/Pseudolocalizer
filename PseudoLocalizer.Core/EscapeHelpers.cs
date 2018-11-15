@@ -1,7 +1,15 @@
-﻿namespace PseudoLocalizer.Core
+﻿using System.Linq;
+
+namespace PseudoLocalizer.Core
 {
     internal static class EscapeHelpers
     {
+        internal static bool MayNeedEscaping(string value)
+        {
+            return (value.Contains('{') && value.Contains('}')) ||
+                   (value.Contains('<') && value.Contains('>'));
+        }
+
         internal static bool ShouldTransform(char[] array, char ch, ref int i)
         {
             // Are we at the start of a potential placeholder (e.g. "{?...}")

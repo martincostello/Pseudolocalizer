@@ -85,6 +85,21 @@
         }
 
         [Test]
+        [TestCase("Hi <em>{0}</em>, click <a href=\"{1}\">here</a>.", new[] { "<em>{0}</em>", "<a href=\"{1}\">", "</a>" })]
+        [TestCase("<em>{0}</em>", new[] { "<em>{0}</em>" })]
+        [TestCase("<em> {0} </em>", new[] { "<em> {0} </em>" })]
+        [TestCase("<a href=\"{0}\">here</a>", new[] { "<a href=\"{0}\">" })]
+        public void TestExtraLengthDoesNotBreakHtml(string input, string[] expected)
+        {
+            string actual = ExtraLength.Instance.Transform(input);
+
+            foreach (string value in expected)
+            {
+                Assert.That(actual, Contains.Substring(value));
+            }
+        }
+
+        [Test]
         public void TestPipeline()
         {
             var pipeline = new Pipeline(ExtraLength.Instance, Accents.Instance, Brackets.Instance);
