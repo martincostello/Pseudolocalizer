@@ -34,22 +34,25 @@ dotnet tool install -g PseudoLocalize
 ## Usage
 
 ```
-Usage: pseudo-localize [/l] [/a] [/b] [/m] [/u] file [file...]
+Usage: pseudo-localize [/l] [/a] [/b] [/m] [/u] [/c culture] file [file...]
 Generates pseudo-localized versions of the specified input file(s).
 
 The input files must be resource files in Resx or Xlf file format.
 The output will be written to a file next to the original, with .qps-Ploc
-appended to its name. For example, if the input file is X:\Foo\Bar.resx,
-then the output file will be X:\Foo\Bar.qps-Ploc.resx.
+(or the output culture you specify) appended to its name. For example, if
+the input file is X:\Foo\Bar.resx, then the output file will be
+X:\Foo\Bar.qps-Ploc.resx.
 
 Options:
   /h, --help         Show command line help.
+  /v, --version      Show the version of the tool.
   /l, --lengthen     Make all words 30% longer, to ensure that there is room for translations.
   /a, --accents      Add accents on all letters so that non-localized text can be spotted.
   /b, --brackets     Add brackets to show the start and end of each localized string.
                      This makes it possible to spot cut off strings.
   /m, --mirror       Reverse all words ("mirror").
   /u, --underscores  Replace all characters with underscores.
+  /c, --culture      Use the following string as the culture code in the output file name(s).
   /o, --overwrite    Overwrites the input file(s) with the pseudo-localized version.
   /f, --force        Suppresses the confirmation prompt for the --overwrite option.
 

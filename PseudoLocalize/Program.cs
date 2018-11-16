@@ -5,6 +5,7 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Security;
     using PseudoLocalizer.Core;
 
@@ -43,6 +44,18 @@
 
         public bool Overwrite { get; set; }
 
+        private static string FileVersion()
+            => typeof(Program).Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+
+        private static string InfoVersion()
+        {
+            string version = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+
+            string[] split = version.Split('+');
+
+            return $"{split[0]}+{split[1].Substring(0, 7)}";
+        }
+
         public static void Main(string[] args)
         {
             var instance = new Program();
@@ -52,6 +65,8 @@
             }
             else
             {
+                Console.WriteLine($"PseudoLocalize {InfoVersion()}");
+                Console.WriteLine();
                 Console.WriteLine("Usage: pseudo-localize [/l] [/a] [/b] [/m] [/u] [/c culture] file [file...]");
                 Console.WriteLine("Generates pseudo-localized versions of the specified input file(s).");
                 Console.WriteLine();
@@ -63,6 +78,7 @@
                 Console.WriteLine();
                 Console.WriteLine("Options:");
                 Console.WriteLine("  /h, --help         Show command line help.");
+                Console.WriteLine("  /v, --version      Show the version of the tool.");
                 Console.WriteLine("  /l, --lengthen     Make all words 30% longer, to ensure that there is room for translations.");
                 Console.WriteLine("  /a, --accents      Add accents on all letters so that non-localized text can be spotted.");
                 Console.WriteLine("  /b, --brackets     Add brackets to show the start and end of each localized string.");
@@ -180,6 +196,12 @@
                         case "H":
                         case "HELP":
                             return false;
+
+                        case "V":
+                        case "VERSION":
+                            Console.WriteLine(FileVersion());
+                            Environment.Exit(0);
+                            return false; // Never reached
 
                         default:
                             Console.WriteLine("ERROR: Unknown option \"{0}\".", arg);
