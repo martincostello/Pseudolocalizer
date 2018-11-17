@@ -8,7 +8,7 @@
 
 ## Introduction
 
-Pseudolocalizer is a [.NET Core Global Tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools ".NET Core Global Tools overview") for testing internationalization aspects of software. Specifically, it reads string values from resource files in the Resx or Xlf format and generates fake translations for the "qps-Ploc" pseudo-locale ([MSDN](https://docs.microsoft.com/en-gb/windows/desktop/Intl/using-pseudo-locales-for-localization-testing "Window pseudo-localization "Using pseudo-locales for localizability testing")).
+Pseudolocalizer is a [.NET Core Global Tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools ".NET Core Global Tools overview") for testing internationalization aspects of software. Specifically, it reads string values from resource files in the Resx or Xlf format and generates fake translations for the "qps-Ploc" pseudo-locale ([MSDN](https://docs.microsoft.com/en-gb/windows/desktop/Intl/using-pseudo-locales-for-localization-testing "Using pseudo-locales for localizability testing")).
 
 The tool is run from the command line and provides the following options for the fake translation:
 
@@ -25,7 +25,7 @@ The tool is run from the command line and provides the following options for the
 
 ## Installation
 
-To install the tool from [NuGet](https://www.nuget.org/packages/MartinCostello.Logging.XUnit/ "MartinCostello.Logging.XUnit on NuGet.org") using the .NET SDK run:
+To install the tool from [NuGet](https://www.nuget.org/packages/PseudoLocalize "PseudoLocalize on NuGet.org") using the .NET SDK run:
 
 ```
 dotnet tool install -g PseudoLocalize
