@@ -14,11 +14,7 @@
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageIconUrl></PackageIconUrl>
-    <NoWarn>$(NoWarn);NU5125</NoWarn>
-    <!--
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    -->
-    <PackageLicenseUrl>https://github.com/martincostello/Pseudolocalizer#license</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/martincostello/Pseudolocalizer</PackageProjectUrl>
     <PackageReleaseNotes>See $(PackageProjectUrl)/releases for details.</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -28,6 +24,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
     <SignAssembly>true</SignAssembly>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <VersionPrefix>0.1.0</VersionPrefix>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
