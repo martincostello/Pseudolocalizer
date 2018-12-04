@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>A .NET Core Global Tool for pseudo-localization of RESX and XLIFF resource files.</Description>
+    <GenerateRuntimeConfigurationFiles>false</GenerateRuntimeConfigurationFiles>
     <OutputType>Exe</OutputType>
     <PackAsTool>true</PackAsTool>
     <PackageId>PseudoLocalize</PackageId>
     <Summary>$(Description)</Summary>
-    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp2.2</TargetFrameworks>
     <Title>PseudoLocalize</Title>
     <ToolCommandName>pseudo-localize</ToolCommandName>
   </PropertyGroup>
