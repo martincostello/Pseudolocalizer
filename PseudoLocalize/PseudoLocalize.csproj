@@ -6,6 +6,8 @@
     <PackAsTool>true</PackAsTool>
     <PackageId>PseudoLocalize</PackageId>
     <Summary>$(Description)</Summary>
+    <!-- Work around https://github.com/NuGet/NuGetGallery/issues/6743 -->
+    <SymbolPackageFormat>symbols.nupkg</SymbolPackageFormat>
     <TargetFrameworks>netcoreapp2.1;netcoreapp2.2</TargetFrameworks>
     <Title>PseudoLocalize</Title>
     <ToolCommandName>pseudo-localize</ToolCommandName>
