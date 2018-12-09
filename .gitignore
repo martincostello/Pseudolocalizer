@@ -5,6 +5,7 @@
 artifacts
 bin
 obj
+TestResults
 TestResult.xml
 *.cache
 *.qps-Ploc.*
