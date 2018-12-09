@@ -1,5 +1,8 @@
 name: CI_$(Date:yyyyMMdd)$(Rev:.r)
 
+pr:
+  autoCancel: false
+
 trigger:
   batch: true
   branches:
