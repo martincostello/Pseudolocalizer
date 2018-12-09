@@ -8,9 +8,6 @@ trigger:
   branches:
     include:
     - master
-  tags:
-    include:
-    - master
 
 phases:
 - template: build-template.yml
