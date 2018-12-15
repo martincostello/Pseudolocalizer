@@ -8,7 +8,8 @@
 
 ## Introduction
 
-Pseudolocalizer is a [.NET Core Global Tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools ".NET Core Global Tools overview") for testing internationalization aspects of software. Specifically, it reads string values from resource files in the Resx or Xlf format and generates fake translations for the "qps-Ploc" pseudo-locale ([MSDN](https://docs.microsoft.com/en-gb/windows/desktop/Intl/using-pseudo-locales-for-localization-testing "Using pseudo-locales for localizability testing")).
+Pseudolocalizer is a [.NET Core Global Tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools ".NET Core Global Tools overview") for testing internationalization aspects of software. Specifically, it reads string values from resource files in the [resx](https://docs.microsoft.com/en-us/dotnet/framework/resources/creating-resource-files-for-desktop-apps#resources-in-resx-files "Resources in .resx Files
+") or [XLIFF](https://en.wikipedia.org/wiki/XLIFF "XLIFF") format and generates fake translations for the _"qps-Ploc"_ pseudo-locale ([MSDN](https://docs.microsoft.com/en-gb/windows/desktop/Intl/using-pseudo-locales-for-localization-testing "Using pseudo-locales for localizability testing")).
 
 The tool is run from the command line and provides the following options for the fake translation:
 
@@ -20,6 +21,7 @@ The tool is run from the command line and provides the following options for the
   * Replace all characters with underscores so that non-localized text can be spotted.
 
 ### See also
+
   * [WPF Localization Guidance Whitepaper by Rick Strahl and Michele Leroux Bustamante](https://archive.codeplex.com/?p=wpflocalization "WPF Localization Guidance")
   * [Stack Overflow: How to use enable pseudo-locale in Windows for testing?](https://stackoverflow.com/questions/7042920/how-to-use-enable-pseudo-locale-in-windows-for-testing/ "How to use enable pseudo-locale in Windows for testing?")
 
@@ -27,8 +29,8 @@ The tool is run from the command line and provides the following options for the
 
 To install the tool from [NuGet](https://www.nuget.org/packages/PseudoLocalize "PseudoLocalize on NuGet.org") using the .NET SDK run:
 
-```
-dotnet tool install -g PseudoLocalize
+```sh
+dotnet tool install --global PseudoLocalize
 ```
 
 ## Usage
@@ -57,6 +59,34 @@ Options:
   /f, --force        Suppresses the confirmation prompt for the --overwrite option.
 
 The default options, if none are given, are: /l /a /b.
+```
+
+## Library
+
+The core functionality is also available as a [NuGet package](https://www.nuget.org/packages/PseudoLocalizer.Core/ "PseudoLocalizer.Core on NuGet.org"), as well as a [NuGet package](https://www.nuget.org/packages/PseudoLocalizer.Humanizer/ "") that plugs into the [Humanizer](https://github.com/Humanizr/Humanizer) library.
+
+These allow you to programmatically pseudo-localize strings for other scenarios not catered for by the PseudoLocalize tool itself.
+
+Took at look at the [source code for PseudoLocalize](https://github.com/martincostello/Pseudolocalizer/blob/3e988d301d1e93e3802434ff8fad7f77e421d266/PseudoLocalize/Program.cs#L316-L354) for examples of how to use the library to pseudo-localize strings and process streams.
+
+| Packages | Latest Version |
+|:-:|:-:|
+| `PseudoLocalizer.Core` |  [![NuGet](https://buildstats.info/nuget/PseudoLocalizer.Core?includePreReleases=false)](https://www.nuget.org/packages/PseudoLocalizer.Core "Download PseudoLocalizer.Core from NuGet") |
+| `PseudoLocalizer.Humanizer` | [![NuGet](https://buildstats.info/nuget/PseudoLocalizer.Humanizer?includePreReleases=false)](https://www.nuget.org/packages/PseudoLocalizer.Humanizer "Download PseudoLocalizer.Humanizer from NuGet") |
+
+### Installation
+
+```sh
+dotnet add package PseudoLocalizer.Core
+dotnet add package PseudoLocalizer.Humanizer
+```
+
+### Usage with Humanizer
+
+To register pseudo-localization for Humanizer, add the following snippet to your application:
+
+```csharp
+new PseudoLocalizer.Humanizer.PseudoHumanizer().Register();
 ```
 
 ## Feedback
