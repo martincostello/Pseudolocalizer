@@ -3,7 +3,6 @@
 root=$(cd "$(dirname "$0")"; pwd -P)
 artifacts=$root/artifacts
 configuration=Release
-skipTests=0
 
 while :; do
     if [ $# -le 0 ]; then
@@ -13,7 +12,7 @@ while :; do
     lowerI="$(echo $1 | awk '{print tolower($0)}')"
     case $lowerI in
         -\?|-h|--help)
-            echo "./build.sh [--skip-tests] [--output <OUTPUT_DIR>]"
+            echo "./build.sh [--output <OUTPUT_DIR>]"
             exit 1
             ;;
 
@@ -44,14 +43,10 @@ if [ "$dotnet_version" != "$CLI_VERSION" ]; then
     curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version "$CLI_VERSION" --install-dir "$DOTNET_INSTALL_DIR"
 fi
 
-dotnet build ./PseudoLocalizer.sln --output $artifacts --configuration $configuration || exit 1
-
-if [ $skipTests == 0 ]; then
-    if [ "$TF_BUILD" != "" ]; then
-        dotnet test ./PseudoLocalizer.Core.Tests/PseudoLocalizer.Core.Tests.csproj --output $artifacts --configuration $configuration --logger trx || exit 1
-        dotnet test ./PseudoLocalize.Tests/PseudoLocalize.Tests.csproj --output $artifacts --configuration $configuration --logger trx || exit 1
-    else
-        dotnet test ./PseudoLocalizer.Core.Tests/PseudoLocalizer.Core.Tests.csproj --output $artifacts --configuration $configuration || exit 1
-        dotnet test ./PseudoLocalize.Tests/PseudoLocalize.Tests.csproj --output $artifacts --configuration $configuration || exit 1
-    fi
+if [ "$TF_BUILD" != "" ]; then
+    dotnet test ./PseudoLocalizer.Core.Tests/PseudoLocalizer.Core.Tests.csproj --output $artifacts --configuration $configuration --logger trx || exit 1
+    dotnet test ./PseudoLocalize.Tests/PseudoLocalize.Tests.csproj --output $artifacts --configuration $configuration --logger trx || exit 1
+else
+    dotnet test ./PseudoLocalizer.Core.Tests/PseudoLocalizer.Core.Tests.csproj --output $artifacts --configuration $configuration || exit 1
+    dotnet test ./PseudoLocalize.Tests/PseudoLocalize.Tests.csproj --output $artifacts --configuration $configuration || exit 1
 fi
