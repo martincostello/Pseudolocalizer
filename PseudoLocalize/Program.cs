@@ -82,7 +82,9 @@
                 Console.WriteLine("  /h,  --help           Show command line help.");
                 Console.WriteLine("  /v,  --version        Show the version of the tool.");
                 Console.WriteLine("  /l,  --lengthen       Make all words 30% longer, to ensure that there is room for translations.");
-                Console.WriteLine("  /lc, --lengthen-char  Specifies the following character to use to make words longer.");
+                Console.WriteLine("  /lc, --lengthen-char  Specifies the following character to use to make words longer. This is");
+                Console.WriteLine("                        applied before other transformations, such as --accents, so may not be");
+                Console.WriteLine("                        the character that appears in the final pseudo-localized output.");
                 Console.WriteLine("  /a,  --accents        Add accents on all letters so that non-localized text can be spotted.");
                 Console.WriteLine("  /b,  --brackets       Add brackets to show the start and end of each localized string.");
                 Console.WriteLine("                        This makes it possible to spot cut off strings.");
@@ -156,7 +158,7 @@
 
                         case "C":
                         case "CULTURE":
-                            if (i == args.Length -1)
+                            if (i == args.Length - 1)
                             {
                                 Console.WriteLine("ERROR: No output culture specified.", arg);
                                 return false;
