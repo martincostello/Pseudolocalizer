@@ -40,6 +40,8 @@
             get { return _inputFiles.Count > 0; }
         }
 
+        public string LengthenChar { get; set; }
+
         public string OutputCulture { get; set; }
 
         public bool Overwrite { get; set; }
@@ -67,7 +69,7 @@
             {
                 Console.WriteLine($"PseudoLocalize {InfoVersion()}");
                 Console.WriteLine();
-                Console.WriteLine("Usage: pseudo-localize [/l] [/a] [/b] [/m] [/u] [/c culture] file [file...]");
+                Console.WriteLine("Usage: pseudo-localize [/l] [/a] [/b] [/m] [/u] [/c culture] [/lc character] file [file...]");
                 Console.WriteLine("Generates pseudo-localized versions of the specified input file(s).");
                 Console.WriteLine();
                 Console.WriteLine("The input files must be resource files in Resx or Xlf file format.");
@@ -77,17 +79,20 @@
                 Console.WriteLine("X:\\Foo\\Bar.qps-Ploc.resx.");
                 Console.WriteLine();
                 Console.WriteLine("Options:");
-                Console.WriteLine("  /h, --help         Show command line help.");
-                Console.WriteLine("  /v, --version      Show the version of the tool.");
-                Console.WriteLine("  /l, --lengthen     Make all words 30% longer, to ensure that there is room for translations.");
-                Console.WriteLine("  /a, --accents      Add accents on all letters so that non-localized text can be spotted.");
-                Console.WriteLine("  /b, --brackets     Add brackets to show the start and end of each localized string.");
-                Console.WriteLine("                     This makes it possible to spot cut off strings.");
-                Console.WriteLine("  /m, --mirror       Reverse all words (\"mirror\").");
-                Console.WriteLine("  /u, --underscores  Replace all characters with underscores.");
-                Console.WriteLine("  /c, --culture      Use the following string as the culture code in the output file name(s).");
-                Console.WriteLine("  /o, --overwrite    Overwrites the input file(s) with the pseudo-localized version.");
-                Console.WriteLine("  /f, --force        Suppresses the confirmation prompt for the --overwrite option.");
+                Console.WriteLine("  /h,  --help           Show command line help.");
+                Console.WriteLine("  /v,  --version        Show the version of the tool.");
+                Console.WriteLine("  /l,  --lengthen       Make all words 30% longer, to ensure that there is room for translations.");
+                Console.WriteLine("  /lc, --lengthen-char  Specifies the following character to use to make words longer. This is");
+                Console.WriteLine("                        applied before other transformations, such as --accents, so may not be");
+                Console.WriteLine("                        the character that appears in the final pseudo-localized output.");
+                Console.WriteLine("  /a,  --accents        Add accents on all letters so that non-localized text can be spotted.");
+                Console.WriteLine("  /b,  --brackets       Add brackets to show the start and end of each localized string.");
+                Console.WriteLine("                        This makes it possible to spot cut off strings.");
+                Console.WriteLine("  /m,  --mirror         Reverse all words (\"mirror\").");
+                Console.WriteLine("  /u,  --underscores    Replace all characters with underscores.");
+                Console.WriteLine("  /c,  --culture        Use the following string as the culture code in the output file name(s).");
+                Console.WriteLine("  /o,  --overwrite      Overwrites the input file(s) with the pseudo-localized version.");
+                Console.WriteLine("  /f,  --force          Suppresses the confirmation prompt for the --overwrite option.");
                 Console.WriteLine();
                 Console.WriteLine("The default options, if none are given, are: /l /a /b.");
             }
@@ -153,7 +158,7 @@
 
                         case "C":
                         case "CULTURE":
-                            if (i == args.Length -1)
+                            if (i == args.Length - 1)
                             {
                                 Console.WriteLine("ERROR: No output culture specified.", arg);
                                 return false;
@@ -202,6 +207,32 @@
                             Console.WriteLine(FileVersion());
                             Environment.Exit(0);
                             return false; // Never reached
+
+                        case "LC":
+                        case "LENGTHEN-CHAR":
+                            if (i == args.Length - 1)
+                            {
+                                Console.WriteLine("ERROR: No lengthening character specified.", arg);
+                                return false;
+                            }
+
+                            string lengthenChar = args[i + 1];
+                            if (lengthenChar.StartsWith("/", StringComparison.Ordinal) ||
+                                lengthenChar.StartsWith("-", StringComparison.Ordinal))
+                            {
+                                Console.WriteLine("ERROR: No lengthening character specified.", arg);
+                                return false;
+                            }
+
+                            if (lengthenChar.Length != 1)
+                            {
+                                Console.WriteLine("ERROR: Lengthening character must be only one character.", arg);
+                                return false;
+                            }
+
+                            instance.LengthenChar = lengthenChar;
+                            i++; // Consumed, so skip
+                            break;
 
                         default:
                             Console.WriteLine("ERROR: Unknown option \"{0}\".", arg);
@@ -327,7 +358,14 @@
 
             if (EnableExtraLength || UseDefaultOptions)
             {
-                transformers.Add(ExtraLength.Instance);
+                var transform = ExtraLength.Instance;
+
+                if (LengthenChar != null)
+                {
+                    transform = new ExtraLength() { LengthenCharacter = LengthenChar[0] };
+                }
+
+                transformers.Add(transform);
             }
 
             if (EnableAccents || UseDefaultOptions)

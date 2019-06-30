@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ja-JP" original="Test1.resx">
+    <body>
+      <trans-unit id="String1">
+        <source>Dude</source>
+        <note></note>
+      </trans-unit>
+      <trans-unit id="String2">
+        <source>Whatever</source>
+        <note>Foo</note>
+      </trans-unit>
+      <trans-unit id="String3">
+        <source>Something</source>
+        <target state="new">Something</target>
+        <note>Blah</note>
+      </trans-unit>
+      <trans-unit id="String4">
+        <source>Anything</source>
+        <note>Foo</note>
+        <target state="translated">Everything</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

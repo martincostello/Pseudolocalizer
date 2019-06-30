@@ -1,5 +1,6 @@
 ﻿namespace PseudoLocalizer.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -9,10 +10,51 @@
     /// </summary>
     public sealed class ExtraLength : ITransformer
     {
+        private readonly bool _isReadOnly;
+        private char _lengthenChar;
+
         /// <summary>
         /// Gets the singleton instance of <see cref="ExtraLength"/>.
         /// </summary>
-        public static ExtraLength Instance { get; } = new ExtraLength();
+        public static ExtraLength Instance { get; } = new ExtraLength(isReadOnly: true);
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtraLength"/> class.
+        /// </summary>
+        public ExtraLength()
+            : this(isReadOnly: false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtraLength"/> class.
+        /// </summary>
+        /// <param name="isReadOnly">Whether the properties of the instance are read-only.</param>
+        private ExtraLength(bool isReadOnly)
+        {
+            _isReadOnly = isReadOnly;
+            _lengthenChar = 'x';
+        }
+
+        /// <summary>
+        /// Gets or sets the character used to lengthen strings.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if the instance is equal to the value of <see cref="Instance"/>.
+        /// </exception>
+        public char LengthenCharacter
+        {
+            get => _lengthenChar;
+            set
+            {
+                if (_isReadOnly)
+                {
+                    throw new InvalidOperationException("This property's value cannot be changed for the default instance.");
+                }
+
+                _lengthenChar = value;
+            }
+        }
 
         /// <inheritdoc />
         public string Transform(string value)
@@ -68,13 +110,13 @@
             return string.Join(" ", words);
         }
 
-        private static string Lengthen(StringBuilder builder)
+        private string Lengthen(StringBuilder builder)
             => string.Join(" ", builder.ToString().Split(' ').Select(Lengthen));
 
-        private static string Lengthen(string word)
+        private string Lengthen(string word)
         {
             var count = (word.Length + 2) / 3;
-            return word + new string('x', count);
+            return word + new string(_lengthenChar, count);
         }
     }
 }

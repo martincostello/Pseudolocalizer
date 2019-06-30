@@ -109,6 +109,16 @@
         }
 
         [Test]
+        public void TestPipelineCustomLengthen()
+        {
+            var pipeline = new Pipeline(new ExtraLength() { LengthenCharacter = '.' }, Accents.Instance, Brackets.Instance);
+
+            Assert.That(pipeline.Transform(string.Empty), Is.EqualTo("[]"));
+            Assert.That(pipeline.Transform("hello, world!"), Is.EqualTo("[ĥéļļö،·· ŵöŕļð¡··]"));
+            Assert.That(pipeline.Transform("Please confirm this e-mail address by clicking the following link:"), Is.EqualTo("[Þļéåšé·· çöñƒîŕɱ··· ţĥîš·· é‐ɱåîļ·· åððŕéšš··· ƀý· çļîçķîñĝ··· ţĥé· ƒöļļöŵîñĝ··· ļîñķ∶··]"));
+        }
+
+        [Test]
         public void TestPipelineNoTransforms()
         {
             var pipeline = new Pipeline(Array.Empty<ITransformer>());
