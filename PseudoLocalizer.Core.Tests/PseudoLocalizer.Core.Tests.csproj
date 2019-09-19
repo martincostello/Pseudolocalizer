@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <RootNamespace>PseudoLocalizer.Core.Tests</RootNamespace>
@@ -15,5 +15,6 @@
   <ItemGroup>
     <None Include="Test1.resx" CopyToOutputDirectory="PreserveNewest" />
     <None Include="*.xlf" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="*.po" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

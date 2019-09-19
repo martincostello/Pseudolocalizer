@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>A library containing types for pseudo-localization of strings and RESX and XLIFF resource files.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -10,4 +10,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Title>PseudoLocalizer.Core</Title>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Karambolo.PO.Compact" Version="1.5.1" />
+  </ItemGroup>
 </Project>
