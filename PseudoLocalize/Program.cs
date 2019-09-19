@@ -259,15 +259,19 @@
 
         private IProcessor GetProcessor(string filePath)
         {
-            string extension = Path.GetExtension(filePath);
+            string extension = Path.GetExtension(filePath).ToUpperInvariant();
 
-            if (string.Equals(".xlf", extension, StringComparison.OrdinalIgnoreCase))
+            switch (extension)
             {
-                return new XlfProcessor(OutputCulture);
-            }
-            else
-            {
-                return new ResxProcessor();
+                case ".XLF":
+                    return new XlfProcessor(OutputCulture);
+
+                case ".PO":
+                case ".POT":
+                    return new POProcessor(OutputCulture);
+
+                default:
+                    return new ResxProcessor();
             }
         }
 

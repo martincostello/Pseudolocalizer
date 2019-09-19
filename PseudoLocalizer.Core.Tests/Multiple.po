@@ -1,0 +1,34 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Language: qps-Ploc\n"
+"Language-Team: \n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: \n"
+"POT-Creation-Date: 2019-09-18 04:19+0100\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+
+#: ../Web/UI/Areas/Home/Models/AccountModels.cs:17
+msgid "Hello, world!"
+msgstr "[Hello, world!1]2"
+
+#: ../Web/UI/Areas/Home/Models/AccountModels.cs:20 ../Web/UI/Areas/Home/Models/AccountModels.cs:41
+msgid "Dude"
+msgstr "[Dude1]2"
+
+#, csharp-format, fuzzy
+msgid "Time: {0} second"
+msgid_plural "Time: {0} seconds"
+msgstr[0] "[Time: {0} second1]2"
+msgstr[1] "[Time: {0} seconds1]2"
+
+msgid ""
+"Quite a long piece of text to test that line wrapping behaviour limits line "
+"length to 80 characters"
+msgstr ""
+"[Quite a long piece of text to test that line wrapping behaviour limits line "
+"length to 80 characters1]2"
