@@ -86,7 +86,7 @@ namespace PseudoLocalizer.Core.Tests
                 ex = Assert.Throws<POFileFormatException>(() => processor.Transform(inputStream, outputStream));
             }
 
-            Assert.AreEqual("Entry beginning at 18,1 must not have an empty id.\r\n", ex.Message);
+            Assert.AreEqual("Entry beginning at 18,1 must not have an empty id." + Environment.NewLine, ex.Message);
         }
 
         private static void DeleteOutputFile()
