@@ -331,6 +331,11 @@
 
                 Console.WriteLine("The file {0} was written successfully.", writtenFileName);
             }
+            catch (POFileFormatException ex)
+            {
+                Console.WriteLine("Syntax errors in input file {0}", inputFileName);
+                Console.Write(ex.Message);
+            }
             catch (Exception ex)
             {
                 if (ex is PathTooLongException ||

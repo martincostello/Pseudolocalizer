@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Karambolo.PO;
 
 namespace PseudoLocalizer.Core
@@ -23,13 +24,35 @@ namespace PseudoLocalizer.Core
         /// <param name="culture">The output culture.</param>
         public POProcessor(string culture)
         {
-            Culture = culture ?? throw new ArgumentNullException(nameof(culture));;
+            Culture = culture ?? throw new ArgumentNullException(nameof(culture));
+            ParserSettings = new POParserSettings();
+            GeneratorSettings = new POGeneratorSettings();
         }
 
         /// <summary>
         /// Gets the culture code associated with the processor.
         /// </summary>
         public string Culture { get; }
+
+#pragma warning disable CS3003 // Type is not CLS-compliant
+        /// <summary>
+        /// Gets the parser settings.
+        /// </summary>
+        /// <value>
+        /// The parser settings.
+        /// </value>
+        public POParserSettings ParserSettings { get; }
+#pragma warning restore CS3003 // Type is not CLS-compliant
+
+#pragma warning disable CS3003 // Type is not CLS-compliant
+        /// <summary>
+        /// Gets the generator settings.
+        /// </summary>
+        /// <value>
+        /// The generator settings.
+        /// </value>
+        public POGeneratorSettings GeneratorSettings { get; }
+#pragma warning restore CS3003 // Type is not CLS-compliant
 
         /// <inheritdoc />
         public override void Transform(Stream inputStream, Stream outputStream)
@@ -50,7 +73,7 @@ namespace PseudoLocalizer.Core
             else
             {
                 var diagnostics = result.Diagnostics;
-                throw new Exception(diagnostics.ToString());
+                throw new POFileFormatException(diagnostics);
             }
         }
 
@@ -66,22 +89,19 @@ namespace PseudoLocalizer.Core
                     PluralFormSelector = inputCatalog.PluralFormSelector
                 };
 
-            // Header comments etc.
-
             // Entries
             foreach (var entry in inputCatalog.Values)
             {
-                if (entry is POSingularEntry singularEntry)
+                switch (entry)
                 {
-                    outputCatalog.Add(TransformSingularEntry(singularEntry));
-                }
-                else if (entry is POPluralEntry plural)
-                {
-                    outputCatalog.Add(TransformPluralEntry(plural));
-                }
-                else
-                {
-                    throw new NotSupportedException("Unsupported PO entry type " + entry.GetType());
+                    case POSingularEntry singularEntry:
+                        outputCatalog.Add(TransformSingularEntry(singularEntry));
+                        break;
+                    case POPluralEntry plural:
+                        outputCatalog.Add(TransformPluralEntry(plural));
+                        break;
+                    default:
+                        throw new NotSupportedException("Unsupported PO entry type " + entry.GetType());
                 }
             }
 
