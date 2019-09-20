@@ -9,7 +9,7 @@
 ## Introduction
 
 Pseudolocalizer is a [.NET Core Global Tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools ".NET Core Global Tools overview") for testing internationalization aspects of software. Specifically, it reads string values from resource files in the [resx](https://docs.microsoft.com/en-us/dotnet/framework/resources/creating-resource-files-for-desktop-apps#resources-in-resx-files "Resources in .resx Files
-") or [XLIFF](https://en.wikipedia.org/wiki/XLIFF "XLIFF") format and generates fake translations for the _"qps-Ploc"_ pseudo-locale ([MSDN](https://docs.microsoft.com/en-gb/windows/desktop/Intl/using-pseudo-locales-for-localization-testing "Using pseudo-locales for localizability testing")).
+"), [XLIFF](https://en.wikipedia.org/wiki/XLIFF "XLIFF"), or [GetText Portable Object (PO)](https://www.gnu.org/software/gettext/manual/html_node/PO-Files.html) format and generates fake translations for the _"qps-Ploc"_ pseudo-locale ([MSDN](https://docs.microsoft.com/en-gb/windows/desktop/Intl/using-pseudo-locales-for-localization-testing "Using pseudo-locales for localizability testing")).
 
 The tool is run from the command line and provides the following options for the fake translation:
 
@@ -39,7 +39,7 @@ dotnet tool install --global PseudoLocalize
 Usage: pseudo-localize [/l] [/a] [/b] [/m] [/u] [/c culture] file [file...]
 Generates pseudo-localized versions of the specified input file(s).
 
-The input files must be resource files in Resx or Xlf file format.
+The input files must be resource files in Resx, Xlf, or PO file format.
 The output will be written to a file next to the original, with .qps-Ploc
 (or the output culture you specify) appended to its name. For example, if
 the input file is X:\Foo\Bar.resx, then the output file will be
