@@ -1,0 +1,21 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Language: en\n"
+"Language-Team: \n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: \n"
+"POT-Creation-Date: 2019-09-18 04:19+0100\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+
+msgid "Hello, world!"
+msgstr "Hello, world!"
+
+msgid ""
+msgstr ""
+
+

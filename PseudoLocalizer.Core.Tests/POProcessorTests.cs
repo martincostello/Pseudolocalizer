@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using NUnit.Framework;
 
 namespace PseudoLocalizer.Core.Tests
@@ -7,6 +8,7 @@ namespace PseudoLocalizer.Core.Tests
     public class POProcessorTests
     {
         private const string Test1FileName = "Test1.po";
+        private const string Test2FileName = "Test2.po";
         private const string OutputFileName = "out.po";
         
         [SetUp]
@@ -70,6 +72,21 @@ namespace PseudoLocalizer.Core.Tests
             }
 
             FileAssert.AreEqual("Multiple.po", OutputFileName);
+        }
+
+        
+        [Test]
+        public void ShouldThrowForBadInputFile()
+        {
+            POFileFormatException ex;
+            using (var inputStream = new FileStream(Test2FileName, FileMode.Open, FileAccess.Read))
+            using (var outputStream = new FileStream(OutputFileName, FileMode.Create, FileAccess.Write))
+            {
+                var processor = new POProcessor("qps-Ploc");
+                ex = Assert.Throws<POFileFormatException>(() => processor.Transform(inputStream, outputStream));
+            }
+
+            Assert.AreEqual("Entry beginning at 18,1 must not have an empty id.\r\n", ex.Message);
         }
 
         private static void DeleteOutputFile()
