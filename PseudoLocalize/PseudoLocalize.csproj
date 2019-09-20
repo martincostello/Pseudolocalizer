@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Description>A .NET Core Global Tool for pseudo-localization of RESX and XLIFF resource files.</Description>
+    <Description>A .NET Core Global Tool for pseudo-localization of RESX, XLIFF, and PO resource files.</Description>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <OutputType>Exe</OutputType>
     <PackAsTool>true</PackAsTool>
