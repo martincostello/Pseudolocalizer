@@ -6,7 +6,7 @@
     <PackAsTool>true</PackAsTool>
     <PackageId>PseudoLocalize</PackageId>
     <Summary>$(Description)</Summary>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp2.2</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
     <Title>PseudoLocalize</Title>
     <ToolCommandName>pseudo-localize</ToolCommandName>
   </PropertyGroup>
