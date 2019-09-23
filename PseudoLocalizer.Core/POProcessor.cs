@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
 using Karambolo.PO;
 
 namespace PseudoLocalizer.Core
@@ -25,34 +25,12 @@ namespace PseudoLocalizer.Core
         public POProcessor(string culture)
         {
             Culture = culture ?? throw new ArgumentNullException(nameof(culture));
-            ParserSettings = new POParserSettings();
-            GeneratorSettings = new POGeneratorSettings();
         }
 
         /// <summary>
         /// Gets the culture code associated with the processor.
         /// </summary>
         public string Culture { get; }
-
-#pragma warning disable CS3003 // Type is not CLS-compliant
-        /// <summary>
-        /// Gets the parser settings.
-        /// </summary>
-        /// <value>
-        /// The parser settings.
-        /// </value>
-        public POParserSettings ParserSettings { get; }
-#pragma warning restore CS3003 // Type is not CLS-compliant
-
-#pragma warning disable CS3003 // Type is not CLS-compliant
-        /// <summary>
-        /// Gets the generator settings.
-        /// </summary>
-        /// <value>
-        /// The generator settings.
-        /// </value>
-        public POGeneratorSettings GeneratorSettings { get; }
-#pragma warning restore CS3003 // Type is not CLS-compliant
 
         /// <inheritdoc />
         public override void Transform(Stream inputStream, Stream outputStream)
@@ -72,8 +50,7 @@ namespace PseudoLocalizer.Core
             }
             else
             {
-                var diagnostics = result.Diagnostics;
-                throw new POFileFormatException(diagnostics);
+                throw new POFileFormatException(GetDiagnosticsMessages(result.Diagnostics));
             }
         }
 
@@ -127,6 +104,21 @@ namespace PseudoLocalizer.Core
                 Comments = singular.Comments
             };
             return entry;
+        }
+
+        /// <summary>
+        /// Formats the specified diagnostics collection as a user-friendly message.
+        /// </summary>
+        /// <param name="diagnostics">The diagnostics collection.</param>
+        /// <returns>A string containing a user-friendly message.</returns>
+        private static ICollection<string> GetDiagnosticsMessages(IDiagnostics diagnostics)
+        {
+            if (diagnostics == null)
+            {
+                throw new ArgumentNullException(nameof(diagnostics));
+            }
+
+            return diagnostics.Select(diagnostic => string.Format(diagnostic.Code, diagnostic.Args)).ToList();
         }
     }
 }
