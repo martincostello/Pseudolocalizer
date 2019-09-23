@@ -4,10 +4,12 @@
 .vs
 artifacts
 bin
+coverage*
 obj
 TestResults
 TestResult.xml
 *.cache
+*.coverage
 *.qps-Ploc.*
 *.suo
 *.user
