@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
 
 namespace PseudoLocalizer.Core.Tests
@@ -87,6 +88,7 @@ namespace PseudoLocalizer.Core.Tests
             }
 
             Assert.AreEqual("Entry beginning at 18,1 must not have an empty id." + Environment.NewLine, ex.Message);
+            Assert.AreEqual("Entry beginning at 18,1 must not have an empty id.", ex.DiagnosticsMessages.First());
         }
 
         private static void DeleteOutputFile()
