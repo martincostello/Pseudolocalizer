@@ -74,9 +74,11 @@ namespace PseudoLocalizer.Core
                     case POSingularEntry singularEntry:
                         outputCatalog.Add(TransformSingularEntry(singularEntry));
                         break;
+
                     case POPluralEntry plural:
                         outputCatalog.Add(TransformPluralEntry(plural));
                         break;
+
                     default:
                         throw new NotSupportedException("Unsupported PO entry type " + entry.GetType());
                 }
