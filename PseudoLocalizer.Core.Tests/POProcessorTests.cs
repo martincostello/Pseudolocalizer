@@ -88,7 +88,7 @@ namespace PseudoLocalizer.Core.Tests
             }
 
             Assert.AreEqual("Entry beginning at 18,1 must not have an empty id." + Environment.NewLine, ex.Message);
-            Assert.AreEqual("Entry beginning at 18,1 must not have an empty id.", ex.DiagnosticsMessages.First());
+            Assert.AreEqual("Entry beginning at 18,1 must not have an empty id.", ex.DiagnosticMessages.First());
         }
 
         private static void DeleteOutputFile()

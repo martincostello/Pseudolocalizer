@@ -14,13 +14,6 @@ namespace PseudoLocalizer.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="POProcessor"/> class.
         /// </summary>
-        public POProcessor()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="POProcessor"/> class.
-        /// </summary>
         /// <param name="culture">The output culture.</param>
         public POProcessor(string culture)
         {
@@ -80,7 +73,7 @@ namespace PseudoLocalizer.Core
                         break;
 
                     default:
-                        throw new NotSupportedException("Unsupported PO entry type " + entry.GetType());
+                        throw new NotSupportedException($"Unsupported PO entry type {entry.GetType()}");
                 }
             }
 
