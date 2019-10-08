@@ -31,10 +31,8 @@
                 Encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier),
             };
 
-            using (var xmlWriter = XmlWriter.Create(outputStream, settings))
-            {
-                document.WriteTo(xmlWriter);
-            }
+            using var xmlWriter = XmlWriter.Create(outputStream, settings);
+            document.WriteTo(xmlWriter);
         }
 
         /// <summary>
