@@ -72,7 +72,7 @@
                 Console.WriteLine("Usage: pseudo-localize [/l] [/a] [/b] [/m] [/u] [/c culture] [/lc character] file [file...]");
                 Console.WriteLine("Generates pseudo-localized versions of the specified input file(s).");
                 Console.WriteLine();
-                Console.WriteLine("The input files must be resource files in Resx or Xlf file format.");
+                Console.WriteLine("The input files must be resource files in Resx, Xlf, or PO file format.");
                 Console.WriteLine("The output will be written to a file next to the original, with .qps-Ploc");
                 Console.WriteLine("(or the output culture you specify) appended to its name. For example, if");
                 Console.WriteLine("the input file is X:\\Foo\\Bar.resx, then the output file will be");
@@ -259,15 +259,19 @@
 
         private IProcessor GetProcessor(string filePath)
         {
-            string extension = Path.GetExtension(filePath);
+            string extension = Path.GetExtension(filePath).ToUpperInvariant();
 
-            if (string.Equals(".xlf", extension, StringComparison.OrdinalIgnoreCase))
+            switch (extension)
             {
-                return new XlfProcessor(OutputCulture);
-            }
-            else
-            {
-                return new ResxProcessor();
+                case ".XLF":
+                    return new XlfProcessor(OutputCulture);
+
+                case ".PO":
+                case ".POT":
+                    return new POProcessor(OutputCulture);
+
+                default:
+                    return new ResxProcessor();
             }
         }
 
@@ -326,6 +330,11 @@
                 }
 
                 Console.WriteLine("The file {0} was written successfully.", writtenFileName);
+            }
+            catch (POFileFormatException ex)
+            {
+                Console.WriteLine("Syntax errors in input file {0}", inputFileName);
+                Console.Write(ex.Message);
             }
             catch (Exception ex)
             {
