@@ -5,7 +5,7 @@ using System.Text;
 namespace PseudoLocalizer.Core
 {
     /// <summary>
-    ///     The exception that is thrown when a PO file format error is detected.
+    /// The exception that is thrown when a PO file format error is detected.
     /// </summary>
     public class POFileFormatException : Exception
     {
@@ -13,78 +13,91 @@ namespace PseudoLocalizer.Core
         /// Initializes a new instance of the <see cref="POFileFormatException"/> class.
         /// </summary>
         public POFileFormatException()
-            : base(GetMessage(null, null))
+            : this(null, Array.Empty<string>())
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="POFileFormatException" /> class.
+        /// Initializes a new instance of the <see cref="POFileFormatException" /> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         public POFileFormatException(string message)
-            : base(message)
+            : this(message, Array.Empty<string>())
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="POFileFormatException" /> class.
+        /// Initializes a new instance of the <see cref="POFileFormatException" /> class.
+        /// </summary>
+        /// <param name="diagnosticMessages">The diagnostic messages that describe the file format errors.</param>
+        public POFileFormatException(ICollection<string> diagnosticMessages)
+            : this(null, diagnosticMessages)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="POFileFormatException" /> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         /// <param name="diagnosticMessages">The diagnostic messages that describe the file format errors.</param>
         public POFileFormatException(string message, ICollection<string> diagnosticMessages)
             : base(GetMessage(message, diagnosticMessages))
         {
+            DiagnosticMessages = diagnosticMessages ?? Array.Empty<string>();
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="POFileFormatException" /> class.
+        /// Initializes a new instance of the <see cref="POFileFormatException"/> class with
+        /// the specified error message and a reference to the inner exception that is
+        /// the cause of this exception.
         /// </summary>
-        /// <param name="diagnosticMessages">The diagnostic messages that describe the file format errors.</param>
-        public POFileFormatException(ICollection<string> diagnosticMessages)
-            : base(GetMessage(null, diagnosticMessages))
+        /// <param name="message">The error message string.</param>
+        /// <param name="innerException">The inner exception reference.</param>
+        public POFileFormatException(string message, Exception innerException)
+            : base(message, innerException)
         {
-            DiagnosticMessages = diagnosticMessages;
+            DiagnosticMessages = Array.Empty<string>();
         }
 
         /// <summary>
-        ///     Gets the diagnostic messages that describe the file format errors.
+        /// Gets the diagnostic messages that describe the file format errors, if any.
         /// </summary>
         /// <value>
-        ///     The diagnostic messages that describe the file format errors.
+        /// The diagnostic messages that describe the file format errors.
         /// </value>
         public ICollection<string> DiagnosticMessages { get; }
 
         /// <summary>
-        ///     Gets the exception message.
+        /// Gets the exception message.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         /// <param name="diagnosticMessages">The diagnostic messages.</param>
         /// <returns>The error message.</returns>
         private static string GetMessage(string message, ICollection<string> diagnosticMessages)
         {
-            var sb = new StringBuilder();
+            var builder = new StringBuilder();
 
             if (string.IsNullOrEmpty(message))
             {
-                if (diagnosticMessages == null)
+                if (diagnosticMessages == null || diagnosticMessages.Count < 1)
                 {
-                    sb.AppendLine("The input file was not in a valid format");
+                    builder.AppendLine("The input file was not in a valid format");
                 }
             }
             else
             {
-                sb.AppendLine(message);
+                builder.AppendLine(message);
             }
             
             if (diagnosticMessages != null)
             {
-                foreach (var msg in diagnosticMessages)
+                foreach (string diagnostic in diagnosticMessages)
                 {
-                    sb.AppendLine(msg);
+                    builder.AppendLine(diagnostic);
                 }
             }
 
-            return sb.ToString();
+            return builder.ToString();
         }
     }
 }
