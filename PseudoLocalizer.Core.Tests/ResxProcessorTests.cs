@@ -1,7 +1,6 @@
 ﻿namespace PseudoLocalizer.Core.Tests
 {
     using System.IO;
-    using System.Linq;
     using NUnit.Framework;
 
     [TestFixture]
@@ -42,6 +41,7 @@
 
             var original = File.ReadAllText(Test1FileName);
             var transformed = File.ReadAllText(OutputFileName);
+
             Assert.That(original.Contains("<value>Dude</value>"));
             Assert.That(!original.Contains("<value>eduD</value>"));
             Assert.That(transformed.Contains("<value>eduD</value>"));
@@ -57,11 +57,12 @@
             using (var outputStream = new FileStream(OutputFileName, FileMode.Create, FileAccess.Write))
             {
                 var processor = new ResxProcessor();
-                processor.TransformString += (s, e) => { e.Value = Accents.Instance.Transform(e.Value); };
+                processor.TransformString += (_, e) => e.Value = Accents.Instance.Transform(e.Value);
                 processor.Transform(inputStream, outputStream);
             }
 
             var transformed = File.ReadAllText(OutputFileName);
+
             Assert.That(transformed.Contains("<value>\u00d0\u00fb\u00f0\u00e9</value>"));
             Assert.That(!transformed.Contains("<value>Dude</value>"));
             Assert.That(transformed.Contains("<comment>Foo</comment>"));
@@ -74,9 +75,9 @@
             using (var outputStream = new FileStream(OutputFileName, FileMode.Create, FileAccess.Write))
             {
                 var processor = new ResxProcessor();
-                processor.TransformString += (s, e) => { e.Value = e.Value + "1"; };
-                processor.TransformString += (s, e) => { e.Value = Brackets.Instance.Transform(e.Value); };
-                processor.TransformString += (s, e) => { e.Value = e.Value + "2"; };
+                processor.TransformString += (_, e) => e.Value += "1";
+                processor.TransformString += (_, e) => e.Value = Brackets.Instance.Transform(e.Value);
+                processor.TransformString += (_, e) => e.Value += "2";
                 processor.Transform(inputStream, outputStream);
             }
 

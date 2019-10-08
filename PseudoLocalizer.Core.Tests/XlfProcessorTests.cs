@@ -40,12 +40,13 @@
             using (var outputStream = new FileStream(OutputFileName, FileMode.Create, FileAccess.Write))
             {
                 var processor = new XlfProcessor();
-                processor.TransformString += (s, e) => { e.Value = Mirror.Instance.Transform(e.Value); };
+                processor.TransformString += (_, e) => e.Value = Mirror.Instance.Transform(e.Value);
                 processor.Transform(inputStream, outputStream);
             }
 
             var original = File.ReadAllText(Xlf12FileName);
             var transformed = File.ReadAllText(OutputFileName);
+
             Assert.That(original.Contains("<source>Something</source>"));
             Assert.That(!original.Contains("<target state=\"translated\">gnihtemoS</target>"));
             Assert.That(transformed.Contains("<target state=\"translated\">gnihtemoS</target>"));
@@ -63,11 +64,12 @@
             using (var outputStream = new FileStream(OutputFileName, FileMode.Create, FileAccess.Write))
             {
                 var processor = new XlfProcessor();
-                processor.TransformString += (s, e) => { e.Value = Accents.Instance.Transform(e.Value); };
+                processor.TransformString += (_, e) => e.Value = Accents.Instance.Transform(e.Value);
                 processor.Transform(inputStream, outputStream);
             }
 
             var transformed = File.ReadAllText(OutputFileName);
+
             Assert.That(!transformed.Contains("<target>Dude</target>"));
             Assert.That(transformed.Contains("<target>\u00d0\u00fb\u00f0\u00e9</target>"));
         }
@@ -81,14 +83,15 @@
             using (var outputStream = new FileStream(OutputFileName, FileMode.Create, FileAccess.Write))
             {
                 var processor = new XlfProcessor();
-                processor.TransformString += (s, e) => { e.Value = e.Value + "1"; };
-                processor.TransformString += (s, e) => { e.Value = Brackets.Instance.Transform(e.Value); };
-                processor.TransformString += (s, e) => { e.Value = e.Value + "2"; };
+                processor.TransformString += (_, e) => e.Value += "1";
+                processor.TransformString += (_, e) => e.Value = Brackets.Instance.Transform(e.Value);
+                processor.TransformString += (_, e) => e.Value += "2";
                 processor.Transform(inputStream, outputStream);
             }
 
             var original = File.ReadAllText(Xlf12FileName);
             var transformed = File.ReadAllText(OutputFileName);
+
             Assert.That(original.Contains("<source>Dude</source>"));
             Assert.That(original.Contains("<source>Whatever</source>"));
             Assert.That(original.Contains("<source>Something</source>"));

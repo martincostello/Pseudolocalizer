@@ -38,7 +38,7 @@ namespace PseudoLocalizer.Core.Tests
             using (var outputStream = new FileStream(OutputFileName, FileMode.Create, FileAccess.Write))
             {
                 var processor = new POProcessor("qps-Ploc");
-                processor.TransformString += (s, e) => { e.Value = Mirror.Instance.Transform(e.Value); };
+                processor.TransformString += (_, e) => e.Value = Mirror.Instance.Transform(e.Value);
                 processor.Transform(inputStream, outputStream);
             }
 
@@ -52,7 +52,7 @@ namespace PseudoLocalizer.Core.Tests
             using (var outputStream = new FileStream(OutputFileName, FileMode.Create, FileAccess.Write))
             {
                 var processor = new POProcessor("qps-Ploc");
-                processor.TransformString += (s, e) => { e.Value = Accents.Instance.Transform(e.Value); };
+                processor.TransformString += (_, e) => e.Value = Accents.Instance.Transform(e.Value);
                 processor.Transform(inputStream, outputStream);
             }
 
@@ -66,9 +66,9 @@ namespace PseudoLocalizer.Core.Tests
             using (var outputStream = new FileStream(OutputFileName, FileMode.Create, FileAccess.Write))
             {
                 var processor = new POProcessor("qps-Ploc");
-                processor.TransformString += (s, e) => { e.Value = e.Value + "1"; };
-                processor.TransformString += (s, e) => { e.Value = Brackets.Instance.Transform(e.Value); };
-                processor.TransformString += (s, e) => { e.Value = e.Value + "2"; };
+                processor.TransformString += (_, e) => e.Value += "1";
+                processor.TransformString += (_, e) => e.Value = Brackets.Instance.Transform(e.Value);
+                processor.TransformString += (_, e) => e.Value += "2";
                 processor.Transform(inputStream, outputStream);
             }
 
@@ -80,6 +80,7 @@ namespace PseudoLocalizer.Core.Tests
         public void ShouldThrowForBadInputFile()
         {
             POFileFormatException ex;
+
             using (var inputStream = new FileStream(Test2FileName, FileMode.Open, FileAccess.Read))
             using (var outputStream = new FileStream(OutputFileName, FileMode.Create, FileAccess.Write))
             {

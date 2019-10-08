@@ -14,7 +14,7 @@
     /// </summary>
     public class Program
     {
-        private List<string> _inputFiles = new List<string>();
+        private readonly List<string> _inputFiles = new List<string>();
 
         public Program()
         {
@@ -415,8 +415,11 @@
                     baseFileName = baseFileName.Substring(0, baseFileName.LastIndexOf('.'));
                 }
             }
+#pragma warning disable CA1031
             catch (CultureNotFoundException)
+#pragma warning restore CA1031
             {
+                // Let the user use whatever they entered if it isn't known
             }
 
             return Path.Combine(
