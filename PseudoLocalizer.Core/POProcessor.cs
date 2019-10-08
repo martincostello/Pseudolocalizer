@@ -15,6 +15,9 @@ namespace PseudoLocalizer.Core
         /// Initializes a new instance of the <see cref="POProcessor"/> class.
         /// </summary>
         /// <param name="culture">The output culture.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="culture"/> is <see langword="null"/>.
+        /// </exception>
         public POProcessor(string culture)
         {
             Culture = culture ?? throw new ArgumentNullException(nameof(culture));
@@ -43,21 +46,22 @@ namespace PseudoLocalizer.Core
             }
             else
             {
-                throw new POFileFormatException(GetDiagnosticsMessages(result.Diagnostics));
+                var diagnosticMessages = GetDiagnosticMessages(result.Diagnostics);
+                throw new POFileFormatException(diagnosticMessages);
             }
         }
 
         private POCatalog ProcessCatalog(POCatalog inputCatalog)
         {
-            var outputCatalog = new POCatalog
-                {
-                    HeaderComments = inputCatalog.HeaderComments,
-                    Headers = inputCatalog.Headers,
-                    Encoding = inputCatalog.Encoding,
-                    Language = Culture,
-                    PluralFormCount = inputCatalog.PluralFormCount,
-                    PluralFormSelector = inputCatalog.PluralFormSelector
-                };
+            var outputCatalog = new POCatalog()
+            {
+                HeaderComments = inputCatalog.HeaderComments,
+                Headers = inputCatalog.Headers,
+                Encoding = inputCatalog.Encoding,
+                Language = Culture,
+                PluralFormCount = inputCatalog.PluralFormCount,
+                PluralFormSelector = inputCatalog.PluralFormSelector
+            };
 
             // Entries
             foreach (var entry in inputCatalog.Values)
@@ -82,8 +86,12 @@ namespace PseudoLocalizer.Core
 
         private POPluralEntry TransformPluralEntry(POPluralEntry plural)
         {
-            var entry = new POPluralEntry(plural.Key) {Comments = plural.Comments};
-            foreach (var source in plural)
+            var entry = new POPluralEntry(plural.Key)
+            {
+                Comments = plural.Comments,
+            };
+
+            foreach (string source in plural)
             {
                 entry.Add(Transform(source));
             }
@@ -93,12 +101,13 @@ namespace PseudoLocalizer.Core
 
         private POSingularEntry TransformSingularEntry(POSingularEntry singular)
         {
-            var entry = new POSingularEntry(singular.Key)
+            string translation = Transform(singular.Translation);
+
+            return new POSingularEntry(singular.Key)
             {
-                Translation = Transform(singular.Translation),
-                Comments = singular.Comments
+                Translation = translation,
+                Comments = singular.Comments,
             };
-            return entry;
         }
 
         /// <summary>
@@ -106,14 +115,16 @@ namespace PseudoLocalizer.Core
         /// </summary>
         /// <param name="diagnostics">The diagnostics collection.</param>
         /// <returns>A string containing a user-friendly message.</returns>
-        private static ICollection<string> GetDiagnosticsMessages(IDiagnostics diagnostics)
+        private static ICollection<string> GetDiagnosticMessages(IDiagnostics diagnostics)
         {
             if (diagnostics == null)
             {
                 throw new ArgumentNullException(nameof(diagnostics));
             }
 
-            return diagnostics.Select(diagnostic => string.Format(diagnostic.Code, diagnostic.Args)).ToList();
+            return diagnostics
+                .Select((diagnostic) => string.Format(diagnostic.Code, diagnostic.Args))
+                .ToList();
         }
     }
 }
