@@ -15,7 +15,6 @@ namespace PseudoLocalizer.Core
         public POFileFormatException()
             : base(GetMessage(null, null))
         {
-            
         }
 
         /// <summary>
