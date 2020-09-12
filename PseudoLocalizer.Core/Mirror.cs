@@ -16,6 +16,8 @@
         /// <inheritdoc />
         public string Transform(string value)
         {
+            StringBuilder mirrored;
+
             // Slower path to not break formatting strings by flipping placeholders or breaking HTML
             if (EscapeHelpers.MayNeedEscaping(value))
             {
@@ -31,7 +33,7 @@
 
                     if (EscapeHelpers.ShouldTransform(src, ch, ref i))
                     {
-                        current.Insert(0, ch);
+                        current.Insert(0, FlipIfSpecial(ch));
                     }
                     else
                     {
@@ -55,12 +57,31 @@
                     builder.Insert(0, current.ToString());
                 }
 
-                return builder.ToString();
+                mirrored = builder;
             }
             else
             {
-                return new string(value.Reverse().ToArray());
+                mirrored = new StringBuilder();
+
+                foreach (char ch in value.Reverse())
+                {
+                    mirrored.Append(FlipIfSpecial(ch));
+                }
             }
+
+            return mirrored.ToString();
+        }
+
+        private static char FlipIfSpecial(char ch)
+        {
+            return ch switch
+            {
+                '[' => ']',
+                ']' => '[',
+                '(' => ')',
+                ')' => '(',
+                _ => ch,
+            };
         }
     }
 }

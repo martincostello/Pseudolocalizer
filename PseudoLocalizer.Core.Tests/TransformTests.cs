@@ -118,6 +118,15 @@
         }
 
         [Test]
+        [TestCase("This should be flipped (except for these parentheses).", ".(sesehtnerap eseht rof tpecxe) deppilf eb dluohs sihT")]
+        [TestCase("Section tags [like this] should not be flipped.", ".deppilf eb ton dluohs [siht ekil] sgat noitceS")]
+        public void TestMirrorDoesNotBreakBrackets(string input, string expected)
+        {
+            string actual = Mirror.Instance.Transform(input);
+            Assert.That(actual, Contains.Substring(expected));
+        }
+
+        [Test]
         public void TestPipeline()
         {
             var pipeline = new Pipeline(ExtraLength.Instance, Accents.Instance, Brackets.Instance);
