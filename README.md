@@ -2,9 +2,7 @@
 
 [![NuGet](https://buildstats.info/nuget/PseudoLocalize?includePreReleases=false)](https://www.nuget.org/packages/PseudoLocalize "Download PseudoLocalize from NuGet")
 
-[![Build Status](https://dev.azure.com/martincostello/Pseudolocalizer/_apis/build/status/CI)](https://dev.azure.com/martincostello/Pseudolocalizer/_build/latest?definitionId=72)
-
-[![Build history](https://buildstats.info/azurepipelines/chart/martincostello/Pseudolocalizer/72?branch=master&includeBuildsFromPullRequest=false)](https://dev.azure.com/martincostello/Pseudolocalizer/_build?definitionId=72)
+[![Build status](https://github.com/martincostello/Pseudolocalizer/workflows/build/badge.svg?branch=master&event=push)](https://github.com/martincostello/Pseudolocalizer/actions?query=workflow%3Abuild+branch%3Amaster+event%3Apush)
 
 ## Introduction
 
@@ -105,17 +103,7 @@ This project is licensed under the [MIT](https://github.com/martincostello/Pseud
 
 Compiling the tool yourself requires Git and the [.NET Core SDK](https://www.microsoft.com/net/download/core "Download the .NET Core SDK") to be installed.
 
-To build and test the tool locally from a terminal/command-line, run one of the following set of commands:
-
-**Windows**
-
-```powershell
-git clone https://github.com/martincostello/Pseudolocalizer.git
-cd Pseudolocalizer
-.\build.ps1
-```
-
-**Linux/macOS**
+To build and test the tool locally from a terminal/command-line, run the following set of commands:
 
 ```sh
 git clone https://github.com/martincostello/Pseudolocalizer.git
