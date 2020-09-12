@@ -118,6 +118,26 @@
         }
 
         [Test]
+        [TestCase("Hi <em>{0}</em>, click <a href=\"{1}\">here</a>.", new[] { "<em>{0}</em>", "<a href=\"{1}\">", "</a>" })]
+        [TestCase("Hi <em>{0}</em>, click <a href=\"https://www.google.com\">here</a>.", new[] { "<em>{0}</em>", "<a href=\"https://www.google.com\">", "</a>" })]
+        [TestCase("<em></em>", new[] { "<em></em>" })]
+        [TestCase("<em>X</em>", new[] { "<em>X</em>" })]
+        [TestCase("<em>ABC</em>", new[] { "<em>CBA</em>" })]
+        [TestCase("<em>{0}</em>", new[] { "<em>{0}</em>" })]
+        [TestCase("<em> {0} </em>", new[] { "<em> {0} </em>" })]
+        [TestCase("<a href=\"{0}\">here</a>", new[] { "<a href=\"{0}\">" })]
+        [TestCase("Here is a <br/> sentence.", new[] { ".ecnetnes <br/> a si ereH" })]
+        public void TestMirrorDoesNotBreakHtml(string input, string[] expected)
+        {
+            string actual = Mirror.Instance.Transform(input);
+
+            foreach (string value in expected)
+            {
+                Assert.That(actual, Contains.Substring(value));
+            }
+        }
+
+        [Test]
         [TestCase("This should be flipped (except for these parentheses).", ".(sesehtnerap eseht rof tpecxe) deppilf eb dluohs sihT")]
         [TestCase("Section tags [like this] should not be flipped.", ".deppilf eb ton dluohs [siht ekil] sgat noitceS")]
         [TestCase("This should also be preserved {even though it's not a format string}.", ".{gnirts tamrof a ton s'ti hguoht neve} devreserp eb osla dluohs sihT")]
