@@ -23,8 +23,8 @@ msgstr "eduD"
 #, csharp-format, fuzzy
 msgid "Time: {0} second"
 msgid_plural "Time: {0} seconds"
-msgstr[0] "dnoces }0{ :emiT"
-msgstr[1] "sdnoces }0{ :emiT"
+msgstr[0] "dnoces {0} :emiT"
+msgstr[1] "sdnoces {0} :emiT"
 
 msgid ""
 "Quite a long piece of text to test that line wrapping behaviour limits line "

@@ -102,6 +102,21 @@
         }
 
         [Test]
+        [TestCase("{0}", "{0}")]
+        [TestCase("{10}", "{10}")]
+        [TestCase("Hello, {0}", "{0}")]
+        [TestCase("Something {100:0abc} something", "{100:0abc}")]
+        [TestCase("{0} is a person and so is {1}.", "{0}")]
+        [TestCase("{0} is a person and so is {1}.", "{1}")]
+        [TestCase("Welcome to the world of tomorrow, {0}; it's the year {1:yyyy}!", "{0}")]
+        [TestCase("Welcome to the world of tomorrow, {0}; it's the year {1:yyyy}!", "{1:yyyy}")]
+        public void TestMirrorDoesNotBreakFormatStrings(string input, string expected)
+        {
+            string actual = Mirror.Instance.Transform(input);
+            Assert.That(actual, Contains.Substring(expected));
+        }
+
+        [Test]
         public void TestPipeline()
         {
             var pipeline = new Pipeline(ExtraLength.Instance, Accents.Instance, Brackets.Instance);
