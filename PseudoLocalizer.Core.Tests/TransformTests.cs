@@ -7,50 +7,52 @@
     public class TransformTests
     {
         [Test]
-        public void TestExtraLength()
+        public void TestExtraLengthEmpty()
         {
             Assert.That(ExtraLength.Instance.Transform(string.Empty), Is.EqualTo(string.Empty), "No extra length added to the empty string.");
-
-            var singleWord = "hello";
-            var transformed = ExtraLength.Instance.Transform(singleWord);
-            Assert.That(transformed.Length, Is.GreaterThan(singleWord.Length));
-            Assert.That(transformed.Split(' ').Length, Is.EqualTo(singleWord.Split(' ').Length), "The number of words stays the same.");
-
-            var sentence = "The quick brown fox bla bla bla.";
-            transformed = ExtraLength.Instance.Transform(sentence);
-            Assert.That(transformed.Length, Is.GreaterThan(sentence.Length));
-            Assert.That(transformed.Split(' ').Length, Is.EqualTo(sentence.Split(' ').Length), "The number of words stays the same.");
         }
 
         [Test]
-        public void TestBrackets()
+        [TestCase("hello")]
+        [TestCase("The quick brown fox bla bla bla.")]
+        public void TestExtraLength(string input)
         {
-            Assert.That(Brackets.Instance.Transform(string.Empty), Is.EqualTo("[]"));
-            Assert.That(Brackets.Instance.Transform("hello"), Is.EqualTo("[hello]"));
-            Assert.That(Brackets.Instance.Transform("The quick brown fox bla bla bla."), Is.EqualTo("[The quick brown fox bla bla bla.]"));
+            var actual = ExtraLength.Instance.Transform(input);
+            Assert.That(actual.Length, Is.GreaterThan(input.Length));
+            Assert.That(actual.Split(' ').Length, Is.EqualTo(input.Split(' ').Length), "The number of words stays the same.");
         }
 
         [Test]
-        public void TestMirror()
+        [TestCase("", "[]")]
+        [TestCase("hello", "[hello]")]
+        [TestCase("The quick brown fox bla bla bla.", "[The quick brown fox bla bla bla.]")]
+        public void TestBrackets(string value, string expected)
         {
-            Assert.That(Mirror.Instance.Transform(string.Empty), Is.EqualTo(string.Empty));
-            Assert.That(Mirror.Instance.Transform("hello, world!"), Is.EqualTo("!dlrow ,olleh"));
+            Assert.That(Brackets.Instance.Transform(value), Is.EqualTo(expected));
         }
 
         [Test]
-        public void TestUnderscores()
+        [TestCase("", "")]
+        [TestCase("hello, world!", "!dlrow ,olleh")]
+        public void TestMirror(string value, string expected)
         {
-            Assert.That(Underscores.Instance.Transform(string.Empty), Is.EqualTo(string.Empty));
-            var message = "hello, world!";
-            Assert.That(Underscores.Instance.Transform(message), Is.EqualTo(new string('_', message.Length)));
+            Assert.That(Mirror.Instance.Transform(value), Is.EqualTo(expected));
         }
 
         [Test]
-        public void TestAccents()
+        [TestCase("", "")]
+        [TestCase("hello, world!", "_____________")]
+        public void TestUnderscores(string value, string expected)
         {
-            Assert.That(Accents.Instance.Transform(string.Empty), Is.EqualTo(string.Empty));
-            var message = "hello, world!";
-            Assert.That(Accents.Instance.Transform(message), Is.EqualTo("ĥéļļö، ŵöŕļð¡"));
+            Assert.That(Underscores.Instance.Transform(value), Is.EqualTo(expected));
+        }
+
+        [Test]
+        [TestCase("", "")]
+        [TestCase("hello, world!", "ĥéļļö، ŵöŕļð¡")]
+        public void TestAccents(string value, string expected)
+        {
+            Assert.That(Accents.Instance.Transform(value), Is.EqualTo(expected));
         }
 
         [Test]
@@ -148,46 +150,50 @@
         }
 
         [Test]
-        public void TestPipeline()
+        [TestCase("", "[]")]
+        [TestCase("hello, world!", "[ĥéļļö،ẋẋ ŵöŕļð¡ẋẋ]")]
+        public void TestPipeline(string input, string expected)
         {
             var pipeline = new Pipeline(ExtraLength.Instance, Accents.Instance, Brackets.Instance);
-
-            Assert.That(pipeline.Transform(string.Empty), Is.EqualTo("[]"));
-            Assert.That(pipeline.Transform("hello, world!"), Is.EqualTo("[ĥéļļö،ẋẋ ŵöŕļð¡ẋẋ]"));
+            Assert.That(pipeline.Transform(input), Is.EqualTo(expected));
         }
 
         [Test]
-        public void TestPipelineCustomLengthen()
+        [TestCase("", "[]")]
+        [TestCase("hello, world!", "[ĥéļļö،·· ŵöŕļð¡··]")]
+        [TestCase("Please confirm this e-mail address by clicking the following link:", "[Þļéåšé·· çöñƒîŕɱ··· ţĥîš·· é‐ɱåîļ·· åððŕéšš··· ƀý· çļîçķîñĝ··· ţĥé· ƒöļļöŵîñĝ··· ļîñķ∶··]")]
+        public void TestPipelineCustomLengthen(string input, string expected)
         {
             var pipeline = new Pipeline(new ExtraLength() { LengthenCharacter = '.' }, Accents.Instance, Brackets.Instance);
-
-            Assert.That(pipeline.Transform(string.Empty), Is.EqualTo("[]"));
-            Assert.That(pipeline.Transform("hello, world!"), Is.EqualTo("[ĥéļļö،·· ŵöŕļð¡··]"));
-            Assert.That(pipeline.Transform("Please confirm this e-mail address by clicking the following link:"), Is.EqualTo("[Þļéåšé·· çöñƒîŕɱ··· ţĥîš·· é‐ɱåîļ·· åððŕéšš··· ƀý· çļîçķîñĝ··· ţĥé· ƒöļļöŵîñĝ··· ļîñķ∶··]"));
+            Assert.That(pipeline.Transform(input), Is.EqualTo(expected));
         }
 
         [Test]
-        public void TestPipelineNoTransforms()
+        [TestCase("", "")]
+        [TestCase("hello, world!", "hello, world!")]
+        public void TestPipelineNoTransforms(string input, string expected)
         {
             var pipeline = new Pipeline(Array.Empty<ITransformer>());
-            Assert.That(pipeline.Transform(string.Empty), Is.EqualTo(string.Empty));
+            Assert.That(pipeline.Transform(input), Is.EqualTo(expected));
         }
 
         [Test]
-        public void ShouldIgnorePlaceholdersWhenApplyingUnderscores()
+        [TestCase("{0}hello, world", "{0}____________")]
+        [TestCase("hello, {1} world", "_______{1}______")]
+        [TestCase("hello, world{99}", "____________{99}")]
+        [TestCase("hello, world{0", "______________")]
+        public void ShouldIgnorePlaceholdersWhenApplyingUnderscores(string input, string expected)
         {
-            Assert.That(Underscores.Instance.Transform("{0}hello, world"), Is.EqualTo("{0}____________"));
-            Assert.That(Underscores.Instance.Transform("hello, {1} world"), Is.EqualTo("_______{1}______"));
-            Assert.That(Underscores.Instance.Transform("hello, world{99}"), Is.EqualTo("____________{99}"));
-            Assert.That(Underscores.Instance.Transform("hello, world{0"), Is.EqualTo("______________"));
+            Assert.That(Underscores.Instance.Transform(input), Is.EqualTo(expected));
         }
 
         [Test]
-        public void ShouldIgnoreHtmlWhenApplyingUnderscores()
+        [TestCase("This <em>is</em> Sparta", "_____<em>__</em>_______")]
+        [TestCase("Some text <div/> more text", "__________<div/>__________")]
+        [TestCase("Some text <> more text", "______________________")]
+        public void ShouldIgnoreHtmlWhenApplyingUnderscores(string input, string expected)
         {
-            Assert.That(Underscores.Instance.Transform("This <em>is</em> Sparta"), Is.EqualTo("_____<em>__</em>_______"));
-            Assert.That(Underscores.Instance.Transform("Some text <div/> more text"), Is.EqualTo("__________<div/>__________"));
-            Assert.That(Underscores.Instance.Transform("Some text <> more text"), Is.EqualTo("______________________"));
+            Assert.That(Underscores.Instance.Transform(input), Is.EqualTo(expected));
         }
     }
 }
