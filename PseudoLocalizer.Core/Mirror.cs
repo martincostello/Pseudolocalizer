@@ -16,18 +16,17 @@
         /// <inheritdoc />
         public string Transform(string value)
         {
-            StringBuilder mirrored;
+            var result = new StringBuilder(value.Length);
 
             // Slower path to not break formatting strings by flipping placeholders or breaking HTML
             if (EscapeHelpers.MayNeedEscaping(value))
             {
                 char[] src = value.ToArray();
 
-                var startTag = new StringBuilder();
-                var builder = new StringBuilder(value.Length);
                 var current = new StringBuilder(value.Length);
+                var startTag = new StringBuilder();
 
-                bool insideTag = false;
+                bool isInsideTag = false;
 
                 for (int i = 0; i < value.Length; i++)
                 {
@@ -36,13 +35,14 @@
 
                     if (EscapeHelpers.ShouldTransform(src, ch, ref i, out var textType))
                     {
-                        if (insideTag)
+                        if (isInsideTag)
                         {
+                            // Build the reversed inner text of the HTML tag
                             current.Insert(0, FlipIfSpecial(ch));
                         }
                         else
                         {
-                            builder.Insert(0, FlipIfSpecial(ch));
+                            result.Insert(0, FlipIfSpecial(ch));
                         }
                     }
                     else
@@ -50,9 +50,10 @@
                         // Transformation should be skipped due to formatting placeholder or HTML
                         if (textType == EscapeHelpers.TextType.Format)
                         {
-                            // Add the skipped range
-                            if (insideTag)
+                            if (isInsideTag)
                             {
+                                // Add the escaped string to the start of the
+                                // inner text for the tag in left-to-right order
                                 for (int j = indexBefore, k = 0; j < i + 1; j++, k++)
                                 {
                                     current.Insert(k, value[j]);
@@ -60,83 +61,82 @@
                             }
                             else
                             {
+                                // Add the format string to the end in left-to-right order
                                 for (int j = indexBefore; j < i + 1; j++)
                                 {
                                     current.Append(value[j]);
                                 }
-                            }
 
-                            if (current.Length > 0 && !insideTag)
-                            {
-                                builder.Insert(0, current.ToString());
-                                current.Clear();
+                                // Flush to the left-hand-side of the result
+                                if (current.Length > 0)
+                                {
+                                    result.Insert(0, current.ToString());
+                                    current.Clear();
+                                }
                             }
                         }
                         else if (textType == EscapeHelpers.TextType.HtmlSelfClosing)
                         {
-                            // Add the skipped range
+                            // Add the escaped string to the start
+                            // of the result in left-to-right order
                             for (int j = indexBefore, k = 0; j < i + 1; j++, k++)
                             {
-                                builder.Insert(k, value[j]);
+                                result.Insert(k, value[j]);
                             }
                         }
                         else if (textType == EscapeHelpers.TextType.HtmlStart)
                         {
+                            // Store the start tag for use once it's closed
+                            isInsideTag = true;
+
                             for (int j = indexBefore; j < i + 1; j++)
                             {
                                 startTag.Append(value[j]);
                             }
-
-                            insideTag = true;
                         }
                         else if (textType == EscapeHelpers.TextType.HtmlEnd)
                         {
-                            for (int j = startTag.Length - 1; j > -1; j--)
-                            {
-                                current.Insert(0, startTag[j]);
-                            }
-
+                            // Add the tag start as a prefix to the inner text
+                            current.Insert(0, startTag.ToString());
                             startTag.Clear();
 
-                            // Add the skipped range
+                            // Add the tag end as a suffix to the inner text
                             for (int j = indexBefore; j < i + 1; j++)
                             {
                                 current.Append(value[j]);
                             }
 
+                            // Flush the tag to the result
                             if (current.Length > 0)
                             {
                                 for (int j = current.Length - 1; j > -1; j--)
                                 {
-                                    builder.Insert(0, current[j]);
+                                    result.Insert(0, current[j]);
                                 }
 
                                 current.Clear();
                             }
 
-                            insideTag = false;
+                            isInsideTag = false;
                         }
                     }
                 }
 
+                // Flush any remaining characters
                 if (current.Length > 0)
                 {
-                    builder.Insert(0, current.ToString());
+                    result.Insert(0, current.ToString());
                 }
-
-                mirrored = builder;
             }
             else
             {
-                mirrored = new StringBuilder();
-
                 foreach (char ch in value.Reverse())
                 {
-                    mirrored.Append(FlipIfSpecial(ch));
+                    result.Append(FlipIfSpecial(ch));
                 }
             }
 
-            return mirrored.ToString();
+            return result.ToString();
         }
 
         private static char FlipIfSpecial(char ch)
