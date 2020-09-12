@@ -120,6 +120,7 @@
         [Test]
         [TestCase("This should be flipped (except for these parentheses).", ".(sesehtnerap eseht rof tpecxe) deppilf eb dluohs sihT")]
         [TestCase("Section tags [like this] should not be flipped.", ".deppilf eb ton dluohs [siht ekil] sgat noitceS")]
+        [TestCase("This should also be preserved {even though it's not a format string}.", ".{gnirts tamrof a ton s'ti hguoht neve} devreserp eb osla dluohs sihT")]
         public void TestMirrorDoesNotBreakBrackets(string input, string expected)
         {
             string actual = Mirror.Instance.Transform(input);
