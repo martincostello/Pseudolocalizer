@@ -70,6 +70,7 @@
 
         [Test]
         [TestCase("Hi <em>{0}</em>, click <a href=\"{1}\">here</a>.", new[] { "<em>{0}</em>", "<a href=\"{1}\">", "</a>" })]
+        [TestCase("Hi <em>{0}</em>, click <a href=\"{1}\">here</a>.", new[] { "<em>{0}</em>", "<a href=\"{1}\">", "</a>" })]
         [TestCase("2 > 0", new[] { "② ≥ ⓪" })]
         [TestCase("0 < 2", new[] { "⓪ ≤ ②" })]
         [TestCase("0 <> 2", new[] { "⓪ ≤≥ ②" })]
@@ -86,6 +87,7 @@
 
         [Test]
         [TestCase("Hi <em>{0}</em>, click <a href=\"{1}\">here</a>.", new[] { "<em>{0}</em>", "<a href=\"{1}\">", "</a>" })]
+        [TestCase("Hi <em>{0}</em>, click <a href=\"https://www.google.com\">here</a>.", new[] { "<em>{0}</em>", "<a href=\"https://www.google.com\">", "</a>" })]
         [TestCase("<em>{0}</em>", new[] { "<em>{0}</em>" })]
         [TestCase("<em> {0} </em>", new[] { "<em> {0} </em>" })]
         [TestCase("<a href=\"{0}\">here</a>", new[] { "<a href=\"{0}\">" })]
