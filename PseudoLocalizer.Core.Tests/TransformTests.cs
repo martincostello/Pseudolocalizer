@@ -34,6 +34,12 @@
         [Test]
         [TestCase("", "")]
         [TestCase("hello, world!", "!dlrow ,olleh")]
+        [TestCase("{hello, world!", "!dlrow ,olleh}")]
+        [TestCase("{}hello, world!", "!dlrow ,olleh{}")]
+        [TestCase("(hello, world!", "!dlrow ,olleh)")]
+        [TestCase("(hello, world!)", "(!dlrow ,olleh)")]
+        [TestCase("[hello, world!", "!dlrow ,olleh]")]
+        [TestCase("[hello, world!]", "[!dlrow ,olleh]")]
         public void TestMirror(string value, string expected)
         {
             Assert.That(Mirror.Instance.Transform(value), Is.EqualTo(expected));
@@ -182,6 +188,7 @@
         [TestCase("hello, {1} world", "_______{1}______")]
         [TestCase("hello, world{99}", "____________{99}")]
         [TestCase("hello, world{0", "______________")]
+        [TestCase("The year is {0:yyyy}.", "____________{0:yyyy}_")]
         public void ShouldIgnorePlaceholdersWhenApplyingUnderscores(string input, string expected)
         {
             Assert.That(Underscores.Instance.Transform(input), Is.EqualTo(expected));
@@ -191,6 +198,7 @@
         [TestCase("This <em>is</em> Sparta", "_____<em>__</em>_______")]
         [TestCase("Some text <div/> more text", "__________<div/>__________")]
         [TestCase("Some text <> more text", "______________________")]
+        [TestCase("Click <a href=\"https://www.google.com\">here</a>", "______<a href=\"https://www.google.com\">____</a>")]
         public void ShouldIgnoreHtmlWhenApplyingUnderscores(string input, string expected)
         {
             Assert.That(Underscores.Instance.Transform(input), Is.EqualTo(expected));
