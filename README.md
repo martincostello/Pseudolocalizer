@@ -112,7 +112,7 @@ To build and test the tool locally from a terminal/command-line, run one of the 
 ```powershell
 git clone https://github.com/martincostello/Pseudolocalizer.git
 cd Pseudolocalizer
-.\Build.ps1
+.\build.ps1
 ```
 
 **Linux/macOS**
