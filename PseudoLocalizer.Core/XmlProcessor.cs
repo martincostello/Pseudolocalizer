@@ -32,6 +32,8 @@
                 NewLineHandling = modified ? NewLineHandling.Replace : NewLineHandling.None,
             };
 
+            OnWrite(settings);
+
             using var xmlWriter = XmlWriter.Create(outputStream, settings);
             document.WriteTo(xmlWriter);
         }
@@ -58,6 +60,15 @@
         /// <param name="nsmgr">The namespace manager for the document.</param>
         /// <param name="modified">Whether the XML document was modified during processing.</param>
         protected virtual void OnProcessed(XmlDocument document, XmlNamespaceManager nsmgr, bool modified)
+        {
+            // Do nothing by default
+        }
+
+        /// <summary>
+        /// Called before the XML document is written to allow the settings to be customized.
+        /// </summary>
+        /// <param name="settings">The XML writer settings to configure.</param>
+        protected virtual void OnWrite(XmlWriterSettings settings)
         {
             // Do nothing by default
         }
