@@ -29,6 +29,7 @@
             var settings = new XmlWriterSettings()
             {
                 Encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier),
+                NewLineHandling = modified ? NewLineHandling.Replace : NewLineHandling.None,
             };
 
             using var xmlWriter = XmlWriter.Create(outputStream, settings);
