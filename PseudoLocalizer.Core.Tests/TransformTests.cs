@@ -110,6 +110,7 @@
         [TestCase("{0} is a person and so is {1}.", "{1}")]
         [TestCase("Welcome to the world of tomorrow, {0}; it's the year {1:yyyy}!", "{0}")]
         [TestCase("Welcome to the world of tomorrow, {0}; it's the year {1:yyyy}!", "{1:yyyy}")]
+        [TestCase("My name is {0}.", ".{0} si eman yM")]
         public void TestMirrorDoesNotBreakFormatStrings(string input, string expected)
         {
             string actual = Mirror.Instance.Transform(input);
