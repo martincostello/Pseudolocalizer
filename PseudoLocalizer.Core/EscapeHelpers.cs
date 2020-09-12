@@ -70,7 +70,7 @@ namespace PseudoLocalizer.Core
                     {
                     }
 
-                    if (array[j - 1] != '/' && textType != TextType.HtmlEnd)
+                    if (textType != TextType.HtmlEnd && array[j - 1] != '/')
                     {
                         textType = TextType.HtmlStart;
                     }
