@@ -11,6 +11,6 @@
     <Title>PseudoLocalizer.Core</Title>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Karambolo.PO.Compact" Version="1.3.0" />
+    <PackageReference Include="Karambolo.PO.Compact" Version="1.7.0" />
   </ItemGroup>
 </Project>
