@@ -50,6 +50,10 @@ namespace PseudoLocalizer.Humanizer
         private ITransformer Transformer { get; }
 
         /// <inheritdoc />
+        public string DataUnitHumanize(DataUnit dataUnit, double count, bool toSymbol = true)
+            => Transformer.Transform(Inner.DataUnitHumanize(dataUnit, count, toSymbol));
+
+        /// <inheritdoc />
         public string DateHumanize(TimeUnit timeUnit, Tense timeUnitTense, int unit)
             => Transformer.Transform(Inner.DateHumanize(timeUnit, timeUnitTense, unit));
 
