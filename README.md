@@ -2,7 +2,7 @@
 
 [![NuGet](https://buildstats.info/nuget/PseudoLocalize?includePreReleases=false)](https://www.nuget.org/packages/PseudoLocalize "Download PseudoLocalize from NuGet")
 
-[![Build status](https://github.com/martincostello/Pseudolocalizer/workflows/build/badge.svg?branch=master&event=push)](https://github.com/martincostello/Pseudolocalizer/actions?query=workflow%3Abuild+branch%3Amaster+event%3Apush)
+[![Build status](https://github.com/martincostello/Pseudolocalizer/workflows/build/badge.svg?branch=main&event=push)](https://github.com/martincostello/Pseudolocalizer/actions?query=workflow%3Abuild+branch%3Amain+event%3Apush)
 
 ## Introduction
 
@@ -97,7 +97,7 @@ The repository is hosted in [GitHub](https://github.com/martincostello/Pseudoloc
 
 ## License
 
-This project is licensed under the [MIT](https://github.com/martincostello/Pseudolocalizer/blob/master/LICENSE "The MIT license") license.
+This project is licensed under the [MIT](https://github.com/martincostello/Pseudolocalizer/blob/main/LICENSE "The MIT license") license.
 
 ## Building and Testing
 
