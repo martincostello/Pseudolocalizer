@@ -51,11 +51,15 @@ namespace PseudoLocalizer.Humanizer
 
         /// <inheritdoc />
         public string Convert(long number)
-                => Transformer.Transform(Inner.Convert(number));
+            => Transformer.Transform(Inner.Convert(number));
 
         /// <inheritdoc />
-        public string Convert(long number, GrammaticalGender gender)
-            => Transformer.Transform(Inner.Convert(number, gender));
+        public string Convert(long number, bool addAnd)
+            => Transformer.Transform(Inner.Convert(number, addAnd));
+
+        /// <inheritdoc />
+        public string Convert(long number, GrammaticalGender gender, bool addAnd = true)
+            => Transformer.Transform(Inner.Convert(number, gender, addAnd));
 
         /// <inheritdoc />
         public string ConvertToOrdinal(int number)
