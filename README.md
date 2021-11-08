@@ -6,7 +6,7 @@
 
 ## Introduction
 
-Pseudolocalizer is a [.NET Core Global Tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools ".NET Core Global Tools overview") for testing internationalization aspects of software. Specifically, it reads string values from resource files in the [resx](https://docs.microsoft.com/en-us/dotnet/framework/resources/creating-resource-files-for-desktop-apps#resources-in-resx-files "Resources in .resx Files
+Pseudolocalizer is a [.NET Global Tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools ".NET Global Tools overview") for testing internationalization aspects of software. Specifically, it reads string values from resource files in the [resx](https://docs.microsoft.com/en-us/dotnet/framework/resources/creating-resource-files-for-desktop-apps#resources-in-resx-files "Resources in .resx Files
 "), [XLIFF](https://en.wikipedia.org/wiki/XLIFF "XLIFF"), or [GetText Portable Object (PO)](https://www.gnu.org/software/gettext/manual/html_node/PO-Files.html) format and generates fake translations for the _"qps-Ploc"_ pseudo-locale ([MSDN](https://docs.microsoft.com/en-gb/windows/desktop/Intl/using-pseudo-locales-for-localization-testing "Using pseudo-locales for localizability testing")).
 
 The tool is run from the command line and provides the following options for the fake translation:
@@ -101,7 +101,7 @@ This project is licensed under the [MIT](https://github.com/martincostello/Pseud
 
 ## Building and Testing
 
-Compiling the tool yourself requires Git and the [.NET Core SDK](https://www.microsoft.com/net/download/core "Download the .NET Core SDK") to be installed.
+Compiling the tool yourself requires Git and the [.NET SDK](https://www.microsoft.com/net/download/core "Download the .NET SDK") to be installed.
 
 To build and test the tool locally from a terminal/command-line, run the following set of commands:
 
