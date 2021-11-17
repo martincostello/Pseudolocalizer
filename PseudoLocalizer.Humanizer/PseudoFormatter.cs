@@ -72,5 +72,9 @@ namespace PseudoLocalizer.Humanizer
         /// <inheritdoc />
         public string TimeSpanHumanize_Zero()
             => Transformer.Transform(Inner.TimeSpanHumanize_Zero());
+
+        /// <inheritdoc />
+        public string TimeUnitHumanize(TimeUnit timeUnit)
+            => Transformer.Transform(Inner.TimeUnitHumanize(timeUnit));
     }
 }

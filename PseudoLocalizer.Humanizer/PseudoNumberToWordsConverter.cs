@@ -68,5 +68,9 @@ namespace PseudoLocalizer.Humanizer
         /// <inheritdoc />
         public string ConvertToOrdinal(int number, GrammaticalGender gender)
             => Transformer.Transform(Inner.ConvertToOrdinal(number, gender));
+
+        /// <inheritdoc />
+        public string ConvertToTuple(int number)
+            => Transformer.Transform(Inner.ConvertToTuple(number));
     }
 }
