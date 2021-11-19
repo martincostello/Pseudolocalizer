@@ -6,6 +6,8 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)PseudoLocalizer.snk</AssemblyOriginatorKeyFile>
     <Authors>anderskaplan;martin_costello</Authors>
+    <!-- HACK Workaround flaky builds in CI -->
+    <BuildInParallel Condition=" $([MSBuild]::IsOSUnixLike()) and '$(CI)' != '' ">false</BuildInParallel>
     <Company>https://github.com/martincostello/Pseudolocalizer</Company>
     <ContinuousIntegrationBuild Condition=" '$(CI)' != '' ">true</ContinuousIntegrationBuild>
     <Copyright>Pseudolocalizer Contributors (c) 2012-$([System.DateTime]::Now.ToString(yyyy))</Copyright>
