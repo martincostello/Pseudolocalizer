@@ -11,7 +11,7 @@
     <Title>PseudoLocalizer.Humanizer</Title>
   </PropertyGroup>
 <ItemGroup>
-  <PackageReference Include="Humanizer" Version="2.13.14" />
+  <PackageReference Include="Humanizer" Version="2.14.1" />
 </ItemGroup>
 <ItemGroup>
   <ProjectReference Include="..\PseudoLocalizer.Core\PseudoLocalizer.Core.csproj" />

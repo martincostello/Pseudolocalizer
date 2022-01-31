@@ -54,20 +54,40 @@ namespace PseudoLocalizer.Humanizer
             => Transformer.Transform(Inner.Convert(number));
 
         /// <inheritdoc />
+        public string Convert(long number, WordForm wordForm)
+            => Transformer.Transform(Inner.Convert(number, wordForm));
+
+        /// <inheritdoc />
         public string Convert(long number, bool addAnd)
             => Transformer.Transform(Inner.Convert(number, addAnd));
+
+        /// <inheritdoc />
+        public string Convert(long number, bool addAnd, WordForm wordForm)
+            => Transformer.Transform(Inner.Convert(number, addAnd, wordForm));
 
         /// <inheritdoc />
         public string Convert(long number, GrammaticalGender gender, bool addAnd = true)
             => Transformer.Transform(Inner.Convert(number, gender, addAnd));
 
         /// <inheritdoc />
+        public string Convert(long number, WordForm wordForm, GrammaticalGender gender, bool addAnd = true)
+            => Transformer.Transform(Inner.Convert(number, wordForm, gender, addAnd));
+
+        /// <inheritdoc />
         public string ConvertToOrdinal(int number)
             => Transformer.Transform(Inner.ConvertToOrdinal(number));
 
         /// <inheritdoc />
+        public string ConvertToOrdinal(int number, WordForm wordForm)
+            => Transformer.Transform(Inner.ConvertToOrdinal(number, wordForm));
+
+        /// <inheritdoc />
         public string ConvertToOrdinal(int number, GrammaticalGender gender)
             => Transformer.Transform(Inner.ConvertToOrdinal(number, gender));
+
+        /// <inheritdoc />
+        public string ConvertToOrdinal(int number, GrammaticalGender gender, WordForm wordForm)
+            => Transformer.Transform(Inner.ConvertToOrdinal(number, gender, wordForm));
 
         /// <inheritdoc />
         public string ConvertToTuple(int number)

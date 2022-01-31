@@ -54,7 +54,15 @@ namespace PseudoLocalizer.Humanizer
             => Transformer.Transform(Inner.Convert(number, numberString));
 
         /// <inheritdoc />
+        public string Convert(int number, string numberString, WordForm wordForm)
+            => Transformer.Transform(Inner.Convert(number, numberString, wordForm));
+
+        /// <inheritdoc />
         public string Convert(int number, string numberString, GrammaticalGender gender)
             => Transformer.Transform(Inner.Convert(number, numberString, gender));
+
+        /// <inheritdoc />
+        public string Convert(int number, string numberString, GrammaticalGender gender, WordForm wordForm)
+            => Transformer.Transform(Inner.Convert(number, numberString, gender, wordForm));
     }
 }
