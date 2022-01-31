@@ -18,14 +18,14 @@ $solutionFile = Join-Path $solutionPath "PseudoLocalizer.sln"
 $sdkFile = Join-Path $solutionPath "global.json"
 
 $packageProjects = @(
-	(Join-Path $solutionPath "PseudoLocalizer.Core\PseudoLocalizer.Core.csproj"),
-	(Join-Path $solutionPath "PseudoLocalizer.Humanizer\PseudoLocalizer.Humanizer.csproj"),
-	(Join-Path $solutionPath "PseudoLocalize\PseudoLocalize.csproj")
+	(Join-Path $solutionPath "PseudoLocalizer.Core" "PseudoLocalizer.Core.csproj"),
+	(Join-Path $solutionPath "PseudoLocalizer.Humanizer" "PseudoLocalizer.Humanizer.csproj"),
+	(Join-Path $solutionPath "PseudoLocalize" "PseudoLocalize.csproj")
 )
 
 $testProjects = @(
-    (Join-Path $solutionPath "PseudoLocalizer.Core.Tests\PseudoLocalizer.Core.Tests.csproj"),
-    (Join-Path $solutionPath "PseudoLocalize.Tests\PseudoLocalize.Tests.csproj")
+    (Join-Path $solutionPath "PseudoLocalizer.Core.Tests" "PseudoLocalizer.Core.Tests.csproj"),
+    (Join-Path $solutionPath "PseudoLocalize.Tests" "PseudoLocalize.Tests.csproj")
 )
 
 $dotnetVersion = (Get-Content $sdkFile | Out-String | ConvertFrom-Json).sdk.version
@@ -57,7 +57,7 @@ else {
 if ($installDotNetSdk -eq $true) {
 
     $env:DOTNET_INSTALL_DIR = Join-Path "$(Convert-Path "$PSScriptRoot")" ".dotnetcli"
-    $sdkPath = Join-Path $env:DOTNET_INSTALL_DIR "sdk\$dotnetVersion"
+    $sdkPath = Join-Path $env:DOTNET_INSTALL_DIR "sdk" "$dotnetVersion"
 
     if (!(Test-Path $sdkPath)) {
         if (!(Test-Path $env:DOTNET_INSTALL_DIR)) {
