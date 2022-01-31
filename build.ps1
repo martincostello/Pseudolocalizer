@@ -115,7 +115,14 @@ function DotNetPack {
 function DotNetTest {
     param([string]$Project)
 
-    & $dotnet test $Project --output $OutputPath --no-build
+    $additionalArgs = @()
+
+    if (![string]::IsNullOrEmpty($env:GITHUB_SHA)) {
+        $additionalArgs += "--logger"
+        $additionalArgs += "GitHubActions;report-warnings=false"
+    }
+
+    & $dotnet test $Project --output $OutputPath --configuration $Configuration --no-build $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code $LASTEXITCODE"
