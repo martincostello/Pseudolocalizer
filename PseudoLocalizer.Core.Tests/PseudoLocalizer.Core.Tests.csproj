@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="16.0">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <RootNamespace>PseudoLocalizer.Core.Tests</RootNamespace>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net7.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GitHubActionsTestLogger" Version="2.0.1" />
