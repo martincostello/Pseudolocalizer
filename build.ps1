@@ -92,10 +92,10 @@ function DotNetBuild {
     param([string]$Project)
 
     if ($VersionSuffix) {
-        & $dotnet build $Project --output $OutputPath --configuration $Configuration --version-suffix "$VersionSuffix"
+        & $dotnet build $Project --configuration $Configuration --version-suffix "$VersionSuffix"
     }
     else {
-        & $dotnet build $Project --output $OutputPath --configuration $Configuration
+        & $dotnet build $Project --configuration $Configuration
     }
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet build failed with exit code $LASTEXITCODE"
@@ -126,7 +126,7 @@ function DotNetTest {
         $additionalArgs += "GitHubActions;report-warnings=false"
     }
 
-    & $dotnet test $Project --output $OutputPath --configuration $Configuration --no-build $additionalArgs
+    & $dotnet test $Project --output $OutputPath --configuration $Configuration $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code $LASTEXITCODE"
