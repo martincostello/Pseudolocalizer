@@ -6,7 +6,7 @@
     <PackAsTool>true</PackAsTool>
     <PackageId>PseudoLocalize</PackageId>
     <Summary>$(Description)</Summary>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <Title>PseudoLocalize</Title>
     <ToolCommandName>pseudo-localize</ToolCommandName>
   </PropertyGroup>
