@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
   <PropertyGroup>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
@@ -16,6 +16,7 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageIcon></PackageIcon>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
