@@ -5,7 +5,6 @@
 
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
-    [Parameter(Mandatory = $false)][string] $VersionSuffix = "",
     [Parameter(Mandatory = $false)][string] $OutputPath = "",
     [Parameter(Mandatory = $false)][switch] $SkipTests
 )
@@ -14,7 +13,6 @@ $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 
 $solutionPath = Split-Path $MyInvocation.MyCommand.Definition
-$solutionFile = Join-Path $solutionPath "PseudoLocalizer.sln"
 $sdkFile = Join-Path $solutionPath "global.json"
 
 $packageProjects = @(
@@ -88,29 +86,11 @@ if ($installDotNetSdk -eq $true) {
     $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
 }
 
-function DotNetBuild {
-    param([string]$Project)
-
-    if ($VersionSuffix) {
-        & $dotnet build $Project --configuration $Configuration --version-suffix "$VersionSuffix"
-    }
-    else {
-        & $dotnet build $Project --configuration $Configuration
-    }
-    if ($LASTEXITCODE -ne 0) {
-        throw "dotnet build failed with exit code $LASTEXITCODE"
-    }
-}
-
 function DotNetPack {
     param([string]$Project)
 
-    if ($VersionSuffix) {
-        & $dotnet pack $Project --output (Join-Path $OutputPath "packages") --configuration $Configuration --version-suffix "$VersionSuffix" --include-symbols --include-source
-    }
-    else {
-        & $dotnet pack $Project --output (Join-Path $OutputPath "packages") --configuration $Configuration --include-symbols --include-source
-    }
+    & $dotnet pack $Project --output (Join-Path $OutputPath "packages") --configuration $Configuration --include-symbols --include-source
+
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet pack failed with exit code $LASTEXITCODE"
     }
@@ -132,9 +112,6 @@ function DotNetTest {
         throw "dotnet test failed with exit code $LASTEXITCODE"
     }
 }
-
-Write-Host "Building solution..." -ForegroundColor Green
-DotNetBuild $solutionFile
 
 Write-Host "Creating packages..." -ForegroundColor Green
 ForEach ($packageProject in $packageProjects) {

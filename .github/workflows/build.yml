@@ -59,6 +59,7 @@ jobs:
       with:
         name: packages-${{ matrix.os_name }}
         path: ./artifacts/packages
+        if-no-files-found: error
 
   validate-packages:
     needs: build
