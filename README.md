@@ -3,7 +3,7 @@
 [![NuGet](https://buildstats.info/nuget/PseudoLocalize?includePreReleases=false)](https://www.nuget.org/packages/PseudoLocalize "Download PseudoLocalize from NuGet")
 
 [![Build status](https://github.com/martincostello/Pseudolocalizer/workflows/build/badge.svg?branch=main&event=push)](https://github.com/martincostello/Pseudolocalizer/actions?query=workflow%3Abuild+branch%3Amain+event%3Apush)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/martincostello/Pseudolocalizer/badge)](https://api.securityscorecards.dev/projects/github.com/martincostello/Pseudolocalizer)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/martincostello/Pseudolocalizer/badge)](https://securityscorecards.dev/viewer/?uri=github.com/martincostello/Pseudolocalizer)
 
 ## Introduction
 
