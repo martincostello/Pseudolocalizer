@@ -15,7 +15,7 @@ jobs:
   update-dotnet-sdk:
     name: Update .NET SDK
     runs-on: ubuntu-latest
-    if: ${{ github.repository_owner == 'martincostello' }}
+    if: github.repository_owner == 'martincostello'
 
     steps:
 
@@ -28,7 +28,7 @@ jobs:
       id: update-dotnet-sdk
       uses: martincostello/update-dotnet-sdk@ef5170e2dbee1235ee754f03a6018794c061c8e5 # v2.5.0
       with:
-        labels: "dependencies,.NET"
+        labels: 'dependencies,.NET'
         repo-token: ${{ secrets.ACCESS_TOKEN }}
         user-email: ${{ vars.GIT_COMMIT_USER_EMAIL }}
         user-name: ${{ vars.GIT_COMMIT_USER_NAME }}
