@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace PseudoLocalizer.Core.Tests
 {
@@ -28,6 +29,7 @@ namespace PseudoLocalizer.Core.Tests
                 processor.Transform(inputStream, outputStream);
             }
 
+            Assert.That(OutputFileName, Does.Exist);
             FileAssert.AreEqual(Test1FileName, OutputFileName);
         }
 
@@ -42,6 +44,7 @@ namespace PseudoLocalizer.Core.Tests
                 processor.Transform(inputStream, outputStream);
             }
 
+            Assert.That(OutputFileName, Does.Exist);
             FileAssert.AreEqual("Mirror.po", OutputFileName);
         }
 
@@ -56,6 +59,7 @@ namespace PseudoLocalizer.Core.Tests
                 processor.Transform(inputStream, outputStream);
             }
 
+            Assert.That(OutputFileName, Does.Exist);
             FileAssert.AreEqual("Accents.po", OutputFileName);
         }
 
@@ -72,6 +76,7 @@ namespace PseudoLocalizer.Core.Tests
                 processor.Transform(inputStream, outputStream);
             }
 
+            Assert.That(OutputFileName, Does.Exist);
             FileAssert.AreEqual("Multiple.po", OutputFileName);
         }
 
@@ -88,8 +93,8 @@ namespace PseudoLocalizer.Core.Tests
                 ex = Assert.Throws<POFileFormatException>(() => processor.Transform(inputStream, outputStream));
             }
 
-            Assert.AreEqual("Entry beginning at 18,1 must not have an empty id." + Environment.NewLine, ex.Message);
-            Assert.AreEqual("Entry beginning at 18,1 must not have an empty id.", ex.DiagnosticMessages.First());
+            Assert.That(ex.Message, Is.EqualTo("Entry beginning at 18,1 must not have an empty id." + Environment.NewLine));
+            Assert.That(ex.DiagnosticMessages.First(), Is.EqualTo("Entry beginning at 18,1 must not have an empty id."));
         }
 
         private static void DeleteOutputFile()
