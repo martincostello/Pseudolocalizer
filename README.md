@@ -12,17 +12,16 @@ Pseudolocalizer is a [.NET Global Tool](https://docs.microsoft.com/en-us/dotnet/
 
 The tool is run from the command line and provides the following options for the fake translation:
 
-  * Add accents on all letters so that non-localized text can be spotted - but without making the text unreadable.
-  * Make all words 30% longer, to ensure that there is room for translations.
-  * Add brackets to show the start and end of each localized string.
+- Add accents on all letters so that non-localized text can be spotted - but without making the text unreadable.
+- Make all words 30% longer, to ensure that there is room for translations.
+- Add brackets to show the start and end of each localized string.
   This makes it possible to spot strings that have been cut off.
-  * Reverse all words ("mirror"), to simulate right-to-left locales.
-  * Replace all characters with underscores so that non-localized text can be spotted.
+- Reverse all words ("mirror"), to simulate right-to-left locales.
+- Replace all characters with underscores so that non-localized text can be spotted.
 
 ### See also
 
-  * [WPF Localization Guidance Whitepaper by Rick Strahl and Michele Leroux Bustamante](https://archive.codeplex.com/?p=wpflocalization "WPF Localization Guidance")
-  * [Stack Overflow: How to use enable pseudo-locale in Windows for testing?](https://stackoverflow.com/questions/7042920/how-to-use-enable-pseudo-locale-in-windows-for-testing/ "How to use enable pseudo-locale in Windows for testing?")
+[Stack Overflow: How to use enable pseudo-locale in Windows for testing?](https://stackoverflow.com/questions/7042920/how-to-use-enable-pseudo-locale-in-windows-for-testing/ "How to use enable pseudo-locale in Windows for testing?")
 
 ## Installation
 
@@ -34,7 +33,8 @@ dotnet tool install --global PseudoLocalize
 
 ## Usage
 
-```
+```console
+dotnet pseudo-localize --help
 Usage: pseudo-localize [/l] [/a] [/b] [/m] [/u] [/c culture] file [file...]
 Generates pseudo-localized versions of the specified input file(s).
 
@@ -73,7 +73,7 @@ Took at look at the [source code for PseudoLocalize](https://github.com/martinco
 | `PseudoLocalizer.Core` |  [![NuGet](https://buildstats.info/nuget/PseudoLocalizer.Core?includePreReleases=false)](https://www.nuget.org/packages/PseudoLocalizer.Core "Download PseudoLocalizer.Core from NuGet") |
 | `PseudoLocalizer.Humanizer` | [![NuGet](https://buildstats.info/nuget/PseudoLocalizer.Humanizer?includePreReleases=false)](https://www.nuget.org/packages/PseudoLocalizer.Humanizer "Download PseudoLocalizer.Humanizer from NuGet") |
 
-### Installation
+### Library Installation
 
 ```sh
 dotnet add package PseudoLocalizer.Core
@@ -94,7 +94,7 @@ Any feedback or issues can be added to the issues for this project in [GitHub](h
 
 ## Repository
 
-The repository is hosted in [GitHub](https://github.com/martincostello/Pseudolocalizer "This project on GitHub.com"): https://github.com/martincostello/Pseudolocalizer.git
+The repository is hosted in [GitHub](https://github.com/martincostello/Pseudolocalizer "This project on GitHub.com"): <https://github.com/martincostello/Pseudolocalizer.git>
 
 ## License
 
