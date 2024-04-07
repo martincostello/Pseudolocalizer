@@ -41,6 +41,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{02801609-B016-42C8-B6B2-3F5D57551CD4}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\bump-version.yml = .github\workflows\bump-version.yml
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\workflows\dependency-review.yml = .github\workflows\dependency-review.yml
+		.github\workflows\lint.yml = .github\workflows\lint.yml
+		.github\workflows\ossf-scorecard.yml = .github\workflows\ossf-scorecard.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
 		.github\workflows\update-dotnet-sdk.yml = .github\workflows\update-dotnet-sdk.yml
 	EndProjectSection
 EndProject
