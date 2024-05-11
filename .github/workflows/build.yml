@@ -27,6 +27,11 @@ jobs:
     outputs:
       dotnet-sdk-version: ${{ steps.setup-dotnet.outputs.dotnet-version }}
 
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+
     strategy:
       fail-fast: false
       matrix:
@@ -52,6 +57,20 @@ jobs:
       shell: pwsh
       run: ./build.ps1
 
+    - name: Attest artifacts
+      uses: actions/attest-build-provenance@951c0c5f8e375ad4efad33405ab77f7ded2358e4 # v1.1.1
+      if: |
+        runner.os == 'Windows' &&
+        github.event.repository.fork == false &&
+        (github.ref_name == github.event.repository.default_branch || startsWith(github.ref, 'refs/tags/v'))
+      with:
+        subject-path: |
+          ./artifacts/bin/PseudoLocalize/release*/PseudoLocalize*.dll
+          ./artifacts/bin/PseudoLocalize/release*/PseudoLocalize*.exe
+          ./artifacts/bin/PseudoLocalizer.Core/release*/PseudoLocalize*.dll
+          ./artifacts/bin/PseudoLocalizer.Humanizer/release*/PseudoLocalize*.dll
+          ./artifacts/package/release/*
+
     - name: Publish artifacts
       uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
       with:
@@ -62,7 +81,7 @@ jobs:
       uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
       with:
         name: packages-${{ matrix.os_name }}
-        path: ./artifacts/packages
+        path: ./artifacts/package/release
         if-no-files-found: error
 
   validate-packages:

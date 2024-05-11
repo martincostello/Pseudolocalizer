@@ -30,6 +30,7 @@
     <SignAssembly>true</SignAssembly>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
     <AssemblyVersion>0.9.0.0</AssemblyVersion>
     <VersionPrefix>0.9.1</VersionPrefix>
   </PropertyGroup>

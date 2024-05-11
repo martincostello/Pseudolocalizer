@@ -8,6 +8,7 @@ coverage*
 obj
 TestResults
 TestResult.xml
+*.binlog
 *.cache
 *.coverage
 *.qps-Ploc.*
