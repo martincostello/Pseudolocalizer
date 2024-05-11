@@ -67,7 +67,7 @@ jobs:
         subject-path: |
           ./artifacts/bin/PseudoLocalize/release*/PseudoLocalize*.dll
           ./artifacts/bin/PseudoLocalize/release*/PseudoLocalize*.exe
-          ./artifacts/bin/PseudoLocalize.Core/release*/PseudoLocalize*.dll
+          ./artifacts/bin/PseudoLocalizer.Core/release*/PseudoLocalize*.dll
           ./artifacts/bin/PseudoLocalizer.Humanizer/release*/PseudoLocalize*.dll
           ./artifacts/package/release/*
 
