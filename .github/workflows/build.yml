@@ -26,6 +26,9 @@ jobs:
 
     outputs:
       dotnet-sdk-version: ${{ steps.setup-dotnet.outputs.dotnet-version }}
+      dotnet-validate-version: ${{ steps.get-dotnet-validate-version.outputs.dotnet-validate-version }}
+      package-names: ${{ steps.build.outputs.package-names }}
+      package-version: ${{ steps.build.outputs.package-version }}
 
     permissions:
       attestations: write
@@ -54,6 +57,7 @@ jobs:
       id: setup-dotnet
 
     - name: Build, Test and Package
+      id: build
       shell: pwsh
       run: ./build.ps1
 
@@ -92,6 +96,13 @@ jobs:
         path: ./artifacts/package/release
         if-no-files-found: error
 
+    - name: Get dotnet-validate version
+      id: get-dotnet-validate-version
+      shell: pwsh
+      run: |
+        $dotnetValidateVersion = (Get-Content "./.config/dotnet-tools.json" | Out-String | ConvertFrom-Json).tools.'dotnet-validate'.version
+        "dotnet-validate-version=${dotnetValidateVersion}" >> $env:GITHUB_OUTPUT
+
   validate-packages:
     needs: build
     runs-on: ubuntu-latest
@@ -109,8 +120,10 @@ jobs:
 
     - name: Validate NuGet packages
       shell: pwsh
+      env:
+        DOTNET_VALIDATE_VERSION: ${{ needs.build.outputs.dotnet-validate-version }}
       run: |
-        dotnet tool install --global dotnet-validate --version 0.0.1-preview.304
+        dotnet tool install --global dotnet-validate --version ${env:DOTNET_VALIDATE_VERSION}
         $packages = Get-ChildItem -Filter "*.nupkg" | ForEach-Object { $_.FullName }
         $invalidPackages = 0
         foreach ($package in $packages) {
@@ -181,3 +194,16 @@ jobs:
         API_KEY: ${{ secrets.NUGET_TOKEN }}
         SOURCE: https://api.nuget.org/v3/index.json
       run: dotnet nuget push "*.nupkg" --api-key "${API_KEY}" --skip-duplicate --source "${SOURCE}"
+
+    - name: Publish nuget_packages_published
+      uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3.0.0
+      with:
+        event-type: nuget_packages_published
+        repository: ${{ github.repository_owner }}/github-automation
+        token: ${{ secrets.COSTELLOBOT_TOKEN }}
+        client-payload: |-
+          {
+            "repository": "${{ github.repository }}",
+            "packages": "${{ needs.build.outputs.package-names }}",
+            "version": "${{ needs.build.outputs.package-version }}"
+          }
