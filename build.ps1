@@ -112,7 +112,9 @@ ForEach ($packageProject in $packageProjects) {
     DotNetPack $packageProject
 }
 
-Write-Host "Running tests..." -ForegroundColor Green
-ForEach ($testProject in $testProjects) {
-    DotNetTest $testProject
+if (-Not $SkipTests) {
+    Write-Host "Running tests..." -ForegroundColor Green
+    ForEach ($testProject in $testProjects) {
+        DotNetTest $testProject
+    }
 }
