@@ -7,8 +7,8 @@
         <target state="translated">Chaud</target>
       </trans-unit>
       <trans-unit id="chauffe" translate="yes" xml:space="preserve">
-          <source>Chauffe</source>
-          <target state="translated">Chauffe</target>
+        <source>Chauffe</source>
+        <target state="translated">Chauffe</target>
       </trans-unit>
       <trans-unit id="consigne" translate="yes" xml:space="preserve">
         <source>Cons min</source>
