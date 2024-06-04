@@ -15,7 +15,7 @@ namespace PseudoLocalizer
             byte[] original = await File.ReadAllBytesAsync(fileName);
 
             // Act
-            Program.Main(new[] { fileName, "--overwrite", "--force" });
+            Program.Main([fileName, "--overwrite", "--force"]);
 
             // Assert
             Assert.That(File.ReadAllBytes(fileName), Is.EqualTo(original), "The input file has changed.");
@@ -30,11 +30,11 @@ namespace PseudoLocalizer
             byte[] original = await File.ReadAllBytesAsync(inputFileName);
 
             // Act
-            Program.Main(new[] { inputFileName, "--lengthen-char", "." });
+            Program.Main([inputFileName, "--lengthen-char", "."]);
 
             // Assert
             Assert.That(File.ReadAllBytes(inputFileName), Is.EqualTo(original), "The input file has changed.");
-            Assert.That(File.ReadAllBytes(outputFileName), Is.Not.EqualTo(outputFileName), "The output file has not changed.");
+            Assert.That(File.ReadAllBytes(outputFileName), Is.Not.EqualTo(original), "The output file has not changed.");
             Assert.That(File.ReadAllText(outputFileName), Contains.Substring(">[Åñýţĥîñĝ···]<"), "The specified lengthen character was not used.");
         }
     }
