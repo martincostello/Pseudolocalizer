@@ -12,7 +12,7 @@ namespace PseudoLocalizer.Core.Tests
         private const string Test1FileName = "Test1.po";
         private const string Test2FileName = "Test2.po";
         private const string OutputFileName = "out.po";
-        
+
         [SetUp]
         public void SetUp()
         {
@@ -80,7 +80,7 @@ namespace PseudoLocalizer.Core.Tests
             FileAssert.AreEqual("Multiple.po", OutputFileName);
         }
 
-        
+
         [Test]
         public void ShouldThrowForBadInputFile()
         {
