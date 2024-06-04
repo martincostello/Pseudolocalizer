@@ -37,5 +37,21 @@ namespace PseudoLocalizer
             Assert.That(File.ReadAllBytes(outputFileName), Is.Not.EqualTo(original), "The output file has not changed.");
             Assert.That(File.ReadAllText(outputFileName), Contains.Substring(">[Åñýţĥîñĝ···]<"), "The specified lengthen character was not used.");
         }
+
+        [Test]
+        public async Task ShouldChangeXlfFile()
+        {
+            // Arrange
+            string inputFileName = Path.GetFullPath("issue-362.xlf");
+            string outputFileName = Path.GetFullPath("issue-362.qps-Ploc.xlf");
+            byte[] original = await File.ReadAllBytesAsync(inputFileName);
+
+            // Act
+            Program.Main([inputFileName, "--lengthen", "--accents", "--brackets"]);
+
+            // Assert
+            Assert.That(File.ReadAllBytes(inputFileName), Is.EqualTo(original), "The input file has changed.");
+            Assert.That(File.ReadAllBytes(outputFileName), Is.Not.EqualTo(original), "The output file has not changed.");
+        }
     }
 }
