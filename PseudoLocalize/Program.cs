@@ -323,6 +323,8 @@
                     using (var inputStream = File.OpenRead(inputFileName))
                     using (var outputStream = File.OpenWrite(outputFileName))
                     {
+                        // If the file already exists, clear it
+                        outputStream.SetLength(0);
                         Transform(processor, inputStream, outputStream);
                     }
 
