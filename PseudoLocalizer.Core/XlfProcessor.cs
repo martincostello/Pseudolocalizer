@@ -92,7 +92,7 @@
 
             if (version.Major == 1)
             {
-                xpath = "/x:xliff/x:file/x:body/x:trans-unit";
+                xpath = "/x:xliff/x:file/x:body/x:trans-unit|/x:xliff/x:file/x:body/x:group/x:trans-unit";
             }
             else if (version.Major == 2)
             {
