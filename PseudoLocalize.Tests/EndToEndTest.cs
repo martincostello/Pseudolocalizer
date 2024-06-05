@@ -68,7 +68,6 @@ namespace PseudoLocalizer
             document.Load(outputFileName);
         }
 
-        [Ignore("Issue #362 not fixed yet.")]
         [Test]
         public async Task ShouldChangeXlfFileWithGroups()
         {
