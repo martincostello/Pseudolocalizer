@@ -67,5 +67,27 @@ namespace PseudoLocalizer
             var document = new XmlDocument();
             document.Load(outputFileName);
         }
+
+        [Ignore("Issue #362 not fixed yet.")]
+        [Test]
+        public async Task ShouldChangeXlfFileWithGroups()
+        {
+            // Arrange
+            string inputFileName = Path.GetFullPath("issue-362.grouped.xlf");
+            string outputFileName = Path.GetFullPath("issue-362.grouped.qps-Ploc.xlf");
+            byte[] original = await File.ReadAllBytesAsync(inputFileName);
+
+            // Act
+            await Program.Main([inputFileName, "--lengthen", "--accents", "--brackets"]);
+
+            Console.WriteLine(await File.ReadAllTextAsync(outputFileName));
+
+            // Assert
+            Assert.That(await File.ReadAllBytesAsync(inputFileName), Is.EqualTo(original), "The input file has changed.");
+            Assert.That(await File.ReadAllBytesAsync(outputFileName), Is.Not.EqualTo(original), "The output file has not changed.");
+
+            var document = new XmlDocument();
+            document.Load(outputFileName);
+        }
     }
 }
