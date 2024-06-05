@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Reflection;
     using System.Security;
+    using System.Threading.Tasks;
     using PseudoLocalizer.Core;
 
     /// <summary>
@@ -14,7 +15,7 @@
     /// </summary>
     public class Program
     {
-        private readonly List<string> _inputFiles = new List<string>();
+        private readonly List<string> _inputFiles = [];
 
         public Program()
         {
@@ -55,15 +56,15 @@
 
             string[] split = version.Split('+');
 
-            return $"{split[0]}+{split[1].Substring(0, 7)}";
+            return $"{split[0]}+{split[1][..7]}";
         }
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var instance = new Program();
             if (ParseArguments(args, instance))
             {
-                instance.Run();
+                await instance.RunAsync();
             }
             else
             {
@@ -131,8 +132,8 @@
                     continue;
                 }
 
-                if (arg.StartsWith("/", StringComparison.Ordinal) ||
-                    arg.StartsWith("-", StringComparison.Ordinal))
+                if (arg.StartsWith('/') ||
+                    arg.StartsWith('-'))
                 {
                     string name = arg.TrimStart('-', '/');
 
@@ -165,8 +166,8 @@
                             }
 
                             string culture = args[i + 1];
-                            if (culture.StartsWith("/", StringComparison.Ordinal) ||
-                                culture.StartsWith("-", StringComparison.Ordinal))
+                            if (culture.StartsWith('/') ||
+                                culture.StartsWith('-'))
                             {
                                 Console.WriteLine("ERROR: No output culture specified.", arg);
                                 return false;
@@ -217,8 +218,8 @@
                             }
 
                             string lengthenChar = args[i + 1];
-                            if (lengthenChar.StartsWith("/", StringComparison.Ordinal) ||
-                                lengthenChar.StartsWith("-", StringComparison.Ordinal))
+                            if (lengthenChar.StartsWith('/') ||
+                                lengthenChar.StartsWith('-'))
                             {
                                 Console.WriteLine("ERROR: No lengthening character specified.", arg);
                                 return false;
@@ -248,12 +249,12 @@
             return instance.HasInputFiles;
         }
 
-        private void Run()
+        private async Task RunAsync()
         {
             foreach (var filePath in _inputFiles)
             {
                 var processor = GetProcessor(filePath);
-                ProcessFile(filePath, processor);
+                await ProcessFileAsync(filePath, processor);
             }
         }
 
@@ -261,21 +262,15 @@
         {
             string extension = Path.GetExtension(filePath).ToUpperInvariant();
 
-            switch (extension)
+            return extension switch
             {
-                case ".XLF":
-                    return new XlfProcessor(OutputCulture);
-
-                case ".PO":
-                case ".POT":
-                    return new POProcessor(OutputCulture);
-
-                default:
-                    return new ResxProcessor();
-            }
+                ".XLF" => new XlfProcessor(OutputCulture),
+                ".PO" or ".POT" => new POProcessor(OutputCulture),
+                _ => new ResxProcessor(),
+            };
         }
 
-        private void ProcessFile(string inputFileName, IProcessor processor)
+        private async Task ProcessFileAsync(string inputFileName, IProcessor processor)
         {
             try
             {
@@ -310,8 +305,8 @@
                         inputStream.SetLength(0);
 
                         outputStream.Seek(0, SeekOrigin.Begin);
-                        outputStream.CopyTo(inputStream);
-                        outputStream.Flush();
+                        await outputStream.CopyToAsync(inputStream);
+                        await outputStream.FlushAsync();
                     }
 
                     writtenFileName = inputFileName;
@@ -363,7 +358,7 @@
             processor.Transform(inputStream, outputStream);
         }
 
-        private ITransformer CreateTransformer()
+        private Pipeline CreateTransformer()
         {
             var transformers = new List<ITransformer>();
 
@@ -414,12 +409,10 @@
                     !baseFileName.StartsWith(existingCulture) &&
                     !string.Equals(CultureInfo.CreateSpecificCulture(existingCulture).TwoLetterISOLanguageName, "iv", StringComparison.Ordinal))
                 {
-                    baseFileName = baseFileName.Substring(0, baseFileName.LastIndexOf('.'));
+                    baseFileName = baseFileName[..baseFileName.LastIndexOf('.')];
                 }
             }
-#pragma warning disable CA1031
             catch (CultureNotFoundException)
-#pragma warning restore CA1031
             {
                 // Let the user use whatever they entered if it isn't known
             }

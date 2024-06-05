@@ -93,7 +93,7 @@
         /// </returns>
         protected abstract bool Visit(XmlNode node, XmlNamespaceManager nsmgr);
 
-        private bool ShouldPreserveBOM(Stream inputStream)
+        private static bool ShouldPreserveBOM(Stream inputStream)
         {
             bool preserveBOM = false;
 

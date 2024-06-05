@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Concurrent;
-    using System.Collections.Generic;
     using System.Xml;
 
     /// <summary>
@@ -10,7 +9,7 @@
     /// </summary>
     public sealed class XlfProcessor : XmlProcessor
     {
-        private readonly IDictionary<XmlDocument, Version> _versionCache = new ConcurrentDictionary<XmlDocument, Version>();
+        private readonly ConcurrentDictionary<XmlDocument, Version> _versionCache = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XlfProcessor"/> class.
