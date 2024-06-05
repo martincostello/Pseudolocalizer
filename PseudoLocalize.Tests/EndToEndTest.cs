@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
+using System.Xml;
 using NUnit.Framework;
 
 namespace PseudoLocalizer
@@ -15,10 +17,12 @@ namespace PseudoLocalizer
             byte[] original = await File.ReadAllBytesAsync(fileName);
 
             // Act
-            Program.Main([fileName, "--overwrite", "--force"]);
+            await Program.Main([fileName, "--overwrite", "--force"]);
+
+            Console.WriteLine(await File.ReadAllTextAsync(fileName));
 
             // Assert
-            Assert.That(File.ReadAllBytes(fileName), Is.EqualTo(original), "The input file has changed.");
+            Assert.That(await File.ReadAllBytesAsync(fileName), Is.EqualTo(original), "The input file has changed.");
         }
 
         [Test]
@@ -30,12 +34,17 @@ namespace PseudoLocalizer
             byte[] original = await File.ReadAllBytesAsync(inputFileName);
 
             // Act
-            Program.Main([inputFileName, "--lengthen-char", "."]);
+            await Program.Main([inputFileName, "--lengthen-char", "."]);
+
+            Console.WriteLine(await File.ReadAllTextAsync(outputFileName));
 
             // Assert
-            Assert.That(File.ReadAllBytes(inputFileName), Is.EqualTo(original), "The input file has changed.");
-            Assert.That(File.ReadAllBytes(outputFileName), Is.Not.EqualTo(original), "The output file has not changed.");
-            Assert.That(File.ReadAllText(outputFileName), Contains.Substring(">[Åñýţĥîñĝ···]<"), "The specified lengthen character was not used.");
+            Assert.That(await File.ReadAllBytesAsync(inputFileName), Is.EqualTo(original), "The input file has changed.");
+            Assert.That(await File.ReadAllBytesAsync(outputFileName), Is.Not.EqualTo(outputFileName), "The output file has not changed.");
+            Assert.That(await File.ReadAllTextAsync(outputFileName), Contains.Substring(">[Åñýţĥîñĝ···]<"), "The specified lengthen character was not used.");
+
+            var document = new XmlDocument();
+            document.Load(outputFileName);
         }
 
         [Test]
@@ -47,11 +56,16 @@ namespace PseudoLocalizer
             byte[] original = await File.ReadAllBytesAsync(inputFileName);
 
             // Act
-            Program.Main([inputFileName, "--lengthen", "--accents", "--brackets"]);
+            await Program.Main([inputFileName, "--lengthen", "--accents", "--brackets"]);
+
+            Console.WriteLine(await File.ReadAllTextAsync(outputFileName));
 
             // Assert
-            Assert.That(File.ReadAllBytes(inputFileName), Is.EqualTo(original), "The input file has changed.");
-            Assert.That(File.ReadAllBytes(outputFileName), Is.Not.EqualTo(original), "The output file has not changed.");
+            Assert.That(await File.ReadAllBytesAsync(inputFileName), Is.EqualTo(original), "The input file has changed.");
+            Assert.That(await File.ReadAllBytesAsync(outputFileName), Is.Not.EqualTo(original), "The output file has not changed.");
+
+            var document = new XmlDocument();
+            document.Load(outputFileName);
         }
     }
 }
