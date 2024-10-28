@@ -1,6 +1,8 @@
 # Pseudolocalizer
 
-[![NuGet](https://buildstats.info/nuget/PseudoLocalize?includePreReleases=false)](https://www.nuget.org/packages/PseudoLocalize "Download PseudoLocalize from NuGet")
+[![NuGet](https://img.shields.io/nuget/v/PseudoLocalize?logo=nuget&label=Latest&color=blue)](https://www.nuget.org/packages/PseudoLocalize "Download PseudoLocalize from NuGet")
+[![NuGet Downloads](https://img.shields.io/nuget/dt/PseudoLocalize?logo=nuget&label=Downloads&color=blue)](https://www.nuget.org/packages/PseudoLocalize "Download PseudoLocalize from NuGet")
+
 [![Build status](https://github.com/martincostello/Pseudolocalizer/workflows/build/badge.svg?branch=main&event=push)](https://github.com/martincostello/Pseudolocalizer/actions?query=workflow%3Abuild+branch%3Amain+event%3Apush)
 
 ## Introduction
