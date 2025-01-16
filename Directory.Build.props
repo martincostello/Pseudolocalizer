@@ -16,7 +16,7 @@
     <LangVersion>latest</LangVersion>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <PackageIcon></PackageIcon>
+    <PackageIcon>package-icon.png</PackageIcon>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/martincostello/Pseudolocalizer</PackageProjectUrl>
     <PackageReadmeFile>package-readme.md</PackageReadmeFile>
