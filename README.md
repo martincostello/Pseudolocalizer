@@ -70,9 +70,9 @@ These allow you to programmatically pseudo-localize strings for other scenarios 
 Took at look at the [source code for PseudoLocalize](https://github.com/martincostello/Pseudolocalizer/blob/3e988d301d1e93e3802434ff8fad7f77e421d266/PseudoLocalize/Program.cs#L316-L354) for examples of how to use the library to pseudo-localize strings and process streams.
 
 | Packages | Latest Version |
-|:-:|:-:|
-| `PseudoLocalizer.Core` |  [![NuGet](https://buildstats.info/nuget/PseudoLocalizer.Core?includePreReleases=false)](https://www.nuget.org/packages/PseudoLocalizer.Core "Download PseudoLocalizer.Core from NuGet") |
-| `PseudoLocalizer.Humanizer` | [![NuGet](https://buildstats.info/nuget/PseudoLocalizer.Humanizer?includePreReleases=false)](https://www.nuget.org/packages/PseudoLocalizer.Humanizer "Download PseudoLocalizer.Humanizer from NuGet") |
+|:--|:--|
+| `PseudoLocalizer.Core` |  [![NuGet](https://img.shields.io/nuget/v/PseudoLocalizer.Core?logo=nuget&label=NuGet&color=blue)](https://www.nuget.org/packages/PseudoLocalizer.Core "Download PseudoLocalizer.Core from NuGet") |
+| `PseudoLocalizer.Humanizer` | [![NuGet](https://img.shields.io/nuget/v/PseudoLocalizer.Humanizer?logo=nuget&label=NuGet&color=blue)](https://www.nuget.org/packages/PseudoLocalizer.Humanizer "Download PseudoLocalizer.Humanizer from NuGet") |
 
 ### Library Installation
 
