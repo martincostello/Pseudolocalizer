@@ -6,9 +6,7 @@
     <OutputType>Library</OutputType>
     <PackageId>PseudoLocalizer.Core</PackageId>
     <RootNamespace>PseudoLocalizer.Core</RootNamespace>
-    <Summary>$(Description)</Summary>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Title>PseudoLocalizer.Core</Title>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Karambolo.PO.Compact" />
