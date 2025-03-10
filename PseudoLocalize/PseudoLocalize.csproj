@@ -2,10 +2,10 @@
   <PropertyGroup>
     <Description>A .NET Global Tool for pseudo-localization of RESX, XLIFF, and PO resource files.</Description>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <IsPackable>true</IsPackable>
     <OutputType>Exe</OutputType>
     <PackAsTool>true</PackAsTool>
     <PackageId>PseudoLocalize</PackageId>
-    <Summary>$(Description)</Summary>
     <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
     <Title>PseudoLocalize</Title>
     <ToolCommandName>pseudo-localize</ToolCommandName>
