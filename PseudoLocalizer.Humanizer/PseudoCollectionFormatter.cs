@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Humanizer.Configuration;
+﻿using Humanizer.Configuration;
 using Humanizer.Localisation.CollectionFormatters;
 using PseudoLocalizer.Core;
 

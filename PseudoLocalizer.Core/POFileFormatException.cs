@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PseudoLocalizer.Core
+﻿namespace PseudoLocalizer.Core
 {
     /// <summary>
     /// The exception that is thrown when a PO file format error is detected.
@@ -88,7 +84,7 @@ namespace PseudoLocalizer.Core
             {
                 builder.AppendLine(message);
             }
-            
+
             if (diagnosticMessages != null)
             {
                 foreach (string diagnostic in diagnosticMessages)
