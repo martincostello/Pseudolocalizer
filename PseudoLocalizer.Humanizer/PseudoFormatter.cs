@@ -1,5 +1,4 @@
-﻿using System;
-using Humanizer.Configuration;
+﻿using Humanizer.Configuration;
 using Humanizer.Localisation;
 using Humanizer.Localisation.Formatters;
 using PseudoLocalizer.Core;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace PseudoLocalizer.Core
+﻿namespace PseudoLocalizer.Core
 {
     /// <summary>
     /// A class representing a chain of transformations. This class cannot be inherited.

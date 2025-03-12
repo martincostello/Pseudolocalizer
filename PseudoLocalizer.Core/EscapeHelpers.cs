@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace PseudoLocalizer.Core
+﻿namespace PseudoLocalizer.Core
 {
     internal static class EscapeHelpers
     {

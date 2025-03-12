@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace PseudoLocalizer.Core
+﻿namespace PseudoLocalizer.Core
 {
     /// <summary>
     /// A transform which replaces all characters with underscores. This class cannot be inherited.

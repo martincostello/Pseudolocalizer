@@ -1,5 +1,4 @@
-﻿using System;
-using Humanizer;
+﻿using Humanizer;
 using Humanizer.Configuration;
 using Humanizer.Localisation.NumberToWords;
 using PseudoLocalizer.Core;
