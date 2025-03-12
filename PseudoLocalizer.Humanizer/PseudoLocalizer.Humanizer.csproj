@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <AssemblyIsCLSCompliant>false</AssemblyIsCLSCompliant>
     <Description>A library containing extensions for Humanizer to apply pseudo-localization to strings.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsPackable>true</IsPackable>

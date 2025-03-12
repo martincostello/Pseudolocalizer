@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <AssemblyIsCLSCompliant>false</AssemblyIsCLSCompliant>
     <OutputType>Library</OutputType>
     <RootNamespace>PseudoLocalizer.Core.Tests</RootNamespace>
     <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
