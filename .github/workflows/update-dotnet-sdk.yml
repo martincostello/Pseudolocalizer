@@ -26,7 +26,7 @@ jobs:
 
     - name: Update .NET SDK
       id: update-dotnet-sdk
-      uses: martincostello/update-dotnet-sdk@548112dca44d56d69830fce804a007788db3d158 # v3.5.0
+      uses: martincostello/update-dotnet-sdk@ef7653ed976c929ef8c6c6bd31c45b4675c2de71 # v3.6.0
       with:
         labels: 'dependencies,.NET'
         repo-token: ${{ secrets.ACCESS_TOKEN }}
