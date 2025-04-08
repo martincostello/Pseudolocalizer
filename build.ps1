@@ -15,14 +15,9 @@ $solutionPath = $PSScriptRoot
 $sdkFile = Join-Path $solutionPath "global.json"
 
 $packageProjects = @(
-	(Join-Path $solutionPath "PseudoLocalizer.Core" "PseudoLocalizer.Core.csproj"),
-	(Join-Path $solutionPath "PseudoLocalizer.Humanizer" "PseudoLocalizer.Humanizer.csproj"),
-	(Join-Path $solutionPath "PseudoLocalize" "PseudoLocalize.csproj")
-)
-
-$testProjects = @(
-    (Join-Path $solutionPath "PseudoLocalizer.Core.Tests" "PseudoLocalizer.Core.Tests.csproj"),
-    (Join-Path $solutionPath "PseudoLocalize.Tests" "PseudoLocalize.Tests.csproj")
+    (Join-Path $solutionPath "PseudoLocalizer.Core" "PseudoLocalizer.Core.csproj"),
+    (Join-Path $solutionPath "PseudoLocalizer.Humanizer" "PseudoLocalizer.Humanizer.csproj"),
+    (Join-Path $solutionPath "PseudoLocalize" "PseudoLocalize.csproj")
 )
 
 $dotnetVersion = (Get-Content $sdkFile | Out-String | ConvertFrom-Json).sdk.version
@@ -49,7 +44,7 @@ else {
 
 if ($installDotNetSdk) {
 
-    ${env:DOTNET_INSTALL_DIR} = Join-Path $solutionPath ".dotnetcli"
+    ${env:DOTNET_INSTALL_DIR} = Join-Path $solutionPath ".dotnet"
     $sdkPath = Join-Path ${env:DOTNET_INSTALL_DIR} "sdk" $dotnetVersion
 
     if (!(Test-Path $sdkPath)) {
@@ -91,7 +86,7 @@ function DotNetPack {
 }
 
 function DotNetTest {
-    param([string]$Project)
+    param()
 
     $additionalArgs = @()
 
@@ -100,7 +95,7 @@ function DotNetTest {
         $additionalArgs += "GitHubActions;report-warnings=false"
     }
 
-    & $dotnet test $Project --configuration "Release" $additionalArgs
+    & $dotnet test --configuration "Release" $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code $LASTEXITCODE"
@@ -114,7 +109,5 @@ ForEach ($packageProject in $packageProjects) {
 
 if (-Not $SkipTests) {
     Write-Information "Running tests..."
-    ForEach ($testProject in $testProjects) {
-        DotNetTest $testProject
-    }
+    DotNetTest
 }
