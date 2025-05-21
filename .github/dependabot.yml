@@ -6,20 +6,12 @@ updates:
     interval: daily
     time: "05:30"
     timezone: Europe/London
-  reviewers:
-    - "martincostello"
 - package-ecosystem: nuget
   directory: "/"
-  groups:
-    xunit:
-      patterns:
-        - xunit*
   schedule:
     interval: daily
     time: "05:30"
     timezone: Europe/London
-  reviewers:
-    - "martincostello"
   open-pull-requests-limit: 99
   ignore:
   - dependency-name: Humanizer
