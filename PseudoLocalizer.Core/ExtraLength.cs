@@ -64,7 +64,7 @@
             // Slower path to not break formatting strings by removing their digits or break HTML tags
             if (EscapeHelpers.MayNeedEscaping(value))
             {
-                char[] src = value.ToArray();
+                char[] src = [.. value];
 
                 var builder = new StringBuilder(value.Length * 2);
                 var current = new StringBuilder(value.Length);

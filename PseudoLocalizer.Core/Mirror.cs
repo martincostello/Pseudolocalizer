@@ -15,17 +15,8 @@
 
         /// <inheritdoc />
         public string Transform(string value)
-        {
             // Slower path to not break formatting strings by flipping placeholders or breaking HTML
-            if (EscapeHelpers.MayNeedEscaping(value))
-            {
-                return MirrorSlow(value);
-            }
-            else
-            {
-                return MirrorFast(value);
-            }
-        }
+            => EscapeHelpers.MayNeedEscaping(value) ? MirrorSlow(value) : MirrorFast(value);
 
         private static string MirrorFast(string value)
         {
@@ -41,7 +32,7 @@
 
         private static string MirrorSlow(string value)
         {
-            char[] src = value.ToArray();
+            char[] src = [.. value];
 
             var result = new StringBuilder(value.Length);
             var current = new StringBuilder(value.Length);
