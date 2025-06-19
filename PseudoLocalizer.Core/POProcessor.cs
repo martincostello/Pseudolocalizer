@@ -118,9 +118,7 @@ namespace PseudoLocalizer.Core
                 throw new ArgumentNullException(nameof(diagnostics));
             }
 
-            return diagnostics
-                .Select((diagnostic) => string.Format(diagnostic.Code, diagnostic.Args))
-                .ToList();
+            return [.. diagnostics.Select((diagnostic) => string.Format(diagnostic.Code, diagnostic.Args))];
         }
     }
 }

@@ -161,7 +161,7 @@
                         case "CULTURE":
                             if (i == args.Length - 1)
                             {
-                                Console.WriteLine("ERROR: No output culture specified.", arg);
+                                Console.WriteLine("ERROR: No output culture specified.");
                                 return false;
                             }
 
@@ -169,7 +169,7 @@
                             if (culture.StartsWith('/') ||
                                 culture.StartsWith('-'))
                             {
-                                Console.WriteLine("ERROR: No output culture specified.", arg);
+                                Console.WriteLine("ERROR: No output culture specified.");
                                 return false;
                             }
 
@@ -213,7 +213,7 @@
                         case "LENGTHEN-CHAR":
                             if (i == args.Length - 1)
                             {
-                                Console.WriteLine("ERROR: No lengthening character specified.", arg);
+                                Console.WriteLine("ERROR: No lengthening character specified.");
                                 return false;
                             }
 
@@ -221,13 +221,13 @@
                             if (lengthenChar.StartsWith('/') ||
                                 lengthenChar.StartsWith('-'))
                             {
-                                Console.WriteLine("ERROR: No lengthening character specified.", arg);
+                                Console.WriteLine("ERROR: No lengthening character specified.");
                                 return false;
                             }
 
                             if (lengthenChar.Length != 1)
                             {
-                                Console.WriteLine("ERROR: Lengthening character must be only one character.", arg);
+                                Console.WriteLine("ERROR: Lengthening character must be only one character.");
                                 return false;
                             }
 
@@ -281,7 +281,7 @@
                     if (!Force)
                     {
                         Console.WriteLine("The file {0} will be overwritten.", inputFileName);
-                        Console.Write("Are you sure? [y/n]: ", inputFileName);
+                        Console.Write("Are you sure? [y/n]: ");
 
                         switch (Console.ReadLine().ToUpperInvariant())
                         {

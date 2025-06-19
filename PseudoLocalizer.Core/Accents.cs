@@ -140,7 +140,7 @@
             // Slower path to not break formatting strings by removing their digits or break HTML tags
             if (EscapeHelpers.MayNeedEscaping(value))
             {
-                array = value.ToArray();
+                array = [.. value];
 
                 for (int i = 0; i < array.Length; i++)
                 {
@@ -154,7 +154,7 @@
             }
             else
             {
-                array = value.Select(Transform).ToArray();
+                array = [.. value.Select(Transform)];
             }
 
             return new string(array);
@@ -180,15 +180,6 @@
         }
 
         private char Transform(char value)
-        {
-            if (_replacements.TryGetValue(value, out char x))
-            {
-                return x;
-            }
-            else
-            {
-                return value;
-            }
-        }
+            => _replacements.TryGetValue(value, out char x) ? x : value;
     }
 }

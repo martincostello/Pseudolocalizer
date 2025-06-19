@@ -27,16 +27,16 @@
             {
                 int j = i;
 
-                // Consume all the digits
                 while (j < array.Length - 1 && char.IsDigit(array[++j]))
                 {
+                    // Consume all the digits
                 }
 
                 if (array[j] == ':')
                 {
-                    // Consume all of any format specifier (e.g. "{0:yyyy}" for a DateTime)
                     while (j < array.Length - 1 && array[++j] != '}')
                     {
+                        // Consume all of any format specifier (e.g. "{0:yyyy}" for a DateTime)
                     }
                 }
 
@@ -63,9 +63,9 @@
                         textType = TextType.HtmlEnd;
                     }
 
-                    // Consume all of the tag
                     while (j < array.Length - 1 && array[++j] != '>')
                     {
+                        // Consume all of the tag
                     }
 
                     if (textType != TextType.HtmlEnd && array[j - 1] != '/')

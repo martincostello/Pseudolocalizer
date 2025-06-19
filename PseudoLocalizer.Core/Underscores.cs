@@ -16,7 +16,7 @@
             // Slower path to not break formatting strings by removing their digits or break HTML tags
             if (EscapeHelpers.MayNeedEscaping(value))
             {
-                char[] array = value.ToArray();
+                char[] array = [.. value];
 
                 for (int i = 0; i < array.Length; i++)
                 {
