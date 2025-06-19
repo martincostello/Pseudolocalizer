@@ -1,0 +1,42 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path=".vsconfig" />
+    <File Path="build.ps1" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="LICENSE" />
+    <File Path="NuGet.config" />
+    <File Path="PseudoLocalizer.snk" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/">
+    <File Path=".github/dependabot.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/workflows/">
+    <File Path=".github/workflows/build.yml" />
+    <File Path=".github/workflows/bump-version.yml" />
+    <File Path=".github/workflows/codeql-analysis.yml" />
+    <File Path=".github/workflows/dependency-review.yml" />
+    <File Path=".github/workflows/lint.yml" />
+    <File Path=".github/workflows/ossf-scorecard.yml" />
+    <File Path=".github/workflows/release.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/.vscode/">
+    <File Path=".vscode/extensions.json" />
+    <File Path=".vscode/launch.json" />
+    <File Path=".vscode/tasks.json" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="PseudoLocalize/PseudoLocalize.csproj" />
+    <Project Path="PseudoLocalizer.Core/PseudoLocalizer.Core.csproj" />
+    <Project Path="PseudoLocalizer.Humanizer/PseudoLocalizer.Humanizer.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="PseudoLocalize.Tests/PseudoLocalize.Tests.csproj" />
+    <Project Path="PseudoLocalizer.Core.Tests/PseudoLocalizer.Core.Tests.csproj" />
+  </Folder>
+</Solution>
