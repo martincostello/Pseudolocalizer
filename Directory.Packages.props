@@ -8,6 +8,6 @@
     <PackageVersion Include="Karambolo.PO.Compact" Version="1.3.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="NUnit" Version="4.3.2" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="5.0.0" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="5.1.0" />
   </ItemGroup>
 </Project>
