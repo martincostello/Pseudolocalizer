@@ -6,9 +6,11 @@
     <OutputType>Exe</OutputType>
     <PackAsTool>true</PackAsTool>
     <PackageId>PseudoLocalize</PackageId>
-    <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
+    <RuntimeIdentifier>any</RuntimeIdentifier>
+    <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>
     <Title>PseudoLocalize</Title>
     <ToolCommandName>pseudo-localize</ToolCommandName>
+    <ToolType>agnostic</ToolType>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\PseudoLocalizer.Core\PseudoLocalizer.Core.csproj" />
