@@ -27,7 +27,8 @@ jobs:
 
     outputs:
       dotnet-sdk-version: ${{ steps.setup-dotnet.outputs.dotnet-version }}
-      dotnet-validate-version: ${{ steps.get-dotnet-validate-version.outputs.dotnet-validate-version }}
+      dotnet-validate-version: ${{ steps.get-dotnet-tools-versions.outputs.dotnet-validate-version }}
+      nuget-package-validation-version: ${{ steps.get-dotnet-tools-versions.outputs.nuget-package-validation-version }}
       package-names: ${{ steps.build.outputs.package-names }}
       package-version: ${{ steps.build.outputs.package-version }}
 
@@ -73,7 +74,7 @@ jobs:
       run: ./build.ps1
 
     - name: Generate SBOM
-      uses: anchore/sbom-action@da167eac915b4e86f08b264dbdbc867b61be6f0c # v0.20.5
+      uses: anchore/sbom-action@8e94d75ddd33f69f691467e42275782e4bfefe84 # v0.20.9
       if: runner.os == 'Windows'
       with:
         artifact-name: pseudolocalizer.spdx.json
@@ -96,24 +97,27 @@ jobs:
           ./artifacts/package/release/*
 
     - name: Publish artifacts
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: artifacts-${{ matrix.os-name }}
         path: ./artifacts
 
     - name: Publish NuGet packages
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: packages-${{ matrix.os-name }}
         path: ./artifacts/package/release
         if-no-files-found: error
 
-    - name: Get dotnet-validate version
-      id: get-dotnet-validate-version
+    - name: Get .NET tools versions
+      id: get-dotnet-tools-versions
       shell: pwsh
       run: |
-        $dotnetValidateVersion = (Get-Content "./.config/dotnet-tools.json" | Out-String | ConvertFrom-Json).tools.'dotnet-validate'.version
-        "dotnet-validate-version=${dotnetValidateVersion}" >> $env:GITHUB_OUTPUT
+        $manifest = (Get-Content "./.config/dotnet-tools.json" | Out-String | ConvertFrom-Json)
+        $dotnetValidateVersion = $manifest.tools.'dotnet-validate'.version
+        $nugetPackageValidationVersion = $manifest.tools.'meziantou.framework.nugetpackagevalidation.tool'.version
+        "dotnet-validate-version=${dotnetValidateVersion}" >> ${env:GITHUB_OUTPUT}
+        "nuget-package-validation-version=${nugetPackageValidationVersion}" >> ${env:GITHUB_OUTPUT}
 
   validate-packages:
     needs: build
@@ -121,7 +125,7 @@ jobs:
     steps:
 
     - name: Download packages
-      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
       with:
         name: packages-windows
 
@@ -130,23 +134,39 @@ jobs:
       with:
         dotnet-version: ${{ needs.build.outputs.dotnet-sdk-version }}
 
-    - name: Validate NuGet packages
+    - name: Install NuGet package validation tools
       shell: pwsh
       env:
         DOTNET_VALIDATE_VERSION: ${{ needs.build.outputs.dotnet-validate-version }}
+        NUGET_PACKAGE_VALIDATION_VERSION: ${{ needs.build.outputs.nuget-package-validation-version }}
       run: |
-        dotnet tool install --global dotnet-validate --version ${env:DOTNET_VALIDATE_VERSION}
+        dotnet tool install --global dotnet-validate --version ${env:DOTNET_VALIDATE_VERSION} --allow-roll-forward
+        dotnet tool install --global Meziantou.Framework.NuGetPackageValidation.Tool --version ${env:NUGET_PACKAGE_VALIDATION_VERSION} --allow-roll-forward
+
+    - name: Validate NuGet packages
+      shell: pwsh
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
         $packages = Get-ChildItem -Filter "*.nupkg" | ForEach-Object { $_.FullName }
         $invalidPackages = 0
         foreach ($package in $packages) {
+          $isValid = $true
           dotnet validate package local $package
           if ($LASTEXITCODE -ne 0) {
+            $isValid = $false
+          }
+          meziantou.validate-nuget-package $package --github-token ${env:GH_TOKEN} --excluded-rules AssembliesMustBeOptimized
+          if ($LASTEXITCODE -ne 0) {
+            $isValid = $false
+          }
+          if (-Not $isValid) {
             $invalidPackages++
           }
         }
         if ($invalidPackages -gt 0) {
           Write-Output "::error::$invalidPackages NuGet package(s) failed validation."
-          return 1
+          exit 1
         }
 
   publish-feedz-io:
@@ -163,7 +183,7 @@ jobs:
     steps:
 
     - name: Download packages
-      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
       with:
         name: packages-windows
 
@@ -190,10 +210,13 @@ jobs:
     environment:
       name: NuGet.org
 
+    permissions:
+      id-token: write
+
     steps:
 
     - name: Download packages
-      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
       with:
         name: packages-windows
 
@@ -202,16 +225,22 @@ jobs:
       with:
         dotnet-version: ${{ needs.build.outputs.dotnet-sdk-version }}
 
+    - name: NuGet log in
+      uses: NuGet/login@d22cc5f58ff5b88bf9bd452535b4335137e24544 # v1.1.0
+      id: nuget-login
+      with:
+        user: ${{ secrets.NUGET_USER }}
+
     - name: Push NuGet packages to NuGet.org
       shell: bash
       env:
-        API_KEY: ${{ secrets.NUGET_TOKEN }}
+        API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
         PACKAGE_VERSION: ${{ needs.build.outputs.package-version }}
         SOURCE: https://api.nuget.org/v3/index.json
       run: dotnet nuget push "*.nupkg" --api-key "${API_KEY}" --skip-duplicate --source "${SOURCE}" && echo "::notice title=nuget.org::Published version ${PACKAGE_VERSION} to NuGet.org."
 
     - name: Publish nuget_packages_published
-      uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3.0.0
+      uses: peter-evans/repository-dispatch@5fc4efd1a4797ddb68ffd0714a238564e4cc0e6f # v4.0.0
       with:
         event-type: nuget_packages_published
         repository: ${{ github.repository_owner }}/github-automation

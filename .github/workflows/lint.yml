@@ -24,7 +24,7 @@ env:
   PSSCRIPTANALYZER_VERSION: '1.24.0'
   TERM: xterm
   # renovate: datasource=github-releases depName=zizmor packageName=zizmorcore/zizmor
-  ZIZMOR_VERSION: '1.12.1'
+  ZIZMOR_VERSION: '1.16.3'
 
 jobs:
   lint:
@@ -48,12 +48,12 @@ jobs:
       run: echo "::add-matcher::.github/actionlint-matcher.json"
 
     - name: Lint workflows with actionlint
-      uses: docker://rhysd/actionlint:1.7.7@sha256:887a259a5a534f3c4f36cb02dca341673c6089431057242cdc931e9f133147e9
+      uses: docker://rhysd/actionlint:1.7.8@sha256:96d4a8c87dbbfb3bdd324f8fdc285fc3df5261e2decc619a4dd7e8ee52bbfd46
       with:
         args: -color
 
     - name: Lint workflows with zizmor
-      uses: zizmorcore/zizmor-action@5ca5fc7a4779c5263a3ffa0e1f693009994446d1 # v0.1.2
+      uses: zizmorcore/zizmor-action@e673c3917a1aef3c65c972347ed84ccd013ecda4 # v0.2.0
       with:
         persona: pedantic
         version: ${{ env.ZIZMOR_VERSION }}
