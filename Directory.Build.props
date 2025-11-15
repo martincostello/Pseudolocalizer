@@ -3,8 +3,6 @@
     <AnalysisMode>latest-recommended</AnalysisMode>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)PseudoLocalizer.snk</AssemblyOriginatorKeyFile>
     <Authors>anderskaplan;martin_costello</Authors>
-    <!-- HACK Workaround for https://github.com/dotnet/sdk/issues/17454 -->
-    <BuildInParallel Condition="$([System.OperatingSystem]::IsWindows())">false</BuildInParallel>
     <Copyright>Pseudolocalizer Contributors (c) 2012-$([System.DateTime]::Now.ToString(yyyy))</Copyright>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <Nullable>disable</Nullable>
