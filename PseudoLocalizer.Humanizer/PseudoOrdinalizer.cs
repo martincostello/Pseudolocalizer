@@ -1,6 +1,4 @@
 ﻿using Humanizer;
-using Humanizer.Configuration;
-using Humanizer.Localisation.Ordinalizers;
 using PseudoLocalizer.Core;
 
 namespace PseudoLocalizer.Humanizer

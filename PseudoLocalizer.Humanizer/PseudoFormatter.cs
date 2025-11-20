@@ -1,6 +1,4 @@
-﻿using Humanizer.Configuration;
-using Humanizer.Localisation;
-using Humanizer.Localisation.Formatters;
+﻿using Humanizer;
 using PseudoLocalizer.Core;
 
 namespace PseudoLocalizer.Humanizer
@@ -67,6 +65,10 @@ namespace PseudoLocalizer.Humanizer
         /// <inheritdoc />
         public string TimeSpanHumanize(TimeUnit timeUnit, int unit, bool toWords = false)
             => Transformer.Transform(Inner.TimeSpanHumanize(timeUnit, unit, toWords));
+
+        /// <inheritdoc />
+        public string TimeSpanHumanize_Age()
+            => Inner.TimeSpanHumanize_Age();
 
         /// <inheritdoc />
         public string TimeSpanHumanize_Zero()
