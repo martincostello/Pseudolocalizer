@@ -3,7 +3,7 @@
     <GlobalPackageReference Include="MartinCostello.BuildKit" Version="0.8.2" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="GitHubActionsTestLogger" Version="3.0.0" />
+    <PackageVersion Include="GitHubActionsTestLogger" Version="3.0.1" />
     <PackageVersion Include="Humanizer" Version="3.0.1" />
     <PackageVersion Include="Karambolo.PO.Compact" Version="1.3.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
