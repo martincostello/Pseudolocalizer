@@ -20,7 +20,7 @@ env:
   PSSCRIPTANALYZER_VERSION: '1.24.0'
   TERM: xterm
   # renovate: datasource=github-releases depName=zizmor packageName=zizmorcore/zizmor
-  ZIZMOR_VERSION: '1.16.3'
+  ZIZMOR_VERSION: '1.17.0'
 
 jobs:
   lint:
@@ -44,18 +44,18 @@ jobs:
       run: echo "::add-matcher::.github/actionlint-matcher.json"
 
     - name: Lint workflows with actionlint
-      uses: docker://rhysd/actionlint:1.7.8@sha256:96d4a8c87dbbfb3bdd324f8fdc285fc3df5261e2decc619a4dd7e8ee52bbfd46
+      uses: docker://rhysd/actionlint:1.7.9@sha256:a0383f60d92601e2694e24b24d37df7b6a40bed7cedbc447611c50009bf02d94
       with:
         args: -color
 
     - name: Lint workflows with zizmor
-      uses: zizmorcore/zizmor-action@e673c3917a1aef3c65c972347ed84ccd013ecda4 # v0.2.0
+      uses: zizmorcore/zizmor-action@e639db99335bc9038abc0e066dfcd72e23d26fb4 # v0.3.0
       with:
         persona: pedantic
         version: ${{ env.ZIZMOR_VERSION }}
 
     - name: Lint PowerShell in workflows
-      uses: martincostello/lint-actions-powershell@5942e3350ee5bd8f8933cec4e1185d13f0ea688f # v1.0.0
+      uses: martincostello/lint-actions-powershell@e088367ebeb113cd7c1ebee5c541175d93e945b7 # v1.0.1
       with:
         powershell-yaml-version: ${{ env.POWERSHELL_YAML_VERSION }}
         psscriptanalyzer-version: ${{ env.PSSCRIPTANALYZER_VERSION }}

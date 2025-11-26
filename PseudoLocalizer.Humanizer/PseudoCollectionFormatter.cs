@@ -1,5 +1,4 @@
-﻿using Humanizer.Configuration;
-using Humanizer.Localisation.CollectionFormatters;
+﻿using Humanizer;
 using PseudoLocalizer.Core;
 
 namespace PseudoLocalizer.Humanizer

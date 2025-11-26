@@ -1,4 +1,4 @@
-﻿using Humanizer.Configuration;
+﻿using Humanizer;
 using PseudoLocalizer.Core;
 
 namespace PseudoLocalizer.Humanizer

@@ -1,6 +1,4 @@
 ﻿using Humanizer;
-using Humanizer.Configuration;
-using Humanizer.Localisation.NumberToWords;
 using PseudoLocalizer.Core;
 
 namespace PseudoLocalizer.Humanizer
