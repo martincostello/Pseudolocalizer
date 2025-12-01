@@ -3,6 +3,7 @@
     <AnalysisMode>latest-recommended</AnalysisMode>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)PseudoLocalizer.snk</AssemblyOriginatorKeyFile>
     <Authors>anderskaplan;martin_costello</Authors>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <Copyright>Pseudolocalizer Contributors (c) 2012-$([System.DateTime]::Now.ToString(yyyy))</Copyright>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <Nullable>disable</Nullable>
