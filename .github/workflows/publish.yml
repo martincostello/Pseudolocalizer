@@ -23,7 +23,7 @@ permissions: {}
 
 jobs:
   publish-nuget:
-    if: github.event.repository.fork == false
+    if: github.repository_owner == 'martincostello'
     runs-on: ubuntu-latest
 
     defaults:
