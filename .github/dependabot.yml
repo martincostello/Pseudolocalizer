@@ -5,5 +5,3 @@ updates:
   schedule:
     interval: yearly
     timezone: Europe/London
-  ignore:
-  - dependency-name: Humanizer
