@@ -137,7 +137,7 @@
             var transformed = File.ReadAllText(OutputFileName);
 
             // Inline <x> elements should be preserved in target
-            Assert.That(transformed, Does.Contain("equiv-text=\"{{ count }}\""), "The interpolation element should be preserved.");
+            Assert.That(transformed, Does.Contain("equiv-text=\"{{ count }}\""), "The count interpolation element should be preserved.");
             Assert.That(transformed, Does.Contain("equiv-text=\"{{ name }}\""), "The name interpolation element should be preserved.");
             Assert.That(transformed, Does.Contain("equiv-text=\"{{ place }}\""), "The place interpolation element should be preserved.");
 
