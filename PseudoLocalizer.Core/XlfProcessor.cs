@@ -146,78 +146,167 @@
 
         private bool Visit10(XmlNode node, XmlNamespaceManager nsmgr)
         {
-            var document = node.OwnerDocument;
-            var rootNamespace = document.DocumentElement.NamespaceURI;
             var source = node.SelectSingleNode("x:source", nsmgr);
 
-            bool modified = false;
-
-            if (source != null && source.NodeType == XmlNodeType.Element)
-            {
-                var original = source.InnerText;
-                var transformed = Transform(original);
-
-                if (transformed != original)
-                {
-                    var target = node.SelectSingleNode("x:target", nsmgr);
-
-                    if (target == null)
-                    {
-                        target = document.CreateElement("target", rootNamespace);
-                        node.AppendChild(target);
-                    }
-
-                    var state = target.Attributes["state"];
-
-                    if (state != null)
-                    {
-                        state.Value = "translated";
-                    }
-
-                    target.InnerText = transformed;
-                    modified = true;
-                }
-            }
-
-            return modified;
+            return TransformSourceToTarget(
+                source,
+                node.SelectSingleNode("x:target", nsmgr),
+                node);
         }
 
         private bool Visit20(XmlNode node, XmlNamespaceManager nsmgr)
         {
-            var document = node.OwnerDocument;
-            var rootNamespace = document.DocumentElement.NamespaceURI;
             var source = node.SelectSingleNode("x:segment/x:source", nsmgr);
 
-            bool modified = false;
+            return TransformSourceToTarget(
+                source,
+                node.SelectSingleNode("x:segment/x:target", nsmgr),
+                node);
+        }
 
-            if (source != null && source.NodeType == XmlNodeType.Element)
+        private static XmlElement CreateTargetElement(XmlNode parent)
+        {
+            var document = parent.OwnerDocument;
+            var newTarget = document.CreateElement("target", document.DocumentElement.NamespaceURI);
+            parent.AppendChild(newTarget);
+            return newTarget;
+        }
+
+        private bool TransformSourceToTarget(
+            XmlNode source,
+            XmlNode existingTarget,
+            XmlNode targetParent)
+        {
+            if (source == null || source.NodeType != XmlNodeType.Element)
             {
-                var original = source.InnerText;
-                var transformed = Transform(original);
+                return false;
+            }
 
-                if (transformed != original)
+            // Collect inline (non-text) child nodes
+            var inlineNodes = new System.Collections.Generic.List<XmlNode>();
+
+            foreach (XmlNode child in source.ChildNodes)
+            {
+                if (child.NodeType != XmlNodeType.Text && child.NodeType != XmlNodeType.SignificantWhitespace)
                 {
-                    var target = node.SelectSingleNode("x:segment/x:target", nsmgr);
-
-                    if (target == null)
-                    {
-                        target = document.CreateElement("target", rootNamespace);
-                        source.ParentNode.AppendChild(target);
-                    }
-
-                    var state = target.Attributes["state"];
-
-                    if (state != null)
-                    {
-                        state.Value = "translated";
-                    }
-
-                    target.InnerText = transformed;
-                    modified = true;
+                    inlineNodes.Add(child);
                 }
             }
 
-            return modified;
+            if (inlineNodes.Count > 0)
+            {
+                return TransformWithInlineElements(source, existingTarget, targetParent, inlineNodes);
+            }
+
+            return TransformTextOnly(source, existingTarget, targetParent);
+        }
+
+        private bool TransformTextOnly(
+            XmlNode source,
+            XmlNode existingTarget,
+            XmlNode targetParent)
+        {
+            var original = source.InnerText;
+            var transformed = Transform(original);
+
+            if (transformed == original)
+            {
+                return false;
+            }
+
+            var target = existingTarget ?? CreateTargetElement(targetParent);
+
+            target.Attributes["state"]?.Value = "translated";
+            target.InnerText = transformed;
+            return true;
+        }
+
+        private bool TransformWithInlineElements(
+            XmlNode source,
+            XmlNode existingTarget,
+            XmlNode targetParent,
+            System.Collections.Generic.List<XmlNode> inlineNodes)
+        {
+            var document = source.OwnerDocument;
+
+            // Build a combined string with format-string placeholders for inline elements.
+            // Placeholders use {N} syntax which EscapeHelpers preserves through all transforms.
+            // Use a high base index to avoid collision with real format strings in the text.
+            const int PlaceholderBase = 10_000;
+
+            var combined = new System.Text.StringBuilder();
+            int inlineIndex = 0;
+
+            foreach (XmlNode child in source.ChildNodes)
+            {
+                if (child.NodeType == XmlNodeType.Text || child.NodeType == XmlNodeType.SignificantWhitespace)
+                {
+                    combined.Append(child.Value);
+                }
+                else
+                {
+                    combined.Append("{" + (PlaceholderBase + inlineIndex) + "}");
+                    inlineIndex++;
+                }
+            }
+
+            var originalCombined = combined.ToString();
+            var transformedCombined = Transform(originalCombined);
+
+            if (transformedCombined == originalCombined)
+            {
+                return false;
+            }
+
+            var target = existingTarget ?? CreateTargetElement(targetParent);
+            target.Attributes["state"]?.Value = "translated";
+
+            // Clear existing children (preserving element attributes)
+            while (target.HasChildNodes)
+            {
+                target.RemoveChild(target.FirstChild);
+            }
+
+            // Reconstruct target by splitting transformed text at placeholder positions
+            string remaining = transformedCombined;
+
+            while (remaining.Length > 0)
+            {
+                int earliestPosition = -1;
+                int earliestIndex = -1;
+                string earliestPlaceholder = null;
+
+                for (int i = 0; i < inlineNodes.Count; i++)
+                {
+                    string placeholder = "{" + (PlaceholderBase + i) + "}";
+                    int pos = remaining.IndexOf(placeholder, StringComparison.Ordinal);
+
+                    if (pos >= 0 && (earliestPosition < 0 || pos < earliestPosition))
+                    {
+                        earliestPosition = pos;
+                        earliestIndex = i;
+                        earliestPlaceholder = placeholder;
+                    }
+                }
+
+                if (earliestPlaceholder != null)
+                {
+                    if (earliestPosition > 0)
+                    {
+                        target.AppendChild(document.CreateTextNode(remaining.Substring(0, earliestPosition)));
+                    }
+
+                    target.AppendChild(inlineNodes[earliestIndex].CloneNode(deep: true));
+                    remaining = remaining.Substring(earliestPosition + earliestPlaceholder.Length);
+                }
+                else
+                {
+                    target.AppendChild(document.CreateTextNode(remaining));
+                    break;
+                }
+            }
+
+            return true;
         }
     }
 }
