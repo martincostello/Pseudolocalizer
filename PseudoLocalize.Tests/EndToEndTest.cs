@@ -85,5 +85,30 @@ namespace PseudoLocalizer
             var document = new XmlDocument();
             document.Load(outputFileName);
         }
+
+        [Test]
+        public async Task ShouldRespectXlfInlineInterpolation()
+        {
+            // Arrange
+            string inputFileName = Path.GetFullPath("issue-746.xlf");
+            string outputFileName = Path.GetFullPath("issue-746.qps-Ploc.xlf");
+            byte[] original = await File.ReadAllBytesAsync(inputFileName);
+
+            // Act
+            await Program.Main([inputFileName, "--lengthen", "--accents", "--brackets"]);
+
+            Console.WriteLine(await File.ReadAllTextAsync(outputFileName));
+
+            // Assert
+            Assert.That(await File.ReadAllBytesAsync(inputFileName), Is.EqualTo(original), "The input file has changed.");
+            Assert.That(await File.ReadAllBytesAsync(outputFileName), Is.Not.EqualTo(original), "The output file has not changed.");
+
+            var document = new XmlDocument();
+            document.Load(outputFileName);
+
+            string expectedOutputFileName = Path.GetFullPath("issue-746.expected.xlf");
+            byte[] expected = await File.ReadAllBytesAsync(expectedOutputFileName);
+            Assert.That(await File.ReadAllBytesAsync(outputFileName), Is.EqualTo(expected), "The output file does not match the expected output.");
+        }
     }
 }

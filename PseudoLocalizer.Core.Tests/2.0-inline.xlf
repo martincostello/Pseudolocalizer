@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="en-US" trgLang="ja-JP">
+  <file id="f1" original="Graphic Example.psd">
+    <skeleton href="Graphic Example.psd.skl" />
+    <unit id="1">
+      <segment>
+        <source>All (<x id="INTERPOLATION" equiv-text="{{ count }}" />)</source>
+      </segment>
+    </unit>
+    <unit id="2">
+      <segment>
+        <source>Hello <x id="NAME" equiv-text="{{ name }}" />, welcome to <x id="PLACE" equiv-text="{{ place }}" />!</source>
+      </segment>
+    </unit>
+    <unit id="3">
+      <segment>
+        <source>Plain text only</source>
+        <target state="new">Plain text only</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

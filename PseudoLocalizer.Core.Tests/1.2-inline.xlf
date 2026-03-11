@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ja-JP" original="Test1.resx">
+    <body>
+      <trans-unit id="String1">
+        <source>All (<x id="INTERPOLATION" equiv-text="{{ count }}" />)</source>
+        <note></note>
+      </trans-unit>
+      <trans-unit id="String2">
+        <source>Hello <x id="NAME" equiv-text="{{ name }}" />, welcome to <x id="PLACE" equiv-text="{{ place }}" />!</source>
+        <note>Multiple inline elements</note>
+      </trans-unit>
+      <trans-unit id="String3">
+        <source>Plain text only</source>
+        <target state="new">Plain text only</target>
+        <note>No inline elements</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
