@@ -4,14 +4,14 @@ This file provides guidance to coding agents when working with code in this repo
 
 ## Build, test, and lint
 
-- Preferred full local validation is `.\build.ps1`. This script boots the SDK version from `global.json`, packs `PseudoLocalizer.Core`, `PseudoLocalizer.Humanizer`, and `PseudoLocalize`, then runs `dotnet test -c Release` unless `-SkipTests` is passed.
-- Build a single project with `dotnet build .\PseudoLocalizer.Core\PseudoLocalizer.Core.csproj` or `dotnet build .\PseudoLocalize\PseudoLocalize.csproj`.
+- Preferred full local validation is `./build.ps1`. This script boots the SDK version from `global.json`, packs `PseudoLocalizer.Core`, `PseudoLocalizer.Humanizer`, and `PseudoLocalize`, then runs `dotnet test -c Release` unless `-SkipTests` is passed.
+- Build a single project with `dotnet build PseudoLocalizer.Core/PseudoLocalizer.Core.csproj` or `dotnet build PseudoLocalize/PseudoLocalize.csproj`.
 - Run all tests with `dotnet test -c Release`.
-- Run one test project with `dotnet test .\PseudoLocalizer.Core.Tests\PseudoLocalizer.Core.Tests.csproj` or `dotnet test .\PseudoLocalize.Tests\PseudoLocalize.Tests.csproj`.
+- Run one test project with `dotnet test PseudoLocalizer.Core.Tests/PseudoLocalizer.Core.Tests.csproj` or `dotnet test PseudoLocalize.Tests/PseudoLocalize.Tests.csproj`.
 - Run a single NUnit test with a filter, for example:
-  - `dotnet test .\PseudoLocalizer.Core.Tests\PseudoLocalizer.Core.Tests.csproj --filter "FullyQualifiedName~PseudoLocalizer.Core.Tests.TransformTests.TestPipeline"`
-  - `dotnet test .\PseudoLocalize.Tests\PseudoLocalize.Tests.csproj --filter "FullyQualifiedName~PseudoLocalizer.EndToEndTest.ShouldRespectXlfInlineInterpolation"`
-- CI linting lives in `.github\workflows\lint.yml`. The repo-local lint command it uses for scripts is:
+  - `dotnet test PseudoLocalizer.Core.Tests/PseudoLocalizer.Core.Tests.csproj --filter "FullyQualifiedName~PseudoLocalizer.Core.Tests.TransformTests.TestPipeline"`
+  - `dotnet test PseudoLocalize.Tests/PseudoLocalize.Tests.csproj --filter "FullyQualifiedName~PseudoLocalizer.EndToEndTest.ShouldRespectXlfInlineInterpolation"`
+- CI linting lives in `.github/workflows/lint.yml`. The repo-local lint command it uses for scripts is:
 
 ```powershell
 $settings = @{
