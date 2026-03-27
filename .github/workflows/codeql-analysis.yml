@@ -6,6 +6,7 @@ on:
   pull_request:
   schedule:
     - cron: '0 6 * * MON'
+      timezone: Europe/London
   workflow_dispatch:
 
 permissions: {}
