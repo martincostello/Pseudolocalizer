@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <GlobalPackageReference Include="MartinCostello.BuildKit" Version="0.8.5" />
+    <GlobalPackageReference Include="MartinCostello.BuildKit" Version="0.8.6" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="GitHubActionsTestLogger" Version="3.0.4" />
