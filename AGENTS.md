@@ -6,6 +6,7 @@ This file provides guidance to coding agents when working with code in this repo
 
 - Preferred full local validation is `./build.ps1`. This script boots the SDK version from `global.json`, packs `PseudoLocalizer.Core`, `PseudoLocalizer.Humanizer`, and `PseudoLocalize`, then runs `dotnet test -c Release` unless `-SkipTests` is passed.
 - Build a single project with `dotnet build PseudoLocalizer.Core/PseudoLocalizer.Core.csproj` or `dotnet build PseudoLocalize/PseudoLocalize.csproj`.
+- Tests run on Microsoft Testing Platform (MTP) via the NUnit runner, as configured by the `test` section of `global.json`.
 - Run all tests with `dotnet test -c Release`.
 - Run one test project with `dotnet test PseudoLocalizer.Core.Tests/PseudoLocalizer.Core.Tests.csproj` or `dotnet test PseudoLocalize.Tests/PseudoLocalize.Tests.csproj`.
 - Run a single NUnit test with a filter, for example:
