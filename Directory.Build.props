@@ -10,6 +10,6 @@
     <PackageTags>localization,pseudolocalization</PackageTags>
     <UseArtifactsOutput>true</UseArtifactsOutput>
     <AssemblyVersion>0.13.0.0</AssemblyVersion>
-    <VersionPrefix>0.13.0</VersionPrefix>
+    <VersionPrefix>0.13.1</VersionPrefix>
   </PropertyGroup>
 </Project>
